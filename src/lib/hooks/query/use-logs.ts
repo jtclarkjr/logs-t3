@@ -1,8 +1,3 @@
-/**
- * tRPC-based hooks for logs operations
- * This file replaces the REST API hooks with tRPC equivalents while maintaining the same API
- */
-
 import { format } from "date-fns";
 import { useState } from "react";
 import { toast } from "sonner";

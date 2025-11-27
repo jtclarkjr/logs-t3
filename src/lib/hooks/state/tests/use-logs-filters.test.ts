@@ -115,7 +115,7 @@ describe("useLogsFilters", () => {
     const apiFilters = result.current.getAPIFilters();
     expect(typeof apiFilters).toBe("object");
     expect(apiFilters.page).toBe(1);
-    expect(apiFilters.page_size).toBe(10);
+    expect(apiFilters.pageSize).toBe(10);
   });
 
   it("should compute hasActiveFilters correctly", () => {

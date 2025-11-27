@@ -143,7 +143,7 @@ describe("useDashboardFilters", () => {
       expect(filters).toBeDefined();
       expect(filters?.severity).toBe(SeverityLevel.WARNING);
       expect(filters?.source).toBe("database");
-      expect(filters?.group_by).toBe("hour");
+      expect(filters?.groupBy).toBe("hour");
     });
 
     it("should return null export filters when no valid date range", () => {
@@ -175,8 +175,8 @@ describe("useDashboardFilters", () => {
 
       const filters = result.current.getExportFilters();
       expect(filters).toBeDefined();
-      expect(filters?.start_date).toBeDefined();
-      expect(filters?.end_date).toBeDefined();
+      expect(filters?.startDate).toBeDefined();
+      expect(filters?.endDate).toBeDefined();
       expect(filters?.severity).toBe(SeverityLevel.INFO);
       expect(filters?.source).toBe("cache");
     });
@@ -270,7 +270,7 @@ describe("useDashboardFilters", () => {
       const chartFilters = result.current.getChartDataFilters();
       expect(chartFilters?.severity).toBe(SeverityLevel.CRITICAL);
       expect(chartFilters?.source).toBe("auth");
-      expect(chartFilters?.group_by).toBe("hour");
+      expect(chartFilters?.groupBy).toBe("hour");
     });
 
     it("should handle severity filter edge cases", () => {
