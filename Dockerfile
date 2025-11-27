@@ -1,14 +1,15 @@
 # Base stage with dependencies
-FROM oven/bun:1.1-slim AS base
+FROM oven/bun:1.3-slim AS base
 WORKDIR /app
 
 # Install OpenSSL for Prisma
 RUN apt-get update && apt-get install -y openssl curl && rm -rf /var/lib/apt/lists/*
 
-# Copy package files
+# Copy package files and Prisma schema
 COPY package.json bun.lock* ./
+COPY prisma ./prisma
 
-# Install dependencies
+# Install dependencies (this will run prisma generate via postinstall)
 RUN bun install --frozen-lockfile
 
 # Copy source code
@@ -21,7 +22,7 @@ RUN bunx prisma generate
 RUN bun run build
 
 # Production stage
-FROM oven/bun:1.1-slim AS production
+FROM oven/bun:1.3-slim AS production
 WORKDIR /app
 
 ENV NODE_ENV=production \
