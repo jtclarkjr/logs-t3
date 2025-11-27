@@ -120,32 +120,6 @@ All endpoints are available under `api.logs.*`:
 
 - Postman collection: import `postman_collection.json` (repo root), set `baseUrl` (e.g., `http://localhost:3000`), and send. Requests already wrap payloads under `json` to match the tRPC handler.
 
-## Project Structure
-
-```
-logs-t3/
-├── src/
-│   ├── app/              # Next.js App Router pages
-│   ├── server/
-│   │   ├── api/
-│   │   │   ├── routers/  # tRPC routers
-│   │   │   │   └── logs.ts
-│   │   │   ├── root.ts   # Root router
-│   │   │   └── trpc.ts   # tRPC setup
-│   │   └── db.ts         # Prisma client
-│   ├── trpc/
-│   │   ├── query-client.ts
-│   │   ├── react.tsx     # tRPC React client
-│   │   └── server.ts     # tRPC server client
-│   └── env.js            # Environment validation
-├── prisma/
-│   └── schema.prisma     # Database schema
-├── docker-compose.yml    # Docker services
-├── Dockerfile            # Container image
-├── Makefile              # Development commands
-└── package.json
-```
-
 ## Docker Deployment
 
 Build and run with Docker:
