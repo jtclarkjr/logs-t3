@@ -7,6 +7,15 @@ import "./src/env.js";
 /** @type {import("next").NextConfig} */
 const config = {
   output: "standalone",
+  async redirects() {
+    return [
+      {
+        source: "/",
+        destination: "/dashboard",
+        permanent: true,
+      },
+    ];
+   },
 };
 
 export default config;
