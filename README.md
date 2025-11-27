@@ -22,6 +22,23 @@ A full-stack logs dashboard application built with the T3 Stack (Next.js, TypeSc
 - Time series chart data (hourly, daily, weekly, monthly)
 - Metadata endpoints (sources, severity levels, date ranges)
 
+### Frontend (Next.js + React)
+- **Dashboard Page** - Interactive analytics with charts
+  - Timeline chart showing log volume over time
+  - Severity distribution pie chart
+  - Top sources bar chart
+  - Filters by date range, severity, and source
+- **Logs Management** - Full CRUD interface
+  - Searchable and filterable table
+  - Create, view, update, and delete logs
+  - Advanced filtering (severity, source, date range, text search)
+  - Pagination with customizable page size
+  - Sort by timestamp, severity, or source
+- **UI Components** - 38+ Shadcn/UI components
+  - Built on Radix UI primitives
+  - Full keyboard navigation and accessibility
+  - Toast notifications for user feedback
+
 ### Database Schema
 ```prisma
 model LogEntry {
@@ -116,9 +133,55 @@ All endpoints are available under `api.logs.*`:
 - `logs.update({ id, data })` - Update existing log
 - `logs.delete({ id })` - Delete log
 
-## API Usage
+## Testing with Postman
 
-- Postman collection: import `postman_collection.json` (repo root), set `baseUrl` (e.g., `http://localhost:3000`), and send. Requests already wrap payloads under `json` to match the tRPC handler.
+A complete Postman collection is available for testing the API:
+
+1. **Import Collection**
+   - Import `postman_collection.json` from the repository root
+   - The collection includes all CRUD and analytics endpoints
+
+2. **Configure Base URL**
+   - Set the `baseUrl` variable to your server URL
+   - Default: `http://localhost:3000`
+   - If port 3000 is in use: `http://localhost:3002`
+
+3. **Collection Contents**
+   - **CRUD Operations:**
+     - Create Log Entry
+     - Get All Logs (with/without filters)
+     - Get Log by ID
+     - Update Log Entry
+     - Delete Log Entry
+   - **Analytics:**
+     - Get Aggregation Data
+     - Get Chart Data (hourly/daily/weekly/monthly)
+     - Get Metadata
+
+4. **Important Notes**
+   - All parameters use **camelCase** (e.g., `pageSize`, not `page_size`)
+   - IDs are **UUID strings**, not numbers
+   - Query parameters are wrapped in `{"json":{...}}` format
+   - All example requests and responses match the actual API
+
+### Example Usage
+
+**Create a log:**
+```http
+POST /api/trpc/logs.create
+Content-Type: application/json
+
+{
+  "message": "Application started successfully",
+  "severity": "INFO",
+  "source": "api-server"
+}
+```
+
+**Get logs with filters:**
+```http
+GET /api/trpc/logs.getAll?input={"json":{"page":1,"pageSize":20,"severity":"ERROR"}}
+```
 
 ## Docker Deployment
 
@@ -158,15 +221,10 @@ DATABASE_URL="postgresql://postgres:password@localhost:5432/logs-t3"
 - Better DX with autocomplete
 - Smaller bundle size
 
-## Next Steps
+### Pages Available
 
-To complete the migration:
-
-1. **Copy UI components** from your existing logs-dashboard
-2. **Create pages** in `src/app/` directory
-3. **Use tRPC hooks** instead of REST API calls
-4. **Add Tailwind components** for the dashboard UI
-5. **Test the application** with real data
+- **Dashboard** (`/dashboard`) - Analytics with charts and aggregation data
+- **Logs** (`/logs`) - Full CRUD interface with filtering, search, and pagination
 
 ## Learn More
 
