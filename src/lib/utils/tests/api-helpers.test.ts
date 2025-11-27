@@ -1,5 +1,8 @@
 import { describe, expect, it } from "bun:test";
-import { buildAggregationParams, extractDataFromSettledResponse } from "@/lib/utils/api-helpers";
+import {
+  buildAggregationParams,
+  extractDataFromSettledResponse,
+} from "@/lib/utils/api-helpers";
 
 describe("api-helpers", () => {
   it("extracts data from fulfilled responses without errors", () => {

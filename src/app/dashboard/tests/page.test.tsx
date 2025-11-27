@@ -8,11 +8,7 @@ import type { GroupBy } from "@/lib/types/filters";
 
 // Mock the dashboard client component to inspect props
 const mockDashboardClient = mock(
-  ({
-    initialFilters,
-  }: {
-    initialFilters: unknown;
-  }) => (
+  ({ initialFilters }: { initialFilters: unknown }) => (
     <div data-testid="dashboard-client">
       <div data-testid="initial-filters">{JSON.stringify(initialFilters)}</div>
     </div>
@@ -39,12 +35,12 @@ describe("DashboardPage", () => {
       const { container } = render(await DashboardPage({ searchParams }));
 
       const clientComponent = container.querySelector(
-        "[data-testid=\"dashboard-client\"]",
+        '[data-testid="dashboard-client"]',
       );
       expect(clientComponent).toBeTruthy();
 
       const initialFilters = JSON.parse(
-        container.querySelector("[data-testid=\"initial-filters\"]")
+        container.querySelector('[data-testid="initial-filters"]')
           ?.textContent || "{}",
       );
 
@@ -61,7 +57,7 @@ describe("DashboardPage", () => {
       const { container } = render(await DashboardPage({ searchParams }));
 
       const initialFilters = JSON.parse(
-        container.querySelector("[data-testid=\"initial-filters\"]")
+        container.querySelector('[data-testid="initial-filters"]')
           ?.textContent || "{}",
       );
       const fromDate = new Date(initialFilters.dateRange.from);
@@ -90,7 +86,7 @@ describe("DashboardPage", () => {
       const { container } = render(await DashboardPage({ searchParams }));
 
       const initialFilters = JSON.parse(
-        container.querySelector("[data-testid=\"initial-filters\"]")
+        container.querySelector('[data-testid="initial-filters"]')
           ?.textContent || "{}",
       );
 
@@ -110,7 +106,7 @@ describe("DashboardPage", () => {
       const { container } = render(await DashboardPage({ searchParams }));
 
       const initialFilters = JSON.parse(
-        container.querySelector("[data-testid=\"initial-filters\"]")
+        container.querySelector('[data-testid="initial-filters"]')
           ?.textContent || "{}",
       );
       expect(initialFilters.selectedSeverity).toBe("error");
@@ -124,7 +120,7 @@ describe("DashboardPage", () => {
       const { container } = render(await DashboardPage({ searchParams }));
 
       const initialFilters = JSON.parse(
-        container.querySelector("[data-testid=\"initial-filters\"]")
+        container.querySelector('[data-testid="initial-filters"]')
           ?.textContent || "{}",
       );
       expect(initialFilters.selectedSource).toBe("web-server");
@@ -138,7 +134,7 @@ describe("DashboardPage", () => {
       const { container } = render(await DashboardPage({ searchParams }));
 
       const initialFilters = JSON.parse(
-        container.querySelector("[data-testid=\"initial-filters\"]")
+        container.querySelector('[data-testid="initial-filters"]')
           ?.textContent || "{}",
       );
       expect(initialFilters.timeGrouping).toBe("hour");
@@ -156,7 +152,7 @@ describe("DashboardPage", () => {
       const { container } = render(await DashboardPage({ searchParams }));
 
       const initialFilters = JSON.parse(
-        container.querySelector("[data-testid=\"initial-filters\"]")
+        container.querySelector('[data-testid="initial-filters"]')
           ?.textContent || "{}",
       );
 
@@ -182,12 +178,12 @@ describe("DashboardPage", () => {
       const { container } = render(await DashboardPage({ searchParams }));
 
       const clientComponent = container.querySelector(
-        "[data-testid=\"dashboard-client\"]",
+        '[data-testid="dashboard-client"]',
       );
       expect(clientComponent).toBeTruthy();
 
       const initialFilters = JSON.parse(
-        container.querySelector("[data-testid=\"initial-filters\"]")
+        container.querySelector('[data-testid="initial-filters"]')
           ?.textContent || "{}",
       );
 

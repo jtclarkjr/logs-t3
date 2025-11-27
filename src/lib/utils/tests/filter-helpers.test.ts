@@ -32,7 +32,9 @@ describe("filter-helpers", () => {
 
   it("createBaseDateFilters returns null when missing range", () => {
     expect(createBaseDateFilters(undefined)).toBeNull();
-    expect(createBaseDateFilters({ from: undefined, to: undefined })).toBeNull();
+    expect(
+      createBaseDateFilters({ from: undefined, to: undefined }),
+    ).toBeNull();
     const result = createBaseDateFilters(mockRange);
     expect(result?.startDate).toEqual(mockRange.from);
     expect(result?.endDate).toEqual(mockRange.to);
@@ -53,12 +55,7 @@ describe("filter-helpers", () => {
   });
 
   it("createChartFilters includes groupBy and processed filters", () => {
-    const filters = createChartFilters(
-      mockRange,
-      "all",
-      "all",
-      "day",
-    );
+    const filters = createChartFilters(mockRange, "all", "all", "day");
     expect(filters).toMatchObject({
       startDate: mockRange.from,
       endDate: mockRange.to,

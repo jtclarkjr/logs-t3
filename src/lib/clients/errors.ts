@@ -28,7 +28,7 @@ export class ApiError extends Error {
 
   getDetailedMessage(): string {
     const validationErrors =
-      this.validationErrors?.length ?? 0
+      (this.validationErrors?.length ?? 0)
         ? this.validationErrors
         : this.extractValidationErrors(this.details);
 
@@ -78,7 +78,8 @@ export class ApiError extends Error {
       typeof details === "object" &&
       details !== null &&
       "error" in (details as Record<string, unknown>) &&
-      typeof (details as { error?: { details?: unknown } }).error === "object" &&
+      typeof (details as { error?: { details?: unknown } }).error ===
+        "object" &&
       (details as { error?: { details?: unknown } }).error?.details &&
       typeof (
         details as {
