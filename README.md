@@ -100,32 +100,6 @@ make logs-db      # View database logs
 make logs-app     # View app logs
 ```
 
-## Using tRPC
-
-### In Server Components
-```typescript
-import { api } from "@/trpc/server";
-
-const logs = await api.logs.getAll({ page: 1, pageSize: 20 });
-```
-
-### In Client Components
-```typescript
-"use client";
-import { api } from "@/trpc/react";
-
-function LogsTable() {
-  const { data, isLoading } = api.logs.getAll.useQuery({
-    page: 1,
-    pageSize: 20
-  });
-
-  const deleteMutation = api.logs.delete.useMutation();
-
-  // ...
-}
-```
-
 ## Available tRPC Endpoints
 
 All endpoints are available under `api.logs.*`:
@@ -141,32 +115,6 @@ All endpoints are available under `api.logs.*`:
 - `logs.create({ message, severity, source, timestamp? })` - Create new log
 - `logs.update({ id, data })` - Update existing log
 - `logs.delete({ id })` - Delete log
-
-### Example Usage
-```typescript
-// Create a log
-const createMutation = api.logs.create.useMutation();
-await createMutation.mutateAsync({
-  message: "Application started",
-  severity: "INFO",
-  source: "app-server"
-});
-
-// Get logs with filters
-const { data } = api.logs.getAll.useQuery({
-  page: 1,
-  pageSize: 20,
-  severity: "ERROR",
-  startDate: new Date("2024-01-01"),
-  endDate: new Date("2024-12-31")
-});
-
-// Get aggregation data
-const { data } = api.logs.getAggregation.useQuery({
-  startDate: new Date("2024-01-01"),
-  endDate: new Date("2024-12-31")
-});
-```
 
 ## API Usage
 
@@ -227,18 +175,6 @@ DATABASE_URL="postgresql://postgres:password@localhost:5432/logs-t3"
 3. Start dev server: `make dev`
 4. Make changes to schema → run `make db-push`
 5. Make changes to tRPC routers → hot reload automatic
-
-## Migration from Python FastAPI
-
-This project replaces the Python FastAPI backend with a full TypeScript stack:
-
-| Old (Python) | New (T3) |
-|-------------|----------|
-| FastAPI routes | tRPC procedures |
-| SQLAlchemy | Prisma |
-| Pydantic schemas | Zod schemas |
-| Separate frontend/backend | Monolithic Next.js |
-| REST API | tRPC (RPC over HTTP) |
 
 ### Benefits
 - End-to-end type safety
