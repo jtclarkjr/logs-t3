@@ -1,0 +1,38 @@
+import { z } from "zod";
+import { SeverityLevel } from "@/lib/enums/severity";
+
+const timestampValidator = z
+  .union([z.string(), z.date()])
+  .optional()
+  .refine(
+    (val) => {
+      if (!val) return true; // Optional field
+      const date = val instanceof Date ? val : new Date(val);
+      return !Number.isNaN(date.getTime());
+    },
+    {
+      message: "Please provide a valid timestamp",
+    },
+  );
+
+export const createLogValidator = z.object({
+  severity: z.enum(
+    Object.values(SeverityLevel) as [SeverityLevel, ...SeverityLevel[]],
+    {
+      message: "Severity level is required",
+    },
+  ),
+  source: z
+    .string({ message: "Source is required" })
+    .min(1, "Source is required")
+    .max(100, "Source must be less than 100 characters")
+    .trim(),
+  message: z
+    .string({ message: "Message is required" })
+    .min(1, "Message is required")
+    .max(1000, "Message must be less than 1000 characters")
+    .trim(),
+  timestamp: timestampValidator,
+});
+
+export const updateLogValidator = createLogValidator;

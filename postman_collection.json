@@ -1,0 +1,393 @@
+{
+  "info": {
+    "name": "Logs Dashboard API (tRPC)",
+    "description": "Complete API collection for the Logs Dashboard built with T3 Stack (tRPC + Prisma + Next.js)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "logs-dashboard"
+  },
+  "item": [
+    {
+      "name": "Logs CRUD",
+      "item": [
+        {
+          "name": "Create Log Entry",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"json\": {\n    \"message\": \"Application started successfully\",\n    \"severity\": \"INFO\",\n    \"source\": \"api-server\",\n    \"timestamp\": \"2024-01-15T10:30:00Z\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/trpc/logs.create",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "trpc", "logs.create"]
+            },
+            "description": "Creates a new log entry. Timestamp is optional and defaults to current time if not provided."
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"message\": \"Application started\",\n  \"severity\": \"INFO\",\n  \"source\": \"api-server\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/trpc/logs.create",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "trpc", "logs.create"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [],
+              "cookie": [],
+              "body": "{\n  \"result\": {\n    \"data\": {\n      \"id\": \"123e4567-e89b-12d3-a456-426614174000\",\n      \"message\": \"Application started\",\n      \"severity\": \"INFO\",\n      \"source\": \"api-server\",\n      \"timestamp\": \"2024-01-15T10:30:00.000Z\",\n      \"createdAt\": \"2024-01-15T10:30:00.000Z\",\n      \"updatedAt\": \"2024-01-15T10:30:00.000Z\"\n    }\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get All Logs (No Filters)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/trpc/logs.getAll?input={\"page\":1,\"pageSize\":20,\"sortBy\":\"timestamp\",\"sortOrder\":\"desc\"}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "trpc", "logs.getAll"],
+              "query": [
+                {
+                  "key": "input",
+                  "value": "{\"json\":{\"page\":1,\"pageSize\":20,\"sortBy\":\"timestamp\",\"sortOrder\":\"desc\"}}"
+                }
+              ]
+            },
+            "description": "Retrieves all logs with pagination. Default page size is 20."
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Logs (With Filters)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/trpc/logs.getAll?input={\"page\":1,\"pageSize\":20,\"severity\":\"ERROR\",\"source\":\"api-server\",\"startDate\":\"2024-01-01T00:00:00Z\",\"endDate\":\"2024-12-31T23:59:59Z\",\"search\":\"failed\",\"sortBy\":\"timestamp\",\"sortOrder\":\"desc\"}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "trpc", "logs.getAll"],
+              "query": [
+                {
+                  "key": "input",
+                  "value": "{\"json\":{\"page\":1,\"pageSize\":20,\"severity\":\"ERROR\",\"source\":\"api-server\",\"startDate\":\"2024-01-01T00:00:00Z\",\"endDate\":\"2024-12-31T23:59:59Z\",\"search\":\"failed\",\"sortBy\":\"timestamp\",\"sortOrder\":\"desc\"}}"
+                }
+              ]
+            },
+            "description": "Retrieves logs with filters:\n- severity: DEBUG, INFO, WARNING, ERROR, CRITICAL\n- source: Filter by source name\n- startDate/endDate: Date range filter\n- search: Search in message\n- sortBy: Field to sort by (timestamp, severity, source, message)\n- sortOrder: asc or desc"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Log by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/trpc/logs.getById?input={\"id\":1}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "trpc", "logs.getById"],
+              "query": [
+                {
+                  "key": "input",
+                  "value": "{\"json\":{\"id\":\"123e4567-e89b-12d3-a456-426614174000\"}}",
+                  "description": "Log ID (UUID)"
+                }
+              ]
+            },
+            "description": "Retrieves a single log entry by its ID."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Log Entry",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"json\": {\n    \"id\": \"123e4567-e89b-12d3-a456-426614174000\",\n    \"data\": {\n      \"message\": \"Updated log message\",\n      \"severity\": \"WARNING\"\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/trpc/logs.update",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "trpc", "logs.update"]
+            },
+            "description": "Updates an existing log entry. All fields in 'data' are optional."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Log Entry",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"json\": {\n    \"id\": \"123e4567-e89b-12d3-a456-426614174000\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/trpc/logs.delete",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "trpc", "logs.delete"]
+            },
+            "description": "Deletes a log entry by ID."
+          },
+          "response": []
+        }
+      ],
+      "description": "CRUD operations for log entries"
+    },
+    {
+      "name": "Analytics",
+      "item": [
+        {
+          "name": "Get Aggregation Data",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/trpc/logs.getAggregation?input={\"startDate\":\"2024-01-01T00:00:00Z\",\"endDate\":\"2024-12-31T23:59:59Z\"}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "trpc", "logs.getAggregation"],
+              "query": [
+                {
+                  "key": "input",
+                  "value": "{\"json\":{\"startDate\":\"2024-01-01T00:00:00Z\",\"endDate\":\"2024-12-31T23:59:59Z\"}}"
+                }
+              ]
+            },
+            "description": "Gets aggregated log statistics:\n- Total logs count\n- Count by severity level\n- Count by source\n- Count by date\n\nOptional filters: startDate, endDate, severity, source"
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/trpc/logs.getAggregation?input={\"startDate\":\"2024-01-01T00:00:00Z\",\"endDate\":\"2024-12-31T23:59:59Z\"}",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "trpc", "logs.getAggregation"],
+                  "query": [
+                    {
+                      "key": "input",
+                      "value": "{\"startDate\":\"2024-01-01T00:00:00Z\",\"endDate\":\"2024-12-31T23:59:59Z\"}"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [],
+              "cookie": [],
+              "body": "{\n  \"result\": {\n    \"data\": {\n      \"totalLogs\": 1500,\n      \"dateRangeStart\": \"2024-01-01T00:00:00.000Z\",\n      \"dateRangeEnd\": \"2024-12-31T23:59:59.999Z\",\n      \"bySeverity\": [\n        {\"severity\": \"DEBUG\", \"count\": 100},\n        {\"severity\": \"INFO\", \"count\": 1000},\n        {\"severity\": \"WARNING\", \"count\": 250},\n        {\"severity\": \"ERROR\", \"count\": 125},\n        {\"severity\": \"CRITICAL\", \"count\": 25}\n      ],\n      \"bySource\": [\n        {\"source\": \"api-server\", \"count\": 800},\n        {\"source\": \"web-app\", \"count\": 700}\n      ],\n      \"byDate\": [\n        {\"date\": \"2024-01-01\", \"count\": 50},\n        {\"date\": \"2024-01-02\", \"count\": 75}\n      ]\n    }\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Chart Data (Daily)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/trpc/logs.getChartData?input={\"startDate\":\"2024-01-01T00:00:00Z\",\"endDate\":\"2024-01-31T23:59:59Z\",\"groupBy\":\"day\"}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "trpc", "logs.getChartData"],
+              "query": [
+                {
+                  "key": "input",
+                  "value": "{\"json\":{\"startDate\":\"2024-01-01T00:00:00Z\",\"endDate\":\"2024-01-31T23:59:59Z\",\"groupBy\":\"day\"}}"
+                }
+              ]
+            },
+            "description": "Gets time series data for charts. Group by: hour, day, week, or month.\n\nReturns data points with counts for each severity level."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Chart Data (Hourly)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/trpc/logs.getChartData?input={\"startDate\":\"2024-01-01T00:00:00Z\",\"endDate\":\"2024-01-01T23:59:59Z\",\"groupBy\":\"hour\"}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "trpc", "logs.getChartData"],
+              "query": [
+                {
+                  "key": "input",
+                  "value": "{\"json\":{\"startDate\":\"2024-01-01T00:00:00Z\",\"endDate\":\"2024-01-01T23:59:59Z\",\"groupBy\":\"hour\"}}"
+                }
+              ]
+            },
+            "description": "Gets hourly time series data for a single day."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Chart Data (With Filters)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/trpc/logs.getChartData?input={\"startDate\":\"2024-01-01T00:00:00Z\",\"endDate\":\"2024-01-31T23:59:59Z\",\"severity\":\"ERROR\",\"source\":\"api-server\",\"groupBy\":\"day\"}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "trpc", "logs.getChartData"],
+              "query": [
+                {
+                  "key": "input",
+                  "value": "{\"json\":{\"startDate\":\"2024-01-01T00:00:00Z\",\"endDate\":\"2024-01-31T23:59:59Z\",\"severity\":\"ERROR\",\"source\":\"api-server\",\"groupBy\":\"day\"}}"
+                }
+              ]
+            },
+            "description": "Gets chart data filtered by severity and/or source."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Metadata",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/trpc/logs.getMetadata",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "trpc", "logs.getMetadata"]
+            },
+            "description": "Gets metadata about the logs:\n- Available severity levels\n- All unique sources\n- Date range (earliest/latest)\n- Severity statistics\n- Total log count\n- Available sort fields\n- Pagination settings"
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/trpc/logs.getMetadata",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "trpc", "logs.getMetadata"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [],
+              "cookie": [],
+              "body": "{\n  \"result\": {\n    \"data\": {\n      \"severityLevels\": [\"DEBUG\", \"INFO\", \"WARNING\", \"ERROR\", \"CRITICAL\"],\n      \"sources\": [\"api-server\", \"web-app\", \"worker\"],\n      \"dateRange\": {\n        \"earliest\": \"2024-01-01T00:00:00.000Z\",\n        \"latest\": \"2024-12-31T23:59:59.999Z\"\n      },\n      \"severityStats\": {\n        \"DEBUG\": 100,\n        \"INFO\": 1000,\n        \"WARNING\": 250,\n        \"ERROR\": 125,\n        \"CRITICAL\": 25\n      },\n      \"totalLogs\": 1500,\n      \"sortFields\": [\"timestamp\", \"severity\", \"source\", \"message\"],\n      \"pagination\": {\n        \"defaultPageSize\": 20,\n        \"maxPageSize\": 100\n      }\n    }\n  }\n}"
+            }
+          ]
+        }
+      ],
+      "description": "Analytics and aggregation endpoints"
+    },
+    {
+      "name": "Batch Operations",
+      "item": [
+        {
+          "name": "Batch Create Logs",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"json\": {\n      \"message\": \"User login successful\",\n      \"severity\": \"INFO\",\n      \"source\": \"auth-service\"\n    }\n  },\n  {\n    \"json\": {\n      \"message\": \"Database connection failed\",\n      \"severity\": \"ERROR\",\n      \"source\": \"api-server\"\n    }\n  },\n  {\n    \"json\": {\n      \"message\": \"Cache miss - loading from database\",\n      \"severity\": \"DEBUG\",\n      \"source\": \"cache-service\"\n    }\n  }\n]"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/trpc/batch",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "trpc", "batch"],
+              "query": [
+                {
+                  "key": "batch",
+                  "value": "1",
+                  "description": "Enable batch mode"
+                }
+              ]
+            },
+            "description": "Create multiple log entries in a single request using tRPC batch mode."
+          },
+          "response": []
+        }
+      ],
+      "description": "Batch operations using tRPC's batch functionality"
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// You can add pre-request scripts here",
+          "// For example, to add authentication tokens",
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// You can add test scripts here",
+          "// For example, to validate responses",
+          "pm.test(\"Status code is 200\", function () {",
+          "    pm.response.to.have.status(200);",
+          "});",
+          "",
+          "pm.test(\"Response has result.data\", function () {",
+          "    var jsonData = pm.response.json();",
+          "    pm.expect(jsonData).to.have.property('result');",
+          "    pm.expect(jsonData.result).to.have.property('data');",
+          "});"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000",
+      "type": "string"
+    }
+  ]
+}
