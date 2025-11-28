@@ -1,8 +1,12 @@
-import type { Prisma, SeverityLevel } from "@prisma-generated";
 import { TRPCError } from "@trpc/server";
+import { count, eq } from "drizzle-orm";
 import { z } from "zod";
 
+import type { SeverityLevel } from "@/lib/enums/severity";
+import type { SortByField } from "@/lib/types/filters";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
+import { logs } from "@/server/db/schema";
+import { buildLogWhere, buildSort } from "./query-helpers";
 import { logCreateSchema, logFiltersSchema, logUpdateSchema } from "./schemas";
 
 export const crudRouter = createTRPCRouter({
@@ -11,14 +15,17 @@ export const crudRouter = createTRPCRouter({
     .input(logCreateSchema)
     .mutation(async ({ ctx, input }) => {
       try {
-        const log = await ctx.db.logEntry.create({
-          data: {
+        const [log] = await ctx.db
+          .insert(logs)
+          .values({
             message: input.message,
             severity: input.severity as SeverityLevel,
             source: input.source,
             timestamp: input.timestamp ?? new Date(),
-          },
-        });
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          })
+          .returning();
         return log;
       } catch (error) {
         throw new TRPCError({
@@ -46,39 +53,36 @@ export const crudRouter = createTRPCRouter({
           sortOrder,
         } = input;
 
-        const where: Prisma.LogEntryWhereInput = {};
-
-        if (severity) {
-          where.severity = severity;
-        }
-
-        if (source) {
-          where.source = { contains: source, mode: "insensitive" };
-        }
-
-        if (startDate || endDate) {
-          where.timestamp = {};
-          if (startDate) where.timestamp.gte = startDate;
-          if (endDate) where.timestamp.lte = endDate;
-        }
-
-        if (search) {
-          where.message = { contains: search, mode: "insensitive" };
-        }
-
-        const total = await ctx.db.logEntry.count({ where });
-
-        const logs = await ctx.db.logEntry.findMany({
-          where,
-          skip: (page - 1) * pageSize,
-          take: pageSize,
-          orderBy: { [sortBy]: sortOrder },
+        const where = buildLogWhere({
+          severity,
+          source,
+          startDate,
+          endDate,
+          search,
         });
 
+        const totalValue =
+          (await ctx.db.select({ value: count() }).from(logs).where(where))[0]
+            ?.value ?? 0;
+
+        const sortableFields = ["timestamp", "severity", "source"] as const;
+        const sortField = sortableFields.includes(sortBy as SortByField)
+          ? (sortBy as SortByField)
+          : "timestamp";
+
+        const results = await ctx.db
+          .select()
+          .from(logs)
+          .where(where)
+          .orderBy(buildSort(sortField, sortOrder))
+          .limit(pageSize)
+          .offset((page - 1) * pageSize);
+
+        const total = Number(totalValue ?? 0);
         const totalPages = Math.ceil(total / pageSize);
 
         return {
-          logs,
+          logs: results,
           total,
           page,
           pageSize,
@@ -97,8 +101,8 @@ export const crudRouter = createTRPCRouter({
   getById: publicProcedure
     .input(z.object({ id: z.string().uuid() }))
     .query(async ({ ctx, input }) => {
-      const log = await ctx.db.logEntry.findUnique({
-        where: { id: input.id },
+      const log = await ctx.db.query.logs.findFirst({
+        where: eq(logs.id, input.id),
       });
 
       if (!log) {
@@ -121,8 +125,8 @@ export const crudRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       try {
-        const existingLog = await ctx.db.logEntry.findUnique({
-          where: { id: input.id },
+        const existingLog = await ctx.db.query.logs.findFirst({
+          where: eq(logs.id, input.id),
         });
 
         if (!existingLog) {
@@ -132,17 +136,19 @@ export const crudRouter = createTRPCRouter({
           });
         }
 
-        const log = await ctx.db.logEntry.update({
-          where: { id: input.id },
-          data: {
+        const [log] = await ctx.db
+          .update(logs)
+          .set({
             ...(input.data.message && { message: input.data.message }),
             ...(input.data.severity && {
               severity: input.data.severity as SeverityLevel,
             }),
             ...(input.data.source && { source: input.data.source }),
             ...(input.data.timestamp && { timestamp: input.data.timestamp }),
-          },
-        });
+            updatedAt: new Date(),
+          })
+          .where(eq(logs.id, input.id))
+          .returning();
 
         return log;
       } catch (error) {
@@ -161,8 +167,8 @@ export const crudRouter = createTRPCRouter({
     .input(z.object({ id: z.string().uuid() }))
     .mutation(async ({ ctx, input }) => {
       try {
-        const existingLog = await ctx.db.logEntry.findUnique({
-          where: { id: input.id },
+        const existingLog = await ctx.db.query.logs.findFirst({
+          where: eq(logs.id, input.id),
         });
 
         if (!existingLog) {
@@ -172,9 +178,7 @@ export const crudRouter = createTRPCRouter({
           });
         }
 
-        await ctx.db.logEntry.delete({
-          where: { id: input.id },
-        });
+        await ctx.db.delete(logs).where(eq(logs.id, input.id));
 
         return { success: true, message: "Log entry deleted successfully" };
       } catch (error) {

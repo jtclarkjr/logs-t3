@@ -1,8 +1,12 @@
-import type { Prisma } from "@prisma-generated";
 import { NextResponse } from "next/server";
 import type { SeverityLevel } from "@/lib/enums/severity";
-
+import {
+  buildLogWhere,
+  buildSort,
+} from "@/server/api/routers/logs/query-helpers";
+import { severityLevelSchema } from "@/server/api/routers/logs/schemas";
 import { db } from "@/server/db";
+import { logs } from "@/server/db/schema";
 
 // Use a plain Next.js route for CSV download; tRPC endpoints are JSON-centric and awkward for file attachments.
 const MAX_EXPORT = 5000;
@@ -45,32 +49,33 @@ export async function GET(request: Request) {
   const startDate = parseDate(searchParams.get("startDate"));
   const endDate = parseDate(searchParams.get("endDate"));
 
-  const where: Prisma.LogEntryWhereInput = {};
+  const severityParse = severityLevelSchema.safeParse(severity);
+  const severityFilter: SeverityLevel | undefined = severityParse.success
+    ? severityParse.data
+    : undefined;
 
-  if (severity) {
-    where.severity = severity as SeverityLevel;
-  }
-
-  if (source) {
-    where.source = { contains: source, mode: "insensitive" };
-  }
-
-  if (startDate || endDate) {
-    where.timestamp = {};
-    if (startDate) where.timestamp.gte = startDate;
-    if (endDate) where.timestamp.lte = endDate;
-  }
-
-  if (search) {
-    where.message = { contains: search, mode: "insensitive" };
-  }
-
-  const logs = await db.logEntry.findMany({
-    where,
-    orderBy: { [sortBy]: sortOrder },
-    skip: (page - 1) * pageSize,
-    take: pageSize,
+  const where = buildLogWhere({
+    severity: severityFilter,
+    source,
+    startDate,
+    endDate,
+    search,
   });
+
+  const sortableFields = ["timestamp", "severity", "source"] as const;
+  const sortField = sortableFields.includes(
+    sortBy as (typeof sortableFields)[number],
+  )
+    ? (sortBy as (typeof sortableFields)[number])
+    : "timestamp";
+
+  const results = await db
+    .select()
+    .from(logs)
+    .where(where)
+    .orderBy(buildSort(sortField, sortOrder))
+    .limit(pageSize)
+    .offset((page - 1) * pageSize);
 
   const header = [
     "id",
@@ -82,7 +87,7 @@ export async function GET(request: Request) {
     "updatedAt",
   ];
 
-  const rows = logs.map((log) => [
+  const rows = results.map((log) => [
     log.id,
     log.timestamp.toISOString(),
     log.severity,

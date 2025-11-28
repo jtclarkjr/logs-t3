@@ -42,6 +42,6 @@ export const logFiltersSchema = z.object({
   startDate: z.date().optional(),
   endDate: z.date().optional(),
   search: z.string().optional(),
-  sortBy: z.string().default("timestamp"),
+  sortBy: z.enum(["timestamp", "severity", "source"]).default("timestamp"),
   sortOrder: z.enum(["asc", "desc"]).default("desc"),
 });

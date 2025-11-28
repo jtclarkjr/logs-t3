@@ -3,9 +3,9 @@
 import { describe, expect, it, mock } from "bun:test";
 import { render } from "@testing-library/react";
 import { SeverityLevel } from "@/lib/enums/severity";
-import type { LogAggregationResponse } from "@/lib/types/log";
 import type { ChartDataResponse } from "@/lib/types/chart";
 import type { MetadataResponse } from "@/lib/types/common";
+import type { LogAggregationResponse } from "@/lib/types/log";
 
 const mockAggregation: LogAggregationResponse = {
   totalLogs: 10,

@@ -1,7 +1,7 @@
 {
   "info": {
     "name": "Logs Dashboard API (tRPC)",
-    "description": "Complete API collection for the Logs Dashboard built with T3 Stack (tRPC + Prisma + Next.js). All parameters use camelCase.",
+    "description": "Complete API collection for the Logs Dashboard built with T3 Stack (tRPC + Drizzle + Next.js). All parameters use camelCase.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "_exporter_id": "logs-dashboard"
   },

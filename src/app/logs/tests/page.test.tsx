@@ -2,10 +2,9 @@
 
 import { afterEach, beforeEach, describe, expect, it, mock } from "bun:test";
 import { render } from "@testing-library/react";
-import LogsPage from "../page";
-import { SeverityLevel } from "@/lib/enums/severity";
 import { DEFAULT_PAGE_SIZE } from "@/lib/constants/pagination";
 import type { SortByField, SortOrder } from "@/lib/types/filters";
+import LogsPage from "../page";
 
 // Mock the logs client component
 mock.module("../logs-client", () => ({
@@ -59,7 +58,7 @@ describe("LogsPage", () => {
       );
 
       expect(initialFilters.currentPage).toBe(1);
-      expect(initialFilters.pageSize).toBeUndefined();
+      expect(initialFilters.pageSize).toBe(DEFAULT_PAGE_SIZE);
     });
   });
 

@@ -1,6 +1,5 @@
 import { describe, expect, it } from "bun:test";
 import { ApiError } from "@/lib/clients/errors";
-import { SeverityLevel } from "@/lib/enums/severity";
 import {
   useChartData,
   useCreateLog,
@@ -54,6 +53,8 @@ describe("hook exports", () => {
       useUpdateLog,
     ];
 
-    hooks.forEach((hook) => expect(typeof hook).toBe("function"));
+    hooks.forEach((hook) => {
+      expect(typeof hook).toBe("function");
+    });
   });
 });

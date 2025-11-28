@@ -32,7 +32,7 @@ export class ApiError extends Error {
         ? this.validationErrors
         : this.extractValidationErrors(this.details);
 
-    if (validationErrors && validationErrors.length) {
+    if (validationErrors?.length) {
       const formatted = validationErrors
         .map((v) => `${v.field}: ${v.reason ?? v.message}`)
         .join("; ");

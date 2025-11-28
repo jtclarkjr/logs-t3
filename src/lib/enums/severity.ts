@@ -1,5 +1,3 @@
-import type { $Enums } from "@prisma-generated";
-
 export const SeverityLevel = {
   DEBUG: "DEBUG",
   INFO: "INFO",
@@ -8,4 +6,4 @@ export const SeverityLevel = {
   CRITICAL: "CRITICAL",
 } as const;
 
-export type SeverityLevel = $Enums.SeverityLevel;
+export type SeverityLevel = (typeof SeverityLevel)[keyof typeof SeverityLevel];

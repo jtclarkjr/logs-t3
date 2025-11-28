@@ -1,10 +1,10 @@
 /// <reference lib="dom" />
 
 import { afterEach, beforeEach, describe, expect, it, mock } from "bun:test";
-import { render, cleanup } from "@testing-library/react";
+import { cleanup, render } from "@testing-library/react";
 import { subDays } from "date-fns";
-import DashboardPage from "../page";
 import type { GroupBy } from "@/lib/types/filters";
+import DashboardPage from "../page";
 
 // Mock the dashboard client component to inspect props
 const mockDashboardClient = mock(

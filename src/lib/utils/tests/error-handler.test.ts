@@ -2,9 +2,9 @@ import { describe, expect, it, mock } from "bun:test";
 import { ApiError } from "@/lib/clients/errors";
 import {
   formatValidationErrors,
+  getErrorCode,
   getErrorDisplayInfo,
   getErrorMessage,
-  getErrorCode,
   getRequestId,
   isRetryableError,
   logError,
@@ -52,10 +52,12 @@ describe("error-handler", () => {
   it("logs errors and warnings without throwing", () => {
     const consoleError = mock(() => {});
     const consoleWarn = mock(() => {});
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (console as any).error = consoleError;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (console as any).warn = consoleWarn;
+    const consoleSpies = console as unknown as {
+      error: typeof console.error;
+      warn: typeof console.warn;
+    };
+    consoleSpies.error = consoleError;
+    consoleSpies.warn = consoleWarn;
 
     const apiError = new ApiError("Not found", 404);
     logError("message", apiError);

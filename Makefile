@@ -22,15 +22,15 @@ db: ## Start PostgreSQL database only
 db-stop: ## Stop PostgreSQL database
 	docker compose stop db
 
-# Prisma commands
-db-push: ## Push Prisma schema to database (creates tables)
-	bunx prisma db push
+# Drizzle commands
+db-push: ## Sync Drizzle schema to database
+	bunx drizzle-kit push:pg
 
-db-migrate: ## Run Prisma migrations
-	bunx prisma migrate dev
+db-migrate: ## Apply Drizzle migrations
+	bunx drizzle-kit migrate
 
-db-studio: ## Open Prisma Studio (database GUI)
-	bunx prisma studio
+db-studio: ## Open Drizzle Studio
+	bunx drizzle-kit studio
 
 # Docker compose commands
 up: ## Start all services (database + app)
@@ -53,5 +53,4 @@ logs-app: ## Show app logs
 	docker compose logs -f app
 
 db-seed: ## Generate 1000 sample log entries (add --reset to clear existing)
-	bunx prisma generate
-	bun run scripts/seed.js $(ARGS)
+	bun run scripts/seed.ts $(ARGS)

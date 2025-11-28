@@ -2,21 +2,17 @@
 FROM oven/bun:1.3-slim AS base
 WORKDIR /app
 
-# Install OpenSSL for Prisma
-RUN apt-get update && apt-get install -y openssl curl && rm -rf /var/lib/apt/lists/*
+# Install curl for health checks / diagnostics
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 
-# Copy package files and Prisma schema
-COPY package.json bun.lock* ./
-COPY prisma ./prisma
+# Copy package files
+COPY package.json bun.lock* drizzle.config.ts ./
 
-# Install dependencies (this will run prisma generate via postinstall)
+# Install dependencies
 RUN bun install --frozen-lockfile
 
 # Copy source code
 COPY . .
-
-# Generate Prisma client
-RUN bunx prisma generate
 
 # Build Next.js app
 RUN bun run build
@@ -28,17 +24,11 @@ WORKDIR /app
 ENV NODE_ENV=production \
     PORT=3000
 
-# Install OpenSSL for Prisma
-RUN apt-get update && apt-get install -y openssl curl && rm -rf /var/lib/apt/lists/*
+# Install curl for health checks / diagnostics
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 
 # Create non-root user
 RUN groupadd -r appuser && useradd -r -g appuser appuser
-
-# Copy Prisma files
-COPY --from=base --chown=appuser:appuser /app/generated ./generated
-COPY --from=base --chown=appuser:appuser /app/node_modules/.prisma ./node_modules/.prisma
-COPY --from=base --chown=appuser:appuser /app/node_modules/@prisma ./node_modules/@prisma
-COPY --from=base --chown=appuser:appuser /app/prisma ./prisma
 
 # Copy Next.js build
 COPY --from=base --chown=appuser:appuser /app/.next/standalone ./

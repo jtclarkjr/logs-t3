@@ -1,10 +1,12 @@
-import type { Prisma } from "@prisma-generated";
+import { count, max, min, sql } from "drizzle-orm";
 import { z } from "zod";
-
 import type { SeverityLevel } from "@/lib/enums/severity";
-import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
-import { severityLevelSchema } from "./schemas";
 import type { ChartDataPoint } from "@/lib/types/chart";
+import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
+import { logs } from "@/server/db/schema";
+
+import { buildLogWhere } from "./query-helpers";
+import { severityLevelSchema } from "./schemas";
 
 export const analyticsRouter = createTRPCRouter({
   // Get aggregation data for analytics
@@ -18,86 +20,47 @@ export const analyticsRouter = createTRPCRouter({
       }),
     )
     .query(async ({ ctx, input }) => {
-      // Build where clause
-      const where: Prisma.LogEntryWhereInput = {};
-
-      if (input.severity) {
-        where.severity = input.severity;
-      }
-
-      if (input.source) {
-        where.source = { contains: input.source, mode: "insensitive" };
-      }
-
-      if (input.startDate || input.endDate) {
-        where.timestamp = {};
-        if (input.startDate) where.timestamp.gte = input.startDate;
-        if (input.endDate) where.timestamp.lte = input.endDate;
-      }
+      const where = buildLogWhere({
+        severity: input.severity,
+        source: input.source,
+        startDate: input.startDate,
+        endDate: input.endDate,
+      });
 
       // Get total logs
-      const totalLogs = await ctx.db.logEntry.count({ where });
-
-      const bySeverity = await ctx.db.logEntry.groupBy({
-        by: ["severity"],
-        where,
-        _count: { severity: true },
-      });
-
-      const bySource = await ctx.db.logEntry.groupBy({
-        by: ["source"],
-        where,
-        _count: { source: true },
-      });
-
-      // Get count by date (Prisma can't group by DATE(timestamp) directly, so use a raw query with parameters)
-      const whereConditions: string[] = [];
-      const params: Array<Date | string> = [];
-      let paramIndex = 1;
-
-      if (input.startDate) {
-        whereConditions.push(`timestamp >= $${paramIndex}`);
-        params.push(input.startDate);
-        paramIndex++;
-      }
-
-      if (input.endDate) {
-        whereConditions.push(`timestamp <= $${paramIndex}`);
-        params.push(input.endDate);
-        paramIndex++;
-      }
-
-      if (input.severity) {
-        whereConditions.push(`severity = $${paramIndex}`);
-        params.push(input.severity);
-        paramIndex++;
-      }
-
-      if (input.source) {
-        whereConditions.push(`source ILIKE $${paramIndex}`);
-        params.push(`%${input.source}%`);
-        paramIndex++;
-      }
-
-      const whereClause =
-        whereConditions.length > 0
-          ? `WHERE ${whereConditions.join(" AND ")}`
-          : "";
-
-      const byDate = await ctx.db.$queryRawUnsafe<
-        Array<{ date: Date; count: bigint }>
-      >(
-        `
-          SELECT
-            DATE(timestamp) as date,
-            COUNT(*)::int as count
-          FROM logs
-          ${whereClause}
-          GROUP BY DATE(timestamp)
-          ORDER BY date
-        `,
-        ...params,
+      const totalLogs = Number(
+        (await ctx.db.select({ value: count() }).from(logs).where(where))[0]
+          ?.value ?? 0,
       );
+
+      const bySeverity = await ctx.db
+        .select({
+          severity: logs.severity,
+          count: count().as("count"),
+        })
+        .from(logs)
+        .where(where)
+        .groupBy(logs.severity);
+
+      const bySource = await ctx.db
+        .select({
+          source: logs.source,
+          count: count().as("count"),
+        })
+        .from(logs)
+        .where(where)
+        .groupBy(logs.source);
+
+      const dateExpr = sql<Date>`date(${logs.timestamp})`.as("date");
+      const byDate = await ctx.db
+        .select({
+          date: dateExpr,
+          count: count().as("count"),
+        })
+        .from(logs)
+        .where(where)
+        .groupBy(dateExpr)
+        .orderBy(dateExpr);
 
       return {
         totalLogs,
@@ -105,16 +68,22 @@ export const analyticsRouter = createTRPCRouter({
         dateRangeEnd: input.endDate ?? null,
         bySeverity: bySeverity.map((item) => ({
           severity: item.severity as SeverityLevel,
-          count: item._count.severity,
+          count: Number(item.count ?? 0),
         })),
         bySource: bySource.map((item) => ({
           source: item.source,
-          count: item._count.source,
+          count: Number(item.count ?? 0),
         })),
-        byDate: byDate.map((item) => ({
-          date: item.date.toISOString().split("T")[0],
-          count: Number(item.count),
-        })),
+        byDate: byDate.map((item) => {
+          const dateValue =
+            item.date instanceof Date
+              ? item.date
+              : new Date(item.date as unknown as string);
+          return {
+            date: dateValue.toISOString().split("T")[0],
+            count: Number(item.count ?? 0),
+          };
+        }),
       };
     }),
 
@@ -132,74 +101,41 @@ export const analyticsRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const { startDate, endDate, severity, source, groupBy } = input;
 
-      // Build where conditions (parameterized) for a raw time-series query
-      const whereConditions: string[] = [];
-      const params: unknown[] = [];
-      let paramIndex = 1;
+      const where = buildLogWhere({
+        severity,
+        source,
+        startDate,
+        endDate,
+      });
 
-      if (startDate) {
-        whereConditions.push(`timestamp >= $${paramIndex}`);
-        params.push(startDate);
-        paramIndex++;
-      }
-      if (endDate) {
-        whereConditions.push(`timestamp <= $${paramIndex}`);
-        params.push(endDate);
-        paramIndex++;
-      }
-      if (severity) {
-        whereConditions.push(`severity = $${paramIndex}`);
-        params.push(severity);
-        paramIndex++;
-      }
-      if (source) {
-        whereConditions.push(`source ILIKE $${paramIndex}`);
-        params.push(`%${source}%`);
-        paramIndex++;
-      }
+      const timeGroupMap = {
+        hour: sql<Date>`date_trunc('hour', ${logs.timestamp})`,
+        day: sql<Date>`date_trunc('day', ${logs.timestamp})`,
+        week: sql<Date>`date_trunc('week', ${logs.timestamp})`,
+        month: sql<Date>`date_trunc('month', ${logs.timestamp})`,
+      } as const;
 
-      const whereClause =
-        whereConditions.length > 0
-          ? `WHERE ${whereConditions.join(" AND ")}`
-          : "";
+      const timeGroupExpression = timeGroupMap[groupBy].as("time_period");
 
-      // Determine time grouping
-      let timeGroupExpression = "";
-      switch (groupBy) {
-        case "hour":
-          timeGroupExpression = "date_trunc('hour', timestamp)";
-          break;
-        case "day":
-          timeGroupExpression = "date_trunc('day', timestamp)";
-          break;
-        case "week":
-          timeGroupExpression = "date_trunc('week', timestamp)";
-          break;
-        case "month":
-          timeGroupExpression = "date_trunc('month', timestamp)";
-          break;
-      }
-
-      const rawData = await ctx.db.$queryRawUnsafe<
-        Array<{ time_period: Date; severity: SeverityLevel; count: bigint }>
-      >(
-        `
-          SELECT
-            ${timeGroupExpression} as time_period,
-            severity,
-            COUNT(*)::int as count
-          FROM logs
-          ${whereClause}
-          GROUP BY time_period, severity
-          ORDER BY time_period
-        `,
-        ...params,
-      );
+      const rawData = await ctx.db
+        .select({
+          timePeriod: timeGroupExpression,
+          severity: logs.severity,
+          count: count().as("count"),
+        })
+        .from(logs)
+        .where(where)
+        .groupBy(timeGroupExpression, logs.severity)
+        .orderBy(timeGroupExpression);
 
       const chartData: Record<string, ChartDataPoint> = {};
 
       rawData.forEach((row) => {
-        const timestamp = row.time_period.toISOString();
+        const timeValue =
+          row.timePeriod instanceof Date
+            ? row.timePeriod
+            : new Date(row.timePeriod as unknown as string);
+        const timestamp = timeValue.toISOString();
         if (!chartData[timestamp]) {
           chartData[timestamp] = {
             timestamp,
@@ -211,8 +147,9 @@ export const analyticsRouter = createTRPCRouter({
             CRITICAL: 0,
           };
         }
-        chartData[timestamp][row.severity] = Number(row.count);
-        chartData[timestamp].total += Number(row.count);
+        const value = Number(row.count ?? 0);
+        chartData[timestamp][row.severity] = value;
+        chartData[timestamp].total += value;
       });
 
       return {
@@ -229,36 +166,39 @@ export const analyticsRouter = createTRPCRouter({
 
   // Get metadata
   getMetadata: publicProcedure.query(async ({ ctx }) => {
-    // Get all unique sources
-    const sources = await ctx.db.logEntry.findMany({
-      select: { source: true },
-      distinct: ["source"],
-    });
+    const sources = await ctx.db
+      .selectDistinct({ source: logs.source })
+      .from(logs);
 
-    // Get date range
-    const dateRange = await ctx.db.logEntry.aggregate({
-      _min: { timestamp: true },
-      _max: { timestamp: true },
-    });
+    const [{ earliest, latest } = { earliest: null, latest: null }] =
+      await ctx.db
+        .select({
+          earliest: min(logs.timestamp),
+          latest: max(logs.timestamp),
+        })
+        .from(logs);
 
-    // Get severity stats
-    const severityStats = await ctx.db.logEntry.groupBy({
-      by: ["severity"],
-      _count: { severity: true },
-    });
+    const severityStats = await ctx.db
+      .select({
+        severity: logs.severity,
+        count: count().as("count"),
+      })
+      .from(logs)
+      .groupBy(logs.severity);
 
-    // Get total logs
-    const totalLogs = await ctx.db.logEntry.count();
+    const totalLogs = Number(
+      (await ctx.db.select({ value: count() }).from(logs))[0]?.value ?? 0,
+    );
 
     return {
       severityLevels: ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
       sources: sources.map((s) => s.source),
       dateRange: {
-        earliest: dateRange._min.timestamp?.toISOString() ?? null,
-        latest: dateRange._max.timestamp?.toISOString() ?? null,
+        earliest: earliest?.toISOString() ?? null,
+        latest: latest?.toISOString() ?? null,
       },
       severityStats: Object.fromEntries(
-        severityStats.map((stat) => [stat.severity, stat._count.severity]),
+        severityStats.map((stat) => [stat.severity, Number(stat.count ?? 0)]),
       ),
       totalLogs,
       sortFields: ["timestamp", "severity", "source", "message"],
