@@ -10,13 +10,6 @@
     "includes": [
       "src/**/*",
       "scripts/**/*",
-      "README.md",
-      "AGENTS.md",
-      "MIGRATION_GUIDE.md",
-      "SWAGGER_SETUP.md",
-      "SWAGGER_QUICK_FIX.md",
-      "Makefile",
-      "postman_collection.json",
       "package.json",
       "tsconfig.json",
       "biome.jsonc"
