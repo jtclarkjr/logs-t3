@@ -4,16 +4,7 @@ import { z } from "zod";
 import type { SeverityLevel } from "@/lib/enums/severity";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { severityLevelSchema } from "./schemas";
-
-type ChartDatum = {
-  timestamp: string;
-  total: number;
-  DEBUG: number;
-  INFO: number;
-  WARNING: number;
-  ERROR: number;
-  CRITICAL: number;
-};
+import type { ChartDataPoint } from "@/lib/types/chart";
 
 export const analyticsRouter = createTRPCRouter({
   // Get aggregation data for analytics
@@ -205,7 +196,7 @@ export const analyticsRouter = createTRPCRouter({
         ...params,
       );
 
-      const chartData: Record<string, ChartDatum> = {};
+      const chartData: Record<string, ChartDataPoint> = {};
 
       rawData.forEach((row) => {
         const timestamp = row.time_period.toISOString();
