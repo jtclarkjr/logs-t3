@@ -35,8 +35,21 @@ COPY --from=base --chown=appuser:appuser /app/.next/standalone ./
 COPY --from=base --chown=appuser:appuser /app/.next/static ./.next/static
 COPY --from=base --chown=appuser:appuser /app/public ./public
 
+# Copy drizzle files and dependencies for schema push
+COPY --from=base --chown=appuser:appuser /app/node_modules ./node_modules
+COPY --from=base --chown=appuser:appuser /app/drizzle.config.ts ./drizzle.config.ts
+COPY --from=base --chown=appuser:appuser /app/src/server/db/schema.ts ./src/server/db/schema.ts
+COPY --from=base --chown=appuser:appuser /app/package.json ./package.json
+
+# Copy seed script
+COPY --from=base --chown=appuser:appuser /app/scripts/seed.ts ./scripts/seed.ts
+
+# Copy startup script
+COPY --from=base --chown=appuser:appuser /app/scripts/docker-start.sh ./scripts/docker-start.sh
+RUN chmod +x ./scripts/docker-start.sh
+
 USER appuser
 
 EXPOSE 3000
 
-CMD ["bun", "run", "server.js"]
+CMD ["./scripts/docker-start.sh"]

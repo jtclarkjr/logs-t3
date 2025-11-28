@@ -30,6 +30,7 @@ services:
     environment:
       - NODE_ENV=production
       - DATABASE_URL=postgresql://postgres:password@db:5432/logs-t3
+      - SEED_DATABASE=true  # Set to "false" to skip seeding
     restart: unless-stopped
     depends_on:
       db:

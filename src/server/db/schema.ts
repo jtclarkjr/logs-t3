@@ -32,11 +32,11 @@ export const logs = pgTable(
       .defaultNow()
       .notNull(),
   },
-  (table) => ({
-    timestampIdx: index("logs_timestamp_idx").on(table.timestamp),
-    severityIdx: index("logs_severity_idx").on(table.severity),
-    sourceIdx: index("logs_source_idx").on(table.source),
-  }),
+  (table) => [
+    index("logs_timestamp_idx").on(table.timestamp),
+    index("logs_severity_idx").on(table.severity),
+    index("logs_source_idx").on(table.source),
+  ],
 );
 
 export type Log = typeof logs.$inferSelect;
