@@ -6,8 +6,8 @@ bun run drizzle-kit push --force
 
 # Seed database if SEED_DATABASE env var is set to "true"
 if [ "$SEED_DATABASE" = "true" ]; then
-  echo "Seeding database with sample data..."
-  bun run scripts/seed.ts
+  echo "Seeding database with sample data (clearing existing logs first)..."
+  bun run scripts/seed.ts --reset
 fi
 
 echo "Starting application..."
