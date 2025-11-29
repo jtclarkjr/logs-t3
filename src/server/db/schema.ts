@@ -15,6 +15,7 @@ export const severityEnum = pgEnum("severity_level", [
   "CRITICAL",
 ]);
 
+// Logs schema
 export const logs = pgTable(
   "logs",
   {
