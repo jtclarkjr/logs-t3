@@ -28,9 +28,18 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html className={`${geistSans.variable} ${geistMono.variable}`} lang="en">
+    <html
+      className={`${geistSans.variable} ${geistMono.variable}`}
+      lang="en"
+      suppressHydrationWarning
+    >
       <body className="antialiased">
-        <ThemeProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          disableTransitionOnChange
+          enableSystem
+        >
           <TRPCReactProvider>
             <MainNavigation />
             <main className="flex-1">{children}</main>

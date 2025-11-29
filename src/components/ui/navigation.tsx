@@ -4,6 +4,7 @@ import { BarChart3Icon, FileTextIcon, MenuIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -63,6 +64,7 @@ export function MainNavigation() {
           <NavigationItems />
 
           <div className="flex items-center space-x-2">
+            <ThemeToggle />
             <Badge className="text-xs" variant="secondary">
               v1.0.0
             </Badge>
@@ -71,7 +73,9 @@ export function MainNavigation() {
 
         {/* Mobile Navigation */}
         <div className="flex flex-1 items-center justify-between md:hidden">
-          <div />
+          <div className="flex items-center space-x-2">
+            <ThemeToggle />
+          </div>
           <Sheet onOpenChange={setMobileMenuOpen} open={mobileMenuOpen}>
             <SheetTrigger asChild>
               <Button size="sm" variant="ghost">
