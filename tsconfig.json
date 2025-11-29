@@ -19,7 +19,7 @@
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "jsx": "react-jsx",
-    "types": ["bun-types"],
+    "types": ["bun-types", "bun-types/test"],
     "plugins": [
       {
         "name": "next"
@@ -46,11 +46,11 @@
     "node_modules",
     "generated",
     "scripts/**",
-    "src/**/*.test.ts",
-    "src/**/*.test.tsx",
-    "src/**/tests/**",
     "src/components/ui/stories/**",
     "src/lib/utils/error-handler.ts",
-    "src/lib/hooks/query/use-optimized-queries.ts"
+    "src/lib/hooks/query/use-optimized-queries.ts",
+    "src/lib/hooks/query/tests/**",
+    "src/lib/hooks/state/tests/**",
+    "src/lib/utils/tests/**"
   ]
 }
