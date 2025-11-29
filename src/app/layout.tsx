@@ -2,6 +2,7 @@ import "@/app/globals.css";
 
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { ThemeProvider } from "@/components/providers/theme-provider";
 import { MainNavigation } from "@/components/ui/navigation";
 import { Toaster } from "@/components/ui/sonner";
 import { TRPCReactProvider } from "@/trpc/react";
@@ -29,11 +30,13 @@ export default function RootLayout({
   return (
     <html className={`${geistSans.variable} ${geistMono.variable}`} lang="en">
       <body className="antialiased">
-        <TRPCReactProvider>
-          <MainNavigation />
-          <main className="flex-1">{children}</main>
-          <Toaster />
-        </TRPCReactProvider>
+        <ThemeProvider>
+          <TRPCReactProvider>
+            <MainNavigation />
+            <main className="flex-1">{children}</main>
+            <Toaster />
+          </TRPCReactProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
