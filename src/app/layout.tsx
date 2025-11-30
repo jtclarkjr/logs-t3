@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/providers/theme-provider";
 import { MainNavigation } from "@/components/ui/navigation";
 import { Toaster } from "@/components/ui/sonner";
 import { TRPCReactProvider } from "@/trpc/react";
+import { Analytics } from "@vercel/analytics/next";
 
 export const metadata: Metadata = {
   title: "Logs Dashboard",
@@ -23,6 +24,8 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
   variable: "--font-geist-mono",
 });
+
+const isDev = process.env.ENV === "dev";
 
 export default function RootLayout({
   children,
@@ -46,6 +49,7 @@ export default function RootLayout({
             <Toaster />
           </TRPCReactProvider>
         </ThemeProvider>
+        {!isDev && <Analytics />}
       </body>
     </html>
   );
