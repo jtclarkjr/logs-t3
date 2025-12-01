@@ -1,10 +1,19 @@
 "use client";
 
 import type { User } from "@supabase/supabase-js";
+import { authEnabled } from "@/lib/config/auth";
 import { createClient } from "@/lib/supabase/client";
 
 export async function signInWithGitHub() {
+  if (!authEnabled) {
+    return { data: null, error: new Error("Authentication is disabled") };
+  }
+
   const supabase = createClient();
+  if (!supabase) {
+    return { data: null, error: new Error("Supabase client not initialized") };
+  }
+
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "github",
     options: {
@@ -17,7 +26,15 @@ export async function signInWithGitHub() {
 }
 
 export async function signInWithEmail(email: string, password: string) {
+  if (!authEnabled) {
+    return { data: null, error: new Error("Authentication is disabled") };
+  }
+
   const supabase = createClient();
+  if (!supabase) {
+    return { data: null, error: new Error("Supabase client not initialized") };
+  }
+
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
@@ -26,7 +43,15 @@ export async function signInWithEmail(email: string, password: string) {
 }
 
 export async function signUpWithEmail(email: string, password: string) {
+  if (!authEnabled) {
+    return { data: null, error: new Error("Authentication is disabled") };
+  }
+
   const supabase = createClient();
+  if (!supabase) {
+    return { data: null, error: new Error("Supabase client not initialized") };
+  }
+
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
@@ -40,13 +65,29 @@ export async function signUpWithEmail(email: string, password: string) {
 }
 
 export async function signOut() {
+  if (!authEnabled) {
+    return { error: null };
+  }
+
   const supabase = createClient();
+  if (!supabase) {
+    return { error: new Error("Supabase client not initialized") };
+  }
+
   const { error } = await supabase.auth.signOut();
   return { error };
 }
 
 export async function getCurrentUser(): Promise<User | null> {
+  if (!authEnabled) {
+    return null;
+  }
+
   const supabase = createClient();
+  if (!supabase) {
+    return null;
+  }
+
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -54,8 +95,31 @@ export async function getCurrentUser(): Promise<User | null> {
 }
 
 export function onAuthStateChange(callback: (user: User | null) => void) {
+  if (!authEnabled) {
+    // Return a dummy subscription
+    return {
+      data: {
+        subscription: {
+          unsubscribe: () => {},
+        },
+      },
+    };
+  }
+
   const supabase = createClient();
-  return supabase.auth.onAuthStateChange((_event, session) => {
-    callback(session?.user || null);
-  });
+  if (!supabase) {
+    return {
+      data: {
+        subscription: {
+          unsubscribe: () => {},
+        },
+      },
+    };
+  }
+
+  return supabase.auth.onAuthStateChange(
+    (_event: string, session: { user: User | null } | null) => {
+      callback(session?.user || null);
+    },
+  );
 }

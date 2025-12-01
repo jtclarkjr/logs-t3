@@ -2,6 +2,7 @@
 
 import type { User } from "@supabase/supabase-js";
 import { createContext, useContext, useEffect, useState } from "react";
+import { authEnabled } from "@/lib/config/auth";
 import { getCurrentUser, onAuthStateChange } from "./client";
 
 interface AuthContextType {
@@ -31,6 +32,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
+    // Skip auth initialization if auth is disabled
+    if (!authEnabled) {
+      setUser(null);
+      setLoading(false);
+      return;
+    }
+
     getCurrentUser()
       .then((user) => {
         setUser(user);
