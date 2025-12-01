@@ -1,0 +1,61 @@
+"use client";
+
+import type { User } from "@supabase/supabase-js";
+import { createClient } from "@/lib/supabase/client";
+
+export async function signInWithGitHub() {
+  const supabase = createClient();
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: "github",
+    options: {
+      redirectTo:
+        process.env.NEXT_PUBLIC_AUTH_CALLBACK_URL ||
+        `${window.location.origin}/auth/callback`,
+    },
+  });
+  return { data, error };
+}
+
+export async function signInWithEmail(email: string, password: string) {
+  const supabase = createClient();
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
+  return { data, error };
+}
+
+export async function signUpWithEmail(email: string, password: string) {
+  const supabase = createClient();
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: {
+      emailRedirectTo:
+        process.env.NEXT_PUBLIC_AUTH_CALLBACK_URL ||
+        `${window.location.origin}/auth/callback`,
+    },
+  });
+  return { data, error };
+}
+
+export async function signOut() {
+  const supabase = createClient();
+  const { error } = await supabase.auth.signOut();
+  return { error };
+}
+
+export async function getCurrentUser(): Promise<User | null> {
+  const supabase = createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  return user;
+}
+
+export function onAuthStateChange(callback: (user: User | null) => void) {
+  const supabase = createClient();
+  return supabase.auth.onAuthStateChange((_event, session) => {
+    callback(session?.user || null);
+  });
+}

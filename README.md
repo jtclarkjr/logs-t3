@@ -34,10 +34,16 @@ A full-stack logs dashboard application built with the T3 Stack (Next.js, TypeSc
   - Advanced filtering (severity, source, date range, text search)
   - Pagination with customizable page size
   - Sort by timestamp, severity, or source
+- **Authentication** - Supabase-powered auth with feature flags
+  - Email/Password authentication
+  - GitHub OAuth integration
+  - Toggleable via environment variables (disabled by default)
+  - Protected actions (create, update, delete) when enabled
 - **UI Components** - 38+ Shadcn/UI components
   - Built on Radix UI primitives
   - Full keyboard navigation and accessibility
   - Toast notifications for user feedback
+  - Light/dark mode theme support
 
 ### Database Schema
 Defined with Drizzle in `src/server/db/schema.ts`:
@@ -75,9 +81,17 @@ export const logs = pgTable("logs", {
    ```
 
 2. **Set up environment variables**
-   The `.env` file should already exist with:
+   Copy `.env.example` to `.env` and configure:
    ```env
+   # Database (required)
    DATABASE_URL="postgresql://postgres:password@localhost:5432/logs-t3"
+
+   # Authentication (optional - disabled by default)
+   NEXT_PUBLIC_SUPABASE_URL="https://your-project.supabase.co"
+   NEXT_PUBLIC_SUPABASE_ANON_KEY="your-anon-key"
+   NEXT_PUBLIC_AUTH_CALLBACK_URL="http://localhost:3000/auth/callback"
+   NEXT_PUBLIC_AUTH_ENABLED="false"        # Set to "true" to enable auth
+   NEXT_PUBLIC_AUTH_SIGNUP_ENABLED="false" # Set to "true" to allow sign-ups
    ```
 
 3. **Start the database**
@@ -208,11 +222,26 @@ The app will be available at http://localhost:3000 with PostgreSQL running on po
 
 ## Environment Variables
 
-Required environment variables:
-
+### Required
 ```env
 DATABASE_URL="postgresql://postgres:password@localhost:5432/logs-t3"
 ```
+
+### Optional - Authentication
+Authentication is **disabled by default**. Enable it by setting:
+```env
+NEXT_PUBLIC_SUPABASE_URL="https://your-project.supabase.co"
+NEXT_PUBLIC_SUPABASE_ANON_KEY="your-anon-key"
+NEXT_PUBLIC_AUTH_CALLBACK_URL="http://localhost:3000/auth/callback"
+NEXT_PUBLIC_AUTH_ENABLED="true"         # Enable authentication
+NEXT_PUBLIC_AUTH_SIGNUP_ENABLED="true"  # Allow new user registration
+```
+
+**Authentication Methods:**
+- Email/Password
+- GitHub OAuth
+
+When auth is enabled, create/update/delete operations require authentication.
 
 ## Development Workflow
 

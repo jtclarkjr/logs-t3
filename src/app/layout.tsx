@@ -6,6 +6,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { MinimalSidebar } from "@/components/ui/minimal-sidebar";
 import { Toaster } from "@/components/ui/sonner";
+import { AuthProvider } from "@/lib/auth/context";
 import { TRPCReactProvider } from "@/trpc/react";
 
 export const metadata: Metadata = {
@@ -43,11 +44,13 @@ export default function RootLayout({
           disableTransitionOnChange
           enableSystem
         >
-          <TRPCReactProvider>
-            <MinimalSidebar />
-            <main className="flex-1 pb-16 md:pb-0 md:pl-16">{children}</main>
-            <Toaster />
-          </TRPCReactProvider>
+          <AuthProvider>
+            <TRPCReactProvider>
+              <MinimalSidebar />
+              <main className="flex-1 pb-16 md:pb-0 md:pl-16">{children}</main>
+              <Toaster />
+            </TRPCReactProvider>
+          </AuthProvider>
         </ThemeProvider>
         {!isDev && <Analytics />}
       </body>

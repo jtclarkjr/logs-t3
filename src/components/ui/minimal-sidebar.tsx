@@ -1,10 +1,20 @@
 "use client";
 
-import { BarChart3Icon, FileTextIcon, MenuIcon } from "lucide-react";
+import { BarChart3Icon, FileTextIcon, LogOut, MenuIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   Sheet,
   SheetContent,
@@ -18,6 +28,10 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { UserAvatar } from "@/components/ui/user-avatar";
+import { signOut } from "@/lib/auth/client";
+import { useAuth } from "@/lib/auth/context";
+import { authEnabled } from "@/lib/config/auth";
 import { useIsMobile } from "@/lib/hooks/utils/use-mobile";
 import { cn } from "@/lib/utils";
 
@@ -30,6 +44,16 @@ export function MinimalSidebar() {
   const pathname = usePathname();
   const isMobile = useIsMobile();
   const [isOpen, setIsOpen] = useState(false);
+  const { user } = useAuth();
+
+  const handleSignOut = async () => {
+    const { error } = await signOut();
+    if (error) {
+      toast.error("Failed to sign out");
+    } else {
+      toast.success("Signed out successfully");
+    }
+  };
 
   if (isMobile) {
     return (
@@ -79,6 +103,35 @@ export function MinimalSidebar() {
                   <span className="font-medium text-sm">Theme</span>
                   <ThemeToggle />
                 </div>
+
+                {authEnabled && user && (
+                  <>
+                    <div className="my-2 border-t" />
+                    <div className="flex items-center gap-3 rounded-lg border bg-muted/50 p-3">
+                      <UserAvatar
+                        alt={user.user_metadata?.name || user.email || "User"}
+                        size="md"
+                        src={user.user_metadata?.avatar_url}
+                      />
+                      <div className="flex-1 overflow-hidden">
+                        <p className="truncate font-medium text-sm">
+                          {user.user_metadata?.name || "User"}
+                        </p>
+                        <p className="truncate text-muted-foreground text-xs">
+                          {user.email}
+                        </p>
+                      </div>
+                    </div>
+                    <Button
+                      className="w-full"
+                      onClick={handleSignOut}
+                      variant="outline"
+                    >
+                      <LogOut className="mr-2 h-4 w-4" />
+                      Sign Out
+                    </Button>
+                  </>
+                )}
               </div>
             </SheetContent>
           </Sheet>
@@ -133,10 +186,47 @@ export function MinimalSidebar() {
           })}
         </nav>
 
-        {/* Theme Toggle at Bottom */}
-        <div className="border-t p-2">
-          <div className="flex h-12 w-12 items-center justify-center">
-            <ThemeToggle />
+        {/* Bottom Section */}
+        <div className="border-t">
+          {/* User Avatar with Dropdown */}
+          {authEnabled && user && (
+            <div className="border-b p-2">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button className="h-12 w-12 rounded-md p-0" variant="ghost">
+                    <UserAvatar
+                      alt={user.user_metadata?.name || user.email || "User"}
+                      size="md"
+                      src={user.user_metadata?.avatar_url}
+                    />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" side="right">
+                  <DropdownMenuLabel>
+                    <div className="flex flex-col space-y-1">
+                      <p className="font-medium text-sm">
+                        {user.user_metadata?.name || "User"}
+                      </p>
+                      <p className="text-muted-foreground text-xs">
+                        {user.email}
+                      </p>
+                    </div>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={handleSignOut}>
+                    <LogOut className="mr-2 h-4 w-4" />
+                    Sign Out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          )}
+
+          {/* Theme Toggle */}
+          <div className="p-2">
+            <div className="flex h-12 w-12 items-center justify-center">
+              <ThemeToggle />
+            </div>
           </div>
         </div>
       </TooltipProvider>

@@ -29,6 +29,8 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
+import { useAuth } from "@/lib/auth/context";
+import { authEnabled } from "@/lib/config/auth";
 import { SeverityLevel } from "@/lib/enums/severity";
 import { useUpdateLog } from "@/lib/hooks/query/use-logs";
 import type { LogResponse } from "@/lib/types/log";
@@ -47,6 +49,9 @@ export function LogDetailsDrawer({
   log,
   onDelete,
 }: LogDetailsDrawerProps) {
+  const { user } = useAuth();
+  const isAuthenticated = !authEnabled || !!user;
+
   const [formData, setFormData] = useState({
     message: log?.message || "",
     severity: log?.severity || SeverityLevel.INFO,
@@ -208,6 +213,7 @@ export function LogDetailsDrawer({
                   Severity Level
                 </div>
                 <Select
+                  disabled={!isAuthenticated}
                   onValueChange={(value) => {
                     setFormData((prev) => ({
                       ...prev,
@@ -247,6 +253,7 @@ export function LogDetailsDrawer({
                 <div className="text-muted-foreground text-xs">Source</div>
                 <Input
                   className={`max-w-xs ${fieldErrors.source ? "border-destructive" : ""}`}
+                  disabled={!isAuthenticated}
                   onBlur={() => validateField("source", formData.source)}
                   onChange={(e) => {
                     setFormData((prev) => ({
@@ -286,6 +293,7 @@ export function LogDetailsDrawer({
                 </div>
                 <Input
                   className={`max-w-xs ${fieldErrors.timestamp ? "border-destructive" : ""}`}
+                  disabled={!isAuthenticated}
                   onBlur={() => validateField("timestamp", formData.timestamp)}
                   onChange={(e) => {
                     const date = new Date(e.target.value);
@@ -347,6 +355,7 @@ export function LogDetailsDrawer({
             <div className="space-y-2">
               <Textarea
                 className={`min-h-24 font-mono text-sm ${fieldErrors.message ? "border-destructive" : ""}`}
+                disabled={!isAuthenticated}
                 onBlur={() => validateField("message", formData.message)}
                 onChange={(e) => {
                   setFormData((prev) => ({ ...prev, message: e.target.value }));
@@ -381,7 +390,7 @@ export function LogDetailsDrawer({
               Close
             </Button>
             <Button
-              disabled={updateLogMutation.isPending}
+              disabled={!isAuthenticated || updateLogMutation.isPending}
               onClick={handleSave}
               size="sm"
               variant="default"

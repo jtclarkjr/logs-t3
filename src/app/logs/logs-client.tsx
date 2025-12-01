@@ -15,6 +15,7 @@ import {
 } from "@/lib/hooks/query/use-logs";
 import { useLogsFilters } from "@/lib/hooks/state/use-logs-filters";
 import { useLogsUIState } from "@/lib/hooks/state/use-logs-ui-state";
+import { useAuthAction } from "@/lib/hooks/use-auth-action";
 import type {
   SeverityFilter,
   SortByField,
@@ -40,6 +41,9 @@ export function LogsClient({
   initialData,
   initialFilters = {},
 }: LogsClientProps) {
+  // Auth protection
+  const { requireAuth, AuthModalComponent } = useAuthAction();
+
   // Filter state management
   const {
     searchQuery,
@@ -77,6 +81,18 @@ export function LogsClient({
   const deleteLogMutation = useDeleteLog();
   const { exportLogs, isPending: isExporting } = useExportLogs();
 
+  // Use current data or fall back to initial data
+  const displayLogs: LogListResponse | undefined = logs ?? initialData;
+
+  // Wrapped handlers that require auth
+  const handleCreateLog = () => {
+    requireAuth(() => openCreateDialog());
+  };
+
+  const handleDeleteLog = (log: NonNullable<typeof displayLogs>["logs"][0]) => {
+    requireAuth(() => openDeleteDialog(log));
+  };
+
   const confirmDeleteLog = () => {
     if (!logToDelete) return;
 
@@ -90,9 +106,6 @@ export function LogsClient({
     );
   };
 
-  // Use current data or fall back to initial data
-  const displayLogs: LogListResponse | undefined = logs ?? initialData;
-
   const handleExport = () => {
     const filters = getAPIFilters();
     void exportLogs(filters);
@@ -103,7 +116,7 @@ export function LogsClient({
       {/* Header */}
       <LogsHeader
         isExporting={isExporting}
-        onCreateLog={openCreateDialog}
+        onCreateLog={handleCreateLog}
         onExport={handleExport}
       />
 
@@ -126,7 +139,7 @@ export function LogsClient({
         error={error}
         isLoading={isLoading}
         logs={displayLogs}
-        onDeleteLog={openDeleteDialog}
+        onDeleteLog={handleDeleteLog}
         onResetFilters={resetFilters}
         onViewLog={openLogDetails}
       />
@@ -150,7 +163,7 @@ export function LogsClient({
       {/* Log Details Drawer */}
       <LogDetailsDrawer
         log={selectedLog}
-        onDelete={openDeleteDialog}
+        onDelete={handleDeleteLog}
         onOpenChange={closeLogDetails}
         open={drawerOpen}
       />
@@ -160,6 +173,9 @@ export function LogsClient({
         onOpenChange={closeCreateDialog}
         open={createDialogOpen}
       />
+
+      {/* Auth Modal */}
+      <AuthModalComponent />
     </div>
   );
 }
