@@ -182,7 +182,6 @@ A complete Postman collection is available for testing the API:
      - Get Metadata
 
 4. **Important Notes**
-   - All parameters use **camelCase** (e.g., `pageSize`, not `page_size`)
    - IDs are **UUID strings**, not numbers
    - Query parameters are wrapped in `{"json":{...}}` format
    - All example requests and responses match the actual API
