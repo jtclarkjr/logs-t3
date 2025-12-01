@@ -1,0 +1,145 @@
+"use client";
+
+import { BarChart3Icon, FileTextIcon, MenuIcon } from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useState } from "react";
+import { ThemeToggle } from "@/components/theme-toggle";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { useIsMobile } from "@/lib/hooks/utils/use-mobile";
+import { cn } from "@/lib/utils";
+
+const navigation = [
+  { name: "Dashboard", href: "/dashboard", icon: BarChart3Icon },
+  { name: "Logs", href: "/logs", icon: FileTextIcon },
+];
+
+export function MinimalSidebar() {
+  const pathname = usePathname();
+  const isMobile = useIsMobile();
+  const [isOpen, setIsOpen] = useState(false);
+
+  if (isMobile) {
+    return (
+      <>
+        {/* Mobile Bottom Navigation */}
+        <nav className="fixed right-0 bottom-0 left-0 z-50 flex h-16 items-center justify-around border-t bg-background px-4 md:hidden">
+          {navigation.map((item) => {
+            const Icon = item.icon;
+            const isActive =
+              pathname === item.href ||
+              (item.href !== "/" && pathname.startsWith(item.href));
+
+            return (
+              <Link
+                className={cn(
+                  "flex flex-col items-center justify-center gap-1 rounded-md px-4 py-2 transition-colors",
+                  isActive
+                    ? "text-primary"
+                    : "text-muted-foreground hover:text-foreground",
+                )}
+                href={item.href}
+                key={item.href}
+              >
+                <Icon className="h-5 w-5" />
+                <span className="text-xs">{item.name}</span>
+              </Link>
+            );
+          })}
+
+          {/* Mobile Menu Sheet */}
+          <Sheet onOpenChange={setIsOpen} open={isOpen}>
+            <SheetTrigger asChild>
+              <button
+                className="flex flex-col items-center justify-center gap-1 rounded-md px-4 py-2 text-muted-foreground transition-colors hover:text-foreground"
+                type="button"
+              >
+                <MenuIcon className="h-5 w-5" />
+                <span className="text-xs">Menu</span>
+              </button>
+            </SheetTrigger>
+            <SheetContent side="right">
+              <SheetHeader>
+                <SheetTitle>Settings</SheetTitle>
+              </SheetHeader>
+              <div className="mt-6 flex flex-col gap-4">
+                <div className="flex items-center justify-between">
+                  <span className="font-medium text-sm">Theme</span>
+                  <ThemeToggle />
+                </div>
+              </div>
+            </SheetContent>
+          </Sheet>
+        </nav>
+
+        {/* Mobile padding for bottom nav */}
+        <div className="h-16 md:hidden" />
+      </>
+    );
+  }
+
+  // Desktop Sidebar
+  return (
+    <aside className="fixed top-0 left-0 z-50 hidden h-screen w-16 flex-col border-r bg-background md:flex">
+      <TooltipProvider delayDuration={0}>
+        {/* Logo */}
+        <div className="flex h-16 items-center justify-center border-b">
+          <Link href="/">
+            <BarChart3Icon className="h-6 w-6 text-primary" />
+          </Link>
+        </div>
+
+        {/* Navigation */}
+        <nav className="flex flex-1 flex-col gap-2 p-2">
+          {navigation.map((item) => {
+            const Icon = item.icon;
+            const isActive =
+              pathname === item.href ||
+              (item.href !== "/" && pathname.startsWith(item.href));
+
+            return (
+              <Tooltip key={item.href}>
+                <TooltipTrigger asChild>
+                  <Link
+                    className={cn(
+                      "flex h-12 w-12 items-center justify-center rounded-md transition-colors",
+                      isActive
+                        ? "bg-primary text-primary-foreground"
+                        : "text-muted-foreground hover:bg-muted hover:text-foreground",
+                    )}
+                    href={item.href}
+                  >
+                    <Icon className="h-5 w-5" />
+                    <span className="sr-only">{item.name}</span>
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent side="right">
+                  <p>{item.name}</p>
+                </TooltipContent>
+              </Tooltip>
+            );
+          })}
+        </nav>
+
+        {/* Theme Toggle at Bottom */}
+        <div className="border-t p-2">
+          <div className="flex h-12 w-12 items-center justify-center">
+            <ThemeToggle />
+          </div>
+        </div>
+      </TooltipProvider>
+    </aside>
+  );
+}

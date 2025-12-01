@@ -1,12 +1,12 @@
 import "@/app/globals.css";
 
+import { Analytics } from "@vercel/analytics/next";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/providers/theme-provider";
-import { MainNavigation } from "@/components/ui/navigation";
+import { MinimalSidebar } from "@/components/ui/minimal-sidebar";
 import { Toaster } from "@/components/ui/sonner";
 import { TRPCReactProvider } from "@/trpc/react";
-import { Analytics } from "@vercel/analytics/next";
 
 export const metadata: Metadata = {
   title: "Logs Dashboard",
@@ -44,8 +44,8 @@ export default function RootLayout({
           enableSystem
         >
           <TRPCReactProvider>
-            <MainNavigation />
-            <main className="flex-1">{children}</main>
+            <MinimalSidebar />
+            <main className="flex-1 pb-16 md:pb-0 md:pl-16">{children}</main>
             <Toaster />
           </TRPCReactProvider>
         </ThemeProvider>
