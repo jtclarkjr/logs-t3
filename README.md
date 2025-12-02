@@ -207,9 +207,26 @@ Content-Type: application/json
 GET /api/trpc/logs.getAll?input={"json":{"page":1,"pageSize":20,"severity":"ERROR"}}
 ```
 
-## Docker Deployment
+## Deployment
 
-Build and run with Docker:
+### Production (Vercel)
+
+This application is deployed to Vercel with infrastructure-level protections:
+
+- **Platform:** Vercel
+- **Security:** IP blocking, rate limiting, and DDoS protection configured at the infrastructure level
+- **Database:** PostgreSQL (configured via `DATABASE_URL` environment variable)
+
+To deploy your own instance to Vercel:
+
+1. Push your code to GitHub
+2. Import the project in Vercel
+3. Configure environment variables (see [Environment Variables](#environment-variables))
+4. Deploy
+
+### Docker Deployment
+
+Build and run with Docker for local or self-hosted deployments:
 
 ```bash
 # Start all services
