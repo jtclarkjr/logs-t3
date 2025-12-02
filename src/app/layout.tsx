@@ -28,6 +28,9 @@ const geistMono = Geist_Mono({
 
 const isDev = process.env.ENV === "dev";
 
+// Enable native view transitions (Next.js 16)
+export const experimental_viewTransition = true;
+
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {

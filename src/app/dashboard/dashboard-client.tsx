@@ -1,6 +1,5 @@
 "use client";
 
-import { format } from "date-fns";
 import type { DateRange } from "react-day-picker";
 import { toast } from "sonner";
 import { SeverityDistributionChart } from "@/components/dashboard/chart/chart-severity-distribution";
@@ -68,19 +67,23 @@ export function DashboardClient({
     data: aggregationData,
     isLoading: isLoadingAggregation,
     error: aggregationError,
-  } = useLogAggregation(getAggregationFilters());
+  } = useLogAggregation(getAggregationFilters(), initialData?.aggregationData);
 
   const {
     data: timeSeriesData,
     isLoading: isLoadingChart,
     error: chartError,
-  } = useFormattedChartData(getChartDataFilters(), timeGrouping);
+  } = useFormattedChartData(
+    getChartDataFilters(),
+    timeGrouping,
+    initialData?.timeSeriesData,
+  );
 
   const {
     data: metadata,
     isLoading: isLoadingMetadata,
     error: metadataError,
-  } = useMetadata();
+  } = useMetadata(initialData?.metadata);
 
   const exportLogsMutation = useExportLogs();
 
@@ -106,17 +109,7 @@ export function DashboardClient({
   const displayAggregationData: LogAggregationResponse | undefined =
     (aggregationData as LogAggregationResponse | undefined) ??
     initialData?.aggregationData;
-  const displayTimeSeriesData =
-    timeSeriesData ||
-    (initialData?.timeSeriesData?.data
-      ? initialData.timeSeriesData.data.map((item) => ({
-          ...item,
-          date: format(
-            new Date(item.timestamp),
-            timeGrouping === ("hour" as GroupBy) ? "MMM dd HH:mm" : "MMM dd",
-          ),
-        }))
-      : []);
+  const displayTimeSeriesData = timeSeriesData || [];
   const displayMetadata = metadata || initialData?.metadata;
 
   return (

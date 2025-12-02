@@ -24,27 +24,33 @@ export function useLogs(filters?: LogFilters) {
 /**
  * Hook to fetch aggregation data
  */
-export function useLogAggregation(filters?: LogAggregationFilters) {
+export function useLogAggregation(
+  filters?: LogAggregationFilters,
+  initialData?: any,
+) {
   return api.logs.getAggregation.useQuery(filters ?? {}, {
     enabled: Boolean(filters?.startDate && filters?.endDate),
+    initialData,
   });
 }
 
 /**
  * Hook to fetch chart data for analytics
  */
-export function useChartData(filters?: ChartFilters) {
+export function useChartData(filters?: ChartFilters, initialData?: any) {
   return api.logs.getChartData.useQuery(filters ?? { groupBy: "day" }, {
     enabled: Boolean(filters?.startDate && filters?.endDate),
+    initialData,
   });
 }
 
 /**
  * Hook to fetch metadata (sources, severity levels, etc.)
  */
-export function useMetadata() {
+export function useMetadata(initialData?: any) {
   return api.logs.getMetadata.useQuery(undefined, {
     staleTime: 10 * 60 * 1000, // Cache for 10 minutes since metadata is relatively static
+    initialData,
   });
 }
 
@@ -131,11 +137,13 @@ export function useUpdateLog() {
 export function useFormattedChartData(
   filters?: ChartFilters,
   timeGrouping?: GroupBy,
+  initialData?: any,
 ) {
   return api.logs.getChartData.useQuery(
     filters ?? { groupBy: timeGrouping ?? "day" },
     {
       enabled: Boolean(filters?.startDate && filters?.endDate),
+      initialData,
       select: (data) => {
         if (!data?.data || !timeGrouping) return [];
 
