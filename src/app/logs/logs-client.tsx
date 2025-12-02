@@ -8,6 +8,7 @@ import { LogsFilters } from "@/components/logs/logs-filters";
 import { LogsHeader } from "@/components/logs/logs-header";
 import { LogsPagination } from "@/components/logs/logs-pagination";
 import { LogsTable } from "@/components/logs/logs-table";
+import { SpotlightSearch } from "@/components/logs/spotlight-search";
 import {
   useDeleteLog,
   useExportLogs,
@@ -16,6 +17,7 @@ import {
 import { useLogsFilters } from "@/lib/hooks/state/use-logs-filters";
 import { useLogsUIState } from "@/lib/hooks/state/use-logs-ui-state";
 import { useAuthAction } from "@/lib/hooks/use-auth-action";
+import { useSpotlightSearch } from "@/lib/hooks/utils/use-spotlight-search";
 import type {
   SeverityFilter,
   SortByField,
@@ -47,6 +49,10 @@ export function LogsClient({
   // Auth protection
   const { requireAuth, AuthModalComponent, user } = useAuthAction();
   const currentUserId = user?.id;
+
+  // Spotlight search state
+  const { isOpen: spotlightOpen, setIsOpen: setSpotlightOpen } =
+    useSpotlightSearch();
 
   // Filter state management
   const {
@@ -138,6 +144,7 @@ export function LogsClient({
         onSearchQueryChange={setSearchQuery}
         onSeverityChange={setSelectedSeverity}
         onSortChange={handleSortChange}
+        onSpotlightClick={() => setSpotlightOpen(true)}
         onUpdatedByFilterChange={setUpdatedByFilter}
         searchQuery={searchQuery}
         selectedSeverity={selectedSeverity}
@@ -185,6 +192,14 @@ export function LogsClient({
       <CreateLogDialog
         onOpenChange={closeCreateDialog}
         open={createDialogOpen}
+      />
+
+      {/* Spotlight Search */}
+      <SpotlightSearch
+        onOpenChange={setSpotlightOpen}
+        onSearchQueryChange={setSearchQuery}
+        open={spotlightOpen}
+        searchQuery={searchQuery}
       />
 
       {/* Auth Modal */}

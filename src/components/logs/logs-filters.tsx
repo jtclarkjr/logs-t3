@@ -1,6 +1,6 @@
 "use client";
 
-import { FilterIcon, SearchIcon, XIcon } from "lucide-react";
+import { FilterIcon, SearchIcon } from "lucide-react";
 import type { DateRange } from "react-day-picker";
 import { Button } from "@/components/ui/button";
 import {
@@ -20,7 +20,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { SeverityLevel } from "@/lib/enums/severity";
-import { useDebouncedSearch } from "@/lib/hooks/utils/use-debounced-search";
 import type {
   SeverityFilter,
   SortByField,
@@ -44,6 +43,7 @@ interface LogsFiltersProps {
   updatedByFilter: UserFilter;
   onCreatedByFilterChange: (filter: UserFilter) => void;
   onUpdatedByFilterChange: (filter: UserFilter) => void;
+  onSpotlightClick?: () => void;
 }
 
 export function LogsFilters({
@@ -62,13 +62,8 @@ export function LogsFilters({
   updatedByFilter,
   onCreatedByFilterChange,
   onUpdatedByFilterChange,
+  onSpotlightClick,
 }: LogsFiltersProps) {
-  const { searchValue, setSearchValue } = useDebouncedSearch(
-    searchQuery,
-    onSearchQueryChange,
-    { delay: 300 },
-  );
-
   const handleSortChange = (value: string) => {
     const [field, order] = value.split("-");
     onSortChange(field as SortByField, order as SortOrder);
@@ -98,27 +93,26 @@ export function LogsFilters({
       <CardContent>
         <div className="flex flex-col gap-4 lg:flex-row">
           {/* Search */}
-          <div className="flex-1 lg:flex-[2]">
-            <div className="relative">
+          <div className="w-[500px] flex-1 lg:flex-[2]">
+            <button
+              className="relative w-full cursor-pointer text-left"
+              onClick={onSpotlightClick}
+              type="button"
+            >
               <SearchIcon className="absolute top-3 left-3 h-4 w-4 text-muted-foreground" />
               <Input
-                className="pr-9 pl-9"
-                onChange={(e) => setSearchValue(e.target.value)}
+                className="pr-24 pl-9"
+                onChange={(e) => onSearchQueryChange(e.target.value)}
                 placeholder="Search logs..."
-                value={searchValue}
+                readOnly
+                value={searchQuery}
               />
-              {searchValue && (
-                <Button
-                  className="absolute top-0.5 right-1 h-8 w-8 cursor-pointer p-0 hover:bg-transparent"
-                  onClick={() => setSearchValue("")}
-                  size="sm"
-                  variant="ghost"
-                >
-                  <XIcon className="h-4 w-4 text-muted-foreground hover:text-foreground" />
-                  <span className="sr-only">Clear search</span>
-                </Button>
-              )}
-            </div>
+              <div className="pointer-events-none absolute top-2 right-3 flex items-center gap-1">
+                <kbd className="inline-flex h-6 select-none items-center gap-1 rounded border bg-muted px-1.5 font-medium font-mono text-[10px] text-muted-foreground">
+                  <span className="text-xs">⌘K</span>
+                </kbd>
+              </div>
+            </button>
           </div>
 
           {/* Date Range */}
