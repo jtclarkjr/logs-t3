@@ -30,7 +30,7 @@ export function useLogAggregation(
 ) {
   return api.logs.getAggregation.useQuery(filters ?? {}, {
     enabled: Boolean(filters?.startDate && filters?.endDate),
-    initialData,
+    placeholderData: initialData,
   });
 }
 
@@ -40,7 +40,7 @@ export function useLogAggregation(
 export function useChartData(filters?: ChartFilters, initialData?: any) {
   return api.logs.getChartData.useQuery(filters ?? { groupBy: "day" }, {
     enabled: Boolean(filters?.startDate && filters?.endDate),
-    initialData,
+    placeholderData: initialData,
   });
 }
 
@@ -50,7 +50,7 @@ export function useChartData(filters?: ChartFilters, initialData?: any) {
 export function useMetadata(initialData?: any) {
   return api.logs.getMetadata.useQuery(undefined, {
     staleTime: 10 * 60 * 1000, // Cache for 10 minutes since metadata is relatively static
-    initialData,
+    placeholderData: initialData,
   });
 }
 
@@ -143,7 +143,7 @@ export function useFormattedChartData(
     filters ?? { groupBy: timeGrouping ?? "day" },
     {
       enabled: Boolean(filters?.startDate && filters?.endDate),
-      initialData,
+      placeholderData: initialData,
       select: (data) => {
         if (!data?.data || !timeGrouping) return [];
 
