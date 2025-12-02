@@ -21,6 +21,7 @@ import type {
   SortByField,
   SortOrder,
   SourceFilter,
+  UserFilter,
 } from "@/lib/types/filters";
 import type { LogListResponse } from "@/lib/types/log";
 
@@ -34,6 +35,8 @@ interface LogsClientProps {
     sortOrder?: SortOrder;
     currentPage?: number;
     dateRange?: DateRange;
+    createdByFilter?: UserFilter;
+    updatedByFilter?: UserFilter;
   };
 }
 
@@ -42,7 +45,8 @@ export function LogsClient({
   initialFilters = {},
 }: LogsClientProps) {
   // Auth protection
-  const { requireAuth, AuthModalComponent } = useAuthAction();
+  const { requireAuth, AuthModalComponent, user } = useAuthAction();
+  const currentUserId = user?.id;
 
   // Filter state management
   const {
@@ -51,15 +55,19 @@ export function LogsClient({
     sortBy,
     sortOrder,
     dateRange,
+    createdByFilter,
+    updatedByFilter,
     setSearchQuery,
     setSelectedSeverity,
     setDateRange,
+    setCreatedByFilter,
+    setUpdatedByFilter,
     handleSortChange,
     setCurrentPage,
     setPageSize,
     resetFilters,
     getAPIFilters,
-  } = useLogsFilters(initialFilters);
+  } = useLogsFilters(initialFilters, currentUserId ?? undefined);
 
   // UI state management
   const {
@@ -122,16 +130,21 @@ export function LogsClient({
 
       {/* Filters */}
       <LogsFilters
+        createdByFilter={createdByFilter}
         dateRange={dateRange}
+        onCreatedByFilterChange={setCreatedByFilter}
         onDateRangeChange={setDateRange}
         onResetFilters={resetFilters}
         onSearchQueryChange={setSearchQuery}
         onSeverityChange={setSelectedSeverity}
         onSortChange={handleSortChange}
+        onUpdatedByFilterChange={setUpdatedByFilter}
         searchQuery={searchQuery}
         selectedSeverity={selectedSeverity}
+        showUserFilters={Boolean(currentUserId)}
         sortBy={sortBy}
         sortOrder={sortOrder}
+        updatedByFilter={updatedByFilter}
       />
 
       {/* Results */}

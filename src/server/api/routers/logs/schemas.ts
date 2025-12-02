@@ -44,4 +44,6 @@ export const logFiltersSchema = z.object({
   search: z.string().optional(),
   sortBy: z.enum(["timestamp", "severity", "source"]).default("timestamp"),
   sortOrder: z.enum(["asc", "desc"]).default("desc"),
+  createdBy: z.string().uuid().optional(),
+  updatedBy: z.string().uuid().optional(),
 });

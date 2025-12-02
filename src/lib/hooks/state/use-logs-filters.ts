@@ -8,6 +8,7 @@ import type {
   SortByField,
   SortOrder,
   SourceFilter,
+  UserFilter,
 } from "@/lib/types/filters";
 import type { RouterInputs } from "@/trpc/react";
 
@@ -20,6 +21,8 @@ interface LogsFiltersState {
   currentPage: number;
   pageSize: number;
   dateRange: DateRange | undefined;
+  createdByFilter: UserFilter;
+  updatedByFilter: UserFilter;
 }
 
 interface InitialLogsFilters {
@@ -31,9 +34,14 @@ interface InitialLogsFilters {
   currentPage?: number;
   pageSize?: number;
   dateRange?: DateRange;
+  createdByFilter?: UserFilter;
+  updatedByFilter?: UserFilter;
 }
 
-export function useLogsFilters(initialFilters: InitialLogsFilters = {}) {
+export function useLogsFilters(
+  initialFilters: InitialLogsFilters = {},
+  currentUserId?: string,
+) {
   // State management
   const [searchQuery, setSearchQuery] = useState(
     initialFilters.searchQuery || "",
@@ -59,6 +67,12 @@ export function useLogsFilters(initialFilters: InitialLogsFilters = {}) {
   const [dateRange, setDateRange] = useState<DateRange | undefined>(
     initialFilters.dateRange,
   );
+  const [createdByFilter, setCreatedByFilter] = useState<UserFilter>(
+    initialFilters.createdByFilter || ("all" as UserFilter),
+  );
+  const [updatedByFilter, setUpdatedByFilter] = useState<UserFilter>(
+    initialFilters.updatedByFilter || ("all" as UserFilter),
+  );
 
   const resetFilters = () => {
     setSearchQuery("");
@@ -68,6 +82,8 @@ export function useLogsFilters(initialFilters: InitialLogsFilters = {}) {
     setSortOrder("desc" as SortOrder);
     setCurrentPage(1);
     setDateRange(undefined);
+    setCreatedByFilter("all");
+    setUpdatedByFilter("all");
   };
 
   // Handle page changes with reset to page 1 when filters change
@@ -96,6 +112,14 @@ export function useLogsFilters(initialFilters: InitialLogsFilters = {}) {
     handleFilterChange(() => setDateRange(range));
   };
 
+  const setCreatedByFilterWithReset = (filter: UserFilter) => {
+    handleFilterChange(() => setCreatedByFilter(filter));
+  };
+
+  const setUpdatedByFilterWithReset = (filter: UserFilter) => {
+    handleFilterChange(() => setUpdatedByFilter(filter));
+  };
+
   const setPageSizeWithReset = (size: number) => {
     setPageSize(size);
     setCurrentPage(1); // Reset to first page when page size changes
@@ -121,6 +145,14 @@ export function useLogsFilters(initialFilters: InitialLogsFilters = {}) {
     }),
     ...(dateRange?.from && { startDate: dateRange.from }),
     ...(dateRange?.to && { endDate: dateRange.to }),
+    ...(createdByFilter === "me" &&
+      currentUserId && {
+        createdBy: currentUserId,
+      }),
+    ...(updatedByFilter === "me" &&
+      currentUserId && {
+        updatedBy: currentUserId,
+      }),
   });
 
   // Return state and actions
@@ -134,6 +166,8 @@ export function useLogsFilters(initialFilters: InitialLogsFilters = {}) {
     currentPage,
     pageSize,
     dateRange,
+    createdByFilter,
+    updatedByFilter,
 
     // Basic actions (use these for direct UI updates)
     setSearchQuery: setSearchQueryWithReset,
@@ -144,6 +178,8 @@ export function useLogsFilters(initialFilters: InitialLogsFilters = {}) {
     setSortOrder,
     setCurrentPage: handlePageChange,
     setPageSize: setPageSizeWithReset,
+    setCreatedByFilter: setCreatedByFilterWithReset,
+    setUpdatedByFilter: setUpdatedByFilterWithReset,
 
     // Compound actions
     handleSortChange,
@@ -158,7 +194,9 @@ export function useLogsFilters(initialFilters: InitialLogsFilters = {}) {
         selectedSeverity !== ("all" as FilterAllOption) ||
         selectedSource !== ("all" as FilterAllOption) ||
         dateRange?.from ||
-        dateRange?.to,
+        dateRange?.to ||
+        createdByFilter === "me" ||
+        updatedByFilter === "me",
     ),
   };
 }

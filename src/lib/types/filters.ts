@@ -6,6 +6,7 @@ export type FilterAllOption = "all";
 export type SeverityFilter = SeverityLevel | FilterAllOption;
 export type SourceFilter = string;
 export type SortByField = "timestamp" | "severity" | "source";
+export type UserFilter = FilterAllOption | "me";
 
 export interface LogFilters {
   page?: number;
@@ -17,6 +18,8 @@ export interface LogFilters {
   search?: string;
   sortBy?: SortByField;
   sortOrder?: SortOrder;
+  createdBy?: string;
+  updatedBy?: string;
 }
 
 export interface ChartFilters {

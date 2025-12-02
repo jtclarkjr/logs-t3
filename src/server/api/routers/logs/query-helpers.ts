@@ -11,6 +11,8 @@ type LogWhereInput = {
   startDate?: Date;
   endDate?: Date;
   search?: string;
+  createdBy?: string;
+  updatedBy?: string;
 };
 
 const sortableColumns: Record<SortByField, AnyColumn> = {
@@ -25,6 +27,8 @@ export function buildLogWhere({
   startDate,
   endDate,
   search,
+  createdBy,
+  updatedBy,
 }: LogWhereInput): SQL<unknown> | undefined {
   const clauses: SQL<unknown>[] = [];
 
@@ -46,6 +50,14 @@ export function buildLogWhere({
 
   if (search) {
     clauses.push(ilike(logs.message, `%${search}%`));
+  }
+
+  if (createdBy) {
+    clauses.push(eq(logs.createdBy, createdBy));
+  }
+
+  if (updatedBy) {
+    clauses.push(eq(logs.updatedBy, updatedBy));
   }
 
   return clauses.length ? and(...clauses) : undefined;

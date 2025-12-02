@@ -25,6 +25,7 @@ import type {
   SeverityFilter,
   SortByField,
   SortOrder,
+  UserFilter,
 } from "@/lib/types/filters";
 
 interface LogsFiltersProps {
@@ -38,6 +39,11 @@ interface LogsFiltersProps {
   sortOrder: SortOrder;
   onSortChange: (sortBy: SortByField, sortOrder: SortOrder) => void;
   onResetFilters: () => void;
+  showUserFilters: boolean;
+  createdByFilter: UserFilter;
+  updatedByFilter: UserFilter;
+  onCreatedByFilterChange: (filter: UserFilter) => void;
+  onUpdatedByFilterChange: (filter: UserFilter) => void;
 }
 
 export function LogsFilters({
@@ -51,6 +57,11 @@ export function LogsFilters({
   sortOrder,
   onSortChange,
   onResetFilters,
+  showUserFilters,
+  createdByFilter,
+  updatedByFilter,
+  onCreatedByFilterChange,
+  onUpdatedByFilterChange,
 }: LogsFiltersProps) {
   const { searchValue, setSearchValue } = useDebouncedSearch(
     searchQuery,
@@ -155,6 +166,36 @@ export function LogsFilters({
               </SelectContent>
             </Select>
           </div>
+
+          {/* Created/Updated By */}
+          {showUserFilters && (
+            <div className="flex w-full flex-wrap items-center gap-4 lg:w-auto">
+              <label className="flex items-center gap-2 whitespace-nowrap text-sm">
+                <input
+                  checked={createdByFilter === "me"}
+                  className="h-4 w-4 accent-primary"
+                  name="createdByMe"
+                  onChange={(e) =>
+                    onCreatedByFilterChange(e.target.checked ? "me" : "all")
+                  }
+                  type="checkbox"
+                />
+                Created by me
+              </label>
+              <label className="flex items-center gap-2 whitespace-nowrap text-sm">
+                <input
+                  checked={updatedByFilter === "me"}
+                  className="h-4 w-4 accent-primary"
+                  name="updatedByMe"
+                  onChange={(e) =>
+                    onUpdatedByFilterChange(e.target.checked ? "me" : "all")
+                  }
+                  type="checkbox"
+                />
+                Updated by me
+              </label>
+            </div>
+          )}
         </div>
       </CardContent>
     </Card>

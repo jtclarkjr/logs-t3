@@ -62,6 +62,8 @@ export const crudRouter = createTRPCRouter({
           search,
           sortBy,
           sortOrder,
+          createdBy,
+          updatedBy,
         } = input;
 
         const where = buildLogWhere({
@@ -70,6 +72,8 @@ export const crudRouter = createTRPCRouter({
           startDate,
           endDate,
           search,
+          createdBy,
+          updatedBy,
         });
 
         const totalValue =
