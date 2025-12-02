@@ -32,6 +32,8 @@ export const logs = pgTable(
     updatedAt: timestamp("updated_at", { withTimezone: true })
       .defaultNow()
       .notNull(),
+    createdBy: uuid("created_by"),
+    updatedBy: uuid("updated_by"),
   },
   (table) => [
     index("logs_timestamp_idx").on(table.timestamp),

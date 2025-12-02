@@ -7,6 +7,8 @@ import type { inferRouterInputs, inferRouterOutputs } from "@trpc/server";
 import { useState } from "react";
 import SuperJSON from "superjson";
 
+import { authEnabled } from "@/lib/config/auth";
+import { createClient } from "@/lib/supabase/client";
 import type { AppRouter } from "@/server/api/root";
 import { createQueryClient } from "./query-client";
 
@@ -41,8 +43,10 @@ export type RouterOutputs = inferRouterOutputs<AppRouter>;
 export function TRPCReactProvider(props: { children: React.ReactNode }) {
   const queryClient = getQueryClient();
 
-  const [trpcClient] = useState(() =>
-    api.createClient({
+  const [trpcClient] = useState(() => {
+    const supabase = authEnabled ? createClient() : null;
+
+    return api.createClient({
       links: [
         loggerLink({
           enabled: (op) =>
@@ -52,15 +56,27 @@ export function TRPCReactProvider(props: { children: React.ReactNode }) {
         httpBatchStreamLink({
           transformer: SuperJSON,
           url: `${getBaseUrl()}/api/trpc`,
-          headers: () => {
+          headers: async () => {
             const headers = new Headers();
             headers.set("x-trpc-source", "nextjs-react");
+
+            if (authEnabled && supabase) {
+              const {
+                data: { session },
+              } = await supabase.auth.getSession();
+              const accessToken = session?.access_token;
+
+              if (accessToken) {
+                headers.set("authorization", `Bearer ${accessToken}`);
+              }
+            }
+
             return headers;
           },
         }),
       ],
-    }),
-  );
+    });
+  });
 
   return (
     <QueryClientProvider client={queryClient}>

@@ -12,6 +12,8 @@ export interface LogEntry extends BaseLogProperties {
   timestamp: Date;
   createdAt: Date;
   updatedAt: Date;
+  createdBy?: string | null;
+  updatedBy?: string | null;
 }
 
 export type LogResponse = LogEntry;

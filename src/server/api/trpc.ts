@@ -10,6 +10,8 @@ import { initTRPC } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
 
+import { authEnabled } from "@/lib/config/auth";
+import { getUserFromRequestHeaders } from "@/server/auth/supabase";
 import { db } from "@/server/db";
 
 /**
@@ -25,9 +27,14 @@ import { db } from "@/server/db";
  * @see https://trpc.io/docs/server/context
  */
 export const createTRPCContext = async (opts: { headers: Headers }) => {
+  const user = authEnabled
+    ? await getUserFromRequestHeaders(opts.headers)
+    : null;
+
   return {
     db,
-    ...opts,
+    headers: opts.headers,
+    user,
   };
 };
 

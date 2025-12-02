@@ -64,6 +64,8 @@ export const logs = pgTable("logs", {
   source: text("source").notNull(),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+  createdBy: uuid("created_by"), // Supabase user id when available
+  updatedBy: uuid("updated_by"), // Supabase user id when available
 });
 ```
 

@@ -1,7 +1,7 @@
 import { TRPCError } from "@trpc/server";
 import { count, eq } from "drizzle-orm";
 import { z } from "zod";
-
+import { authEnabled } from "@/lib/config/auth";
 import type { SeverityLevel } from "@/lib/enums/severity";
 import type { SortByField } from "@/lib/types/filters";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
@@ -15,6 +15,15 @@ export const crudRouter = createTRPCRouter({
     .input(logCreateSchema)
     .mutation(async ({ ctx, input }) => {
       try {
+        if (authEnabled && !ctx.user) {
+          throw new TRPCError({
+            code: "UNAUTHORIZED",
+            message: "Authentication required to create logs",
+          });
+        }
+
+        const userId = ctx.user?.id ?? null;
+
         const [log] = await ctx.db
           .insert(logs)
           .values({
@@ -24,6 +33,8 @@ export const crudRouter = createTRPCRouter({
             timestamp: input.timestamp ?? new Date(),
             createdAt: new Date(),
             updatedAt: new Date(),
+            createdBy: userId,
+            updatedBy: userId,
           })
           .returning();
         return log;
@@ -125,6 +136,15 @@ export const crudRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       try {
+        if (authEnabled && !ctx.user) {
+          throw new TRPCError({
+            code: "UNAUTHORIZED",
+            message: "Authentication required to update logs",
+          });
+        }
+
+        const userId = ctx.user?.id ?? null;
+
         const existingLog = await ctx.db.query.logs.findFirst({
           where: eq(logs.id, input.id),
         });
@@ -146,6 +166,7 @@ export const crudRouter = createTRPCRouter({
             ...(input.data.source && { source: input.data.source }),
             ...(input.data.timestamp && { timestamp: input.data.timestamp }),
             updatedAt: new Date(),
+            updatedBy: userId,
           })
           .where(eq(logs.id, input.id))
           .returning();
@@ -167,6 +188,13 @@ export const crudRouter = createTRPCRouter({
     .input(z.object({ id: z.string().uuid() }))
     .mutation(async ({ ctx, input }) => {
       try {
+        if (authEnabled && !ctx.user) {
+          throw new TRPCError({
+            code: "UNAUTHORIZED",
+            message: "Authentication required to delete logs",
+          });
+        }
+
         const existingLog = await ctx.db.query.logs.findFirst({
           where: eq(logs.id, input.id),
         });
