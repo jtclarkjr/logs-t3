@@ -46,6 +46,7 @@ export default async function LogsPage({ searchParams }: LogsPageProps) {
   };
 
   let initialData: LogListResponse | undefined;
+  let prefetchError: string | undefined;
 
   try {
     const severityFilter =
@@ -78,10 +79,16 @@ export default async function LogsPage({ searchParams }: LogsPageProps) {
 
     initialData = await api.logs.getAll(filters);
   } catch (error) {
+    prefetchError =
+      error instanceof Error ? error.message : "Failed to load initial logs";
     console.error("Failed to prefetch logs", error);
   }
 
   return (
-    <LogsClient initialData={initialData} initialFilters={initialFilters} />
+    <LogsClient
+      initialData={initialData}
+      initialFilters={initialFilters}
+      prefetchError={prefetchError}
+    />
   );
 }

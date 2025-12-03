@@ -4,7 +4,7 @@ import type { User } from "@supabase/supabase-js";
 import { authEnabled } from "@/lib/config/auth";
 import { createClient } from "@/lib/supabase/client";
 
-export async function signInWithGitHub() {
+export async function signInWithGitHub(redirectPath?: string) {
   if (!authEnabled) {
     return { data: null, error: new Error("Authentication is disabled") };
   }
@@ -14,12 +14,19 @@ export async function signInWithGitHub() {
     return { data: null, error: new Error("Supabase client not initialized") };
   }
 
+  const callbackUrl =
+    process.env.NEXT_PUBLIC_AUTH_CALLBACK_URL ||
+    `${window.location.origin}/auth/callback`;
+
+  // Append the redirect path as a query parameter
+  const redirectTo = redirectPath
+    ? `${callbackUrl}?redirect=${encodeURIComponent(redirectPath)}`
+    : callbackUrl;
+
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "github",
     options: {
-      redirectTo:
-        process.env.NEXT_PUBLIC_AUTH_CALLBACK_URL ||
-        `${window.location.origin}/auth/callback`,
+      redirectTo,
     },
   });
   return { data, error };

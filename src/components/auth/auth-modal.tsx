@@ -1,6 +1,7 @@
 "use client";
 
 import { LogIn, Mail } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -25,9 +26,15 @@ import { signUpEnabled } from "@/lib/config/auth";
 interface AuthModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  redirectPath?: string;
 }
 
-export function AuthModal({ open, onOpenChange }: AuthModalProps) {
+export function AuthModal({
+  open,
+  onOpenChange,
+  redirectPath,
+}: AuthModalProps) {
+  const router = useRouter();
   const [loading, setLoading] = useState<string | null>(null);
   const [isSignUp, setIsSignUp] = useState(false);
   const [email, setEmail] = useState("");
@@ -55,7 +62,7 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
   };
 
   const handleGitHubSignIn = () =>
-    handleOAuthSignIn("github", signInWithGitHub);
+    handleOAuthSignIn("github", () => signInWithGitHub(redirectPath));
 
   const handleEmailAuth = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -89,6 +96,10 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
         } else {
           toast.success("Signed in successfully");
           onOpenChange(false);
+          // Redirect to the stored path if provided
+          if (redirectPath) {
+            router.push(redirectPath);
+          }
         }
       }
     } catch (_error) {

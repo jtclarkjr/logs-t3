@@ -95,17 +95,34 @@ export default async function DashboardPage({
         : undefined,
   };
 
-  // Log any failures (optional - for debugging)
+  // Collect error messages for client-side toasts
+  const prefetchErrors: string[] = [];
+
   if (aggregationResponse.status === "rejected") {
+    const message =
+      aggregationResponse.reason instanceof Error
+        ? aggregationResponse.reason.message
+        : "Failed to load aggregation data";
+    prefetchErrors.push(message);
     console.error(
       "Failed to fetch aggregation data:",
       aggregationResponse.reason,
     );
   }
   if (chartDataResponse.status === "rejected") {
+    const message =
+      chartDataResponse.reason instanceof Error
+        ? chartDataResponse.reason.message
+        : "Failed to load chart data";
+    prefetchErrors.push(message);
     console.error("Failed to fetch chart data:", chartDataResponse.reason);
   }
   if (metadataResponse.status === "rejected") {
+    const message =
+      metadataResponse.reason instanceof Error
+        ? metadataResponse.reason.message
+        : "Failed to load metadata";
+    prefetchErrors.push(message);
     console.error("Failed to fetch metadata:", metadataResponse.reason);
   }
 
@@ -113,6 +130,7 @@ export default async function DashboardPage({
     <DashboardClient
       initialData={initialData as any}
       initialFilters={initialFilters}
+      prefetchErrors={prefetchErrors.length > 0 ? prefetchErrors : undefined}
     />
   );
 }

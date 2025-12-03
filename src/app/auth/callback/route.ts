@@ -12,6 +12,7 @@ export async function GET(request: NextRequest) {
   }
 
   const code = requestUrl.searchParams.get("code");
+  const redirect = requestUrl.searchParams.get("redirect");
 
   if (code) {
     const supabase = await createClient();
@@ -20,5 +21,10 @@ export async function GET(request: NextRequest) {
     }
   }
 
-  return NextResponse.redirect(requestUrl.origin);
+  // Redirect to the stored path, or default to home
+  const redirectUrl = redirect
+    ? `${requestUrl.origin}${redirect}`
+    : requestUrl.origin;
+
+  return NextResponse.redirect(redirectUrl);
 }

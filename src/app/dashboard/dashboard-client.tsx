@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import type { DateRange } from "react-day-picker";
 import { toast } from "sonner";
 import { SeverityDistributionChart } from "@/components/dashboard/chart/chart-severity-distribution";
@@ -38,12 +39,22 @@ interface DashboardClientProps {
     selectedSource?: SourceFilter;
     timeGrouping?: GroupBy;
   };
+  prefetchErrors?: string[];
 }
 
 export function DashboardClient({
   initialData,
   initialFilters = {},
+  prefetchErrors,
 }: DashboardClientProps) {
+  // Show error toasts if initial data fetches failed
+  useEffect(() => {
+    if (prefetchErrors && prefetchErrors.length > 0) {
+      for (const error of prefetchErrors) {
+        toast.error(error);
+      }
+    }
+  }, [prefetchErrors]);
   // Filter state management
   const {
     dateRange,

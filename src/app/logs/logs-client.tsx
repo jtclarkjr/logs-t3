@@ -1,6 +1,8 @@
 "use client";
 
+import { useEffect } from "react";
 import type { DateRange } from "react-day-picker";
+import { toast } from "sonner";
 import { CreateLogDialog } from "@/components/logs/create/create-log-dialog";
 import { DeleteLogDialog } from "@/components/logs/delete/delete-log-dialog";
 import { LogDetailsDrawer } from "@/components/logs/log-details-drawer";
@@ -40,15 +42,25 @@ interface LogsClientProps {
     createdByFilter?: UserFilter;
     updatedByFilter?: UserFilter;
   };
+  prefetchError?: string;
 }
 
 export function LogsClient({
   initialData,
   initialFilters = {},
+  prefetchError,
 }: LogsClientProps) {
+  // Show error toast if initial data fetch failed
+  useEffect(() => {
+    if (prefetchError) {
+      toast.error(prefetchError);
+    }
+  }, [prefetchError]);
+
   // Auth protection
   const { requireAuth, AuthModalComponent, user } = useAuthAction();
   const currentUserId = user?.id;
+  const isDeleteEnabled = !!user;
 
   // Spotlight search state
   const { isOpen: spotlightOpen, setIsOpen: setSpotlightOpen } =
@@ -104,7 +116,10 @@ export function LogsClient({
   };
 
   const handleDeleteLog = (log: NonNullable<typeof displayLogs>["logs"][0]) => {
-    requireAuth(() => openDeleteDialog(log));
+    // When delete is disabled, this shouldn't be called
+    // But keep requireAuth as safety measure for any edge cases
+    if (!isDeleteEnabled) return;
+    openDeleteDialog(log);
   };
 
   const confirmDeleteLog = () => {
@@ -157,6 +172,7 @@ export function LogsClient({
       {/* Results */}
       <LogsTable
         error={error}
+        isDeleteEnabled={isDeleteEnabled}
         isLoading={isLoading}
         logs={displayLogs}
         onDeleteLog={handleDeleteLog}
