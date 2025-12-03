@@ -118,7 +118,13 @@ export function LogsTable({
                             onClick={() => onDeleteLog(log)}
                           >
                             <TrashIcon className="mr-2 h-4 w-4" />
-                            <span className="text-destructive hover:bg-destructive/10 hover:text-destructive focus:text-destructive">
+                            <span
+                              className={
+                                isDeleteEnabled
+                                  ? "text-destructive hover:bg-destructive/10 hover:text-destructive focus:text-destructive"
+                                  : ""
+                              }
+                            >
                               Delete
                             </span>
                           </DropdownMenuItem>
