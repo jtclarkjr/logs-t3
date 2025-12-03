@@ -33,6 +33,7 @@ interface LogsTableProps {
   onViewLog: (log: LogResponse) => void;
   onDeleteLog: (log: LogResponse) => void;
   onResetFilters: () => void;
+  isDeleteEnabled?: boolean;
 }
 
 export function LogsTable({
@@ -42,6 +43,7 @@ export function LogsTable({
   onViewLog,
   onDeleteLog,
   onResetFilters,
+  isDeleteEnabled = true,
 }: LogsTableProps) {
   // Calculate skeleton row count based on actual data or default page size
   const skeletonRowCount =
@@ -111,7 +113,10 @@ export function LogsTable({
                             <EyeIcon className="mr-2 h-4 w-4" />
                             View
                           </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => onDeleteLog(log)}>
+                          <DropdownMenuItem
+                            disabled={!isDeleteEnabled}
+                            onClick={() => onDeleteLog(log)}
+                          >
                             <TrashIcon className="mr-2 h-4 w-4" />
                             <span className="text-destructive hover:bg-destructive/10 hover:text-destructive focus:text-destructive">
                               Delete

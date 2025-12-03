@@ -399,7 +399,12 @@ export function LogDetailsDrawer({
               {updateLogMutation.isPending ? "Saving..." : "Save"}
             </Button>
             {onDelete && (
-              <Button onClick={handleDelete} size="sm" variant="destructive">
+              <Button
+                disabled={!isAuthenticated}
+                onClick={handleDelete}
+                size="sm"
+                variant="destructive"
+              >
                 Delete
               </Button>
             )}
