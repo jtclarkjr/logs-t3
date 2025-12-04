@@ -53,7 +53,7 @@ export function CreateLogDialog({ open, onOpenChange }: CreateLogDialogProps) {
       // Use current time (no buffer to prevent "future timestamp" error)
       const now = new Date();
 
-      const submitData: LogCreate = {
+      const submitData = {
         ...formData,
         timestamp: now,
       };
