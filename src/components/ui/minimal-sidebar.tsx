@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
+import { AuthModal } from "@/components/auth/auth-modal";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import {
@@ -44,6 +45,7 @@ export function MinimalSidebar() {
   const pathname = usePathname();
   const isMobile = useIsMobile();
   const [isOpen, setIsOpen] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
   const { user } = useAuth();
 
   const handleSignOut = async () => {
@@ -52,6 +54,12 @@ export function MinimalSidebar() {
       toast.error("Failed to sign out");
     } else {
       toast.success("Signed out successfully");
+    }
+  };
+
+  const handleAvatarClick = () => {
+    if (!user) {
+      setShowAuthModal(true);
     }
   };
 
@@ -104,38 +112,65 @@ export function MinimalSidebar() {
                   <ThemeToggle />
                 </div>
 
-                {authEnabled && user && (
+                {authEnabled && (
                   <>
                     <div className="my-2 border-t" />
-                    <div className="flex items-center gap-3 rounded-lg border bg-muted/50 p-3">
-                      <UserAvatar
-                        alt={user.user_metadata?.name || user.email || "User"}
-                        size="md"
-                        src={user.user_metadata?.avatar_url}
-                      />
-                      <div className="flex-1 overflow-hidden">
-                        <p className="truncate font-medium text-sm">
-                          {user.user_metadata?.name || "User"}
-                        </p>
-                        <p className="truncate text-muted-foreground text-xs">
-                          {user.email}
-                        </p>
-                      </div>
-                    </div>
-                    <Button
-                      className="w-full"
-                      onClick={handleSignOut}
-                      variant="outline"
-                    >
-                      <LogOut className="mr-2 h-4 w-4" />
-                      Sign Out
-                    </Button>
+                    {user ? (
+                      <>
+                        <div className="flex items-center gap-3 rounded-lg border bg-muted/50 p-3">
+                          <UserAvatar
+                            alt={
+                              user.user_metadata?.name || user.email || "User"
+                            }
+                            size="md"
+                            src={user.user_metadata?.avatar_url}
+                          />
+                          <div className="flex-1 overflow-hidden">
+                            <p className="truncate font-medium text-sm">
+                              {user.user_metadata?.name || "User"}
+                            </p>
+                            <p className="truncate text-muted-foreground text-xs">
+                              {user.email}
+                            </p>
+                          </div>
+                        </div>
+                        <Button
+                          className="w-full"
+                          onClick={handleSignOut}
+                          variant="outline"
+                        >
+                          <LogOut className="mr-2 h-4 w-4" />
+                          Sign Out
+                        </Button>
+                      </>
+                    ) : (
+                      <button
+                        className="flex items-center gap-3 rounded-lg border bg-muted/50 p-3 transition-colors hover:bg-muted"
+                        onClick={handleAvatarClick}
+                        type="button"
+                      >
+                        <UserAvatar alt="Sign In" size="md" src={null} />
+                        <div className="flex-1 text-left">
+                          <p className="font-medium text-sm">Sign In</p>
+                          <p className="text-muted-foreground text-xs">
+                            Click to sign in
+                          </p>
+                        </div>
+                      </button>
+                    )}
                   </>
                 )}
               </div>
             </SheetContent>
           </Sheet>
         </nav>
+
+        {/* Auth Modal */}
+        <AuthModal
+          onOpenChange={setShowAuthModal}
+          open={showAuthModal}
+          redirectPath={pathname}
+        />
 
         {/* Mobile padding for bottom nav */}
         <div className="h-16 md:hidden" />
@@ -188,37 +223,57 @@ export function MinimalSidebar() {
 
         {/* Bottom Section */}
         <div className="border-t">
-          {/* User Avatar with Dropdown */}
-          {authEnabled && user && (
+          {/* User Avatar with Dropdown or Sign In Button */}
+          {authEnabled && (
             <div className="border-b p-2">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button className="h-12 w-12 rounded-md p-0" variant="ghost">
-                    <UserAvatar
-                      alt={user.user_metadata?.name || user.email || "User"}
-                      size="md"
-                      src={user.user_metadata?.avatar_url}
-                    />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" side="right">
-                  <DropdownMenuLabel>
-                    <div className="flex flex-col space-y-1">
-                      <p className="font-medium text-sm">
-                        {user.user_metadata?.name || "User"}
-                      </p>
-                      <p className="text-muted-foreground text-xs">
-                        {user.email}
-                      </p>
-                    </div>
-                  </DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={handleSignOut}>
-                    <LogOut className="mr-2 h-4 w-4" />
-                    Sign Out
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              {user ? (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      className="h-12 w-12 rounded-md p-0"
+                      variant="ghost"
+                    >
+                      <UserAvatar
+                        alt={user.user_metadata?.name || user.email || "User"}
+                        size="md"
+                        src={user.user_metadata?.avatar_url}
+                      />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" side="right">
+                    <DropdownMenuLabel>
+                      <div className="flex flex-col space-y-1">
+                        <p className="font-medium text-sm">
+                          {user.user_metadata?.name || "User"}
+                        </p>
+                        <p className="text-muted-foreground text-xs">
+                          {user.email}
+                        </p>
+                      </div>
+                    </DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={handleSignOut}>
+                      <LogOut className="mr-2 h-4 w-4" />
+                      Sign Out
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : (
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      className="h-12 w-12 rounded-md p-0"
+                      onClick={handleAvatarClick}
+                      variant="ghost"
+                    >
+                      <UserAvatar alt="Sign In" size="md" src={null} />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">
+                    <p>Sign In</p>
+                  </TooltipContent>
+                </Tooltip>
+              )}
             </div>
           )}
 
@@ -230,6 +285,13 @@ export function MinimalSidebar() {
           </div>
         </div>
       </TooltipProvider>
+
+      {/* Auth Modal */}
+      <AuthModal
+        onOpenChange={setShowAuthModal}
+        open={showAuthModal}
+        redirectPath={pathname}
+      />
     </aside>
   );
 }
