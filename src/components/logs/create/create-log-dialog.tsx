@@ -27,7 +27,6 @@ import { SeverityBadge } from "@/components/ui/severity-badge";
 import { Textarea } from "@/components/ui/textarea";
 import { SeverityLevel } from "@/lib/enums/severity";
 import { useCreateLog } from "@/lib/hooks/query/use-logs";
-import type { LogCreate } from "@/lib/types/log";
 import { createLogValidator } from "@/lib/validators/log";
 
 type CreateLogFormData = z.infer<typeof createLogValidator>;

@@ -5,7 +5,7 @@ import type {
   SeverityFilter,
   SourceFilter,
 } from "@/lib/types/filters";
-import { api } from "@/trpc/server";
+import { api, type RouterOutputs } from "@/trpc/server";
 import { DashboardClient } from "./dashboard-client";
 
 interface DashboardPageProps {
@@ -80,7 +80,11 @@ export default async function DashboardPage({
     ]);
 
   // Extract data from settled promises with fallback to undefined
-  const initialData = {
+  const initialData: {
+    aggregationData?: RouterOutputs["logs"]["getAggregation"];
+    timeSeriesData?: RouterOutputs["logs"]["getChartData"];
+    metadata?: RouterOutputs["logs"]["getMetadata"];
+  } = {
     aggregationData:
       aggregationResponse.status === "fulfilled"
         ? aggregationResponse.value
@@ -128,7 +132,7 @@ export default async function DashboardPage({
 
   return (
     <DashboardClient
-      initialData={initialData as any}
+      initialData={initialData}
       initialFilters={initialFilters}
       prefetchErrors={prefetchErrors.length > 0 ? prefetchErrors : undefined}
     />

@@ -3,11 +3,9 @@
 import { describe, expect, it, mock } from "bun:test";
 import { render } from "@testing-library/react";
 import { SeverityLevel } from "@/lib/enums/severity";
-import type { ChartDataResponse } from "@/lib/types/chart";
-import type { MetadataResponse } from "@/lib/types/common";
-import type { LogAggregationResponse } from "@/lib/types/log";
+import type { RouterOutputs } from "@/trpc/react";
 
-const mockAggregation: LogAggregationResponse = {
+const mockAggregation: RouterOutputs["logs"]["getAggregation"] = {
   totalLogs: 10,
   dateRangeStart: new Date("2024-01-01"),
   dateRangeEnd: new Date("2024-01-08"),
@@ -19,7 +17,7 @@ const mockAggregation: LogAggregationResponse = {
   byDate: [{ date: "2024-01-01", count: 10 }],
 };
 
-const mockChartData: ChartDataResponse = {
+const mockChartData: RouterOutputs["logs"]["getChartData"] = {
   data: [
     {
       timestamp: "2024-01-01T00:00:00Z",
@@ -34,10 +32,10 @@ const mockChartData: ChartDataResponse = {
   groupBy: "day",
   startDate: new Date("2024-01-01"),
   endDate: new Date("2024-01-02"),
-  filters: { severity: null, source: null },
+  filters: { severity: undefined, source: undefined },
 };
 
-const mockMetadata: MetadataResponse = {
+const mockMetadata: RouterOutputs["logs"]["getMetadata"] = {
   severityLevels: ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
   sources: ["api"],
   dateRange: {

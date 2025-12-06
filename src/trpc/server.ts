@@ -1,12 +1,20 @@
 import "server-only";
 
 import { createHydrationHelpers } from "@trpc/react-query/rsc";
+import type { inferRouterOutputs } from "@trpc/server";
 import { headers } from "next/headers";
 import { cache } from "react";
 
 import { type AppRouter, createCaller } from "@/server/api/root";
 import { createTRPCContext } from "@/server/api/trpc";
 import { createQueryClient } from "./query-client";
+
+/**
+ * Inference helper for outputs.
+ *
+ * @example type HelloOutput = RouterOutputs['example']['hello']
+ */
+export type RouterOutputs = inferRouterOutputs<AppRouter>;
 
 /**
  * This wraps the `createTRPCContext` helper and provides the required context for the tRPC API when

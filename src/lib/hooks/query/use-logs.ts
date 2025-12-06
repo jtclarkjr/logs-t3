@@ -2,7 +2,7 @@ import { format } from "date-fns";
 import { useState } from "react";
 import { toast } from "sonner";
 import type { GroupBy } from "@/lib/types/filters";
-import type { RouterInputs } from "@/trpc/react";
+import type { RouterInputs, RouterOutputs } from "@/trpc/react";
 import { api } from "@/trpc/react";
 
 // Type aliases matching the old API
@@ -26,7 +26,7 @@ export function useLogs(filters?: LogFilters) {
  */
 export function useLogAggregation(
   filters?: LogAggregationFilters,
-  initialData?: any,
+  initialData?: RouterOutputs["logs"]["getAggregation"],
 ) {
   return api.logs.getAggregation.useQuery(filters ?? {}, {
     enabled: Boolean(filters?.startDate && filters?.endDate),
@@ -37,7 +37,10 @@ export function useLogAggregation(
 /**
  * Hook to fetch chart data for analytics
  */
-export function useChartData(filters?: ChartFilters, initialData?: any) {
+export function useChartData(
+  filters?: ChartFilters,
+  initialData?: RouterOutputs["logs"]["getChartData"],
+) {
   return api.logs.getChartData.useQuery(filters ?? { groupBy: "day" }, {
     enabled: Boolean(filters?.startDate && filters?.endDate),
     placeholderData: initialData,
@@ -47,7 +50,9 @@ export function useChartData(filters?: ChartFilters, initialData?: any) {
 /**
  * Hook to fetch metadata (sources, severity levels, etc.)
  */
-export function useMetadata(initialData?: any) {
+export function useMetadata(
+  initialData?: RouterOutputs["logs"]["getMetadata"],
+) {
   return api.logs.getMetadata.useQuery(undefined, {
     staleTime: 10 * 60 * 1000, // Cache for 10 minutes since metadata is relatively static
     placeholderData: initialData,
@@ -137,7 +142,7 @@ export function useUpdateLog() {
 export function useFormattedChartData(
   filters?: ChartFilters,
   timeGrouping?: GroupBy,
-  initialData?: any,
+  initialData?: RouterOutputs["logs"]["getChartData"],
 ) {
   return api.logs.getChartData.useQuery(
     filters ?? { groupBy: timeGrouping ?? "day" },

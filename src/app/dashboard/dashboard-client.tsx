@@ -18,20 +18,18 @@ import {
   useMetadata,
 } from "@/lib/hooks/query/use-logs";
 import { useDashboardFilters } from "@/lib/hooks/state/use-dashboard-filters";
-import type { ChartDataResponse } from "@/lib/types/chart";
-import type { MetadataResponse } from "@/lib/types/common";
 import type {
   GroupBy,
   SeverityFilter,
   SourceFilter,
 } from "@/lib/types/filters";
-import type { LogAggregationResponse } from "@/lib/types/log";
+import type { RouterOutputs } from "@/trpc/react";
 
 interface DashboardClientProps {
   initialData?: {
-    aggregationData?: LogAggregationResponse;
-    timeSeriesData?: ChartDataResponse;
-    metadata?: MetadataResponse;
+    aggregationData?: RouterOutputs["logs"]["getAggregation"];
+    timeSeriesData?: RouterOutputs["logs"]["getChartData"];
+    metadata?: RouterOutputs["logs"]["getMetadata"];
   };
   initialFilters?: {
     dateRange?: DateRange;
@@ -117,9 +115,8 @@ export function DashboardClient({
   };
 
   // Use current data or fall back to initial data
-  const displayAggregationData: LogAggregationResponse | undefined =
-    (aggregationData as LogAggregationResponse | undefined) ??
-    initialData?.aggregationData;
+  const displayAggregationData =
+    aggregationData ?? initialData?.aggregationData;
   const displayTimeSeriesData = timeSeriesData || [];
   const displayMetadata = metadata || initialData?.metadata;
 

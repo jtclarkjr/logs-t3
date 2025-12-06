@@ -19,10 +19,10 @@ import { ChartTooltip } from "@/components/ui/chart";
 import { EmptyState } from "@/components/ui/empty-state";
 import { QueryError } from "@/components/ui/error-boundary";
 import { LoadingState } from "@/components/ui/loading-state";
-import type { LogAggregationResponse } from "@/lib/types/log";
+import type { RouterOutputs } from "@/trpc/react";
 
 interface TopSourcesChartProps {
-  aggregationData?: LogAggregationResponse;
+  aggregationData?: RouterOutputs["logs"]["getAggregation"];
   isLoading: boolean;
   error?: unknown;
 }

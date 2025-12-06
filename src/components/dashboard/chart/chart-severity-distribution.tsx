@@ -15,7 +15,7 @@ import { LoadingState } from "@/components/ui/loading-state";
 import { Progress } from "@/components/ui/progress";
 import { SeverityBadge } from "@/components/ui/severity-badge";
 import { SeverityLevel } from "@/lib/enums/severity";
-import type { LogAggregationResponse } from "@/lib/types/log";
+import type { RouterOutputs } from "@/trpc/react";
 
 const SEVERITY_COLORS = {
   [SeverityLevel.DEBUG]: "#6b7280",
@@ -26,7 +26,7 @@ const SEVERITY_COLORS = {
 };
 
 interface SeverityDistributionChartProps {
-  aggregationData?: LogAggregationResponse;
+  aggregationData?: RouterOutputs["logs"]["getAggregation"];
   isLoading: boolean;
   error?: unknown;
 }
@@ -37,13 +37,11 @@ export function SeverityDistributionChart({
   error,
 }: SeverityDistributionChartProps) {
   const severityDistribution =
-    aggregationData?.bySeverity.map(
-      (item: LogAggregationResponse["bySeverity"][number]) => ({
-        name: item.severity,
-        value: item.count,
-        color: SEVERITY_COLORS[item.severity as SeverityLevel],
-      }),
-    ) || [];
+    aggregationData?.bySeverity.map((item) => ({
+      name: item.severity,
+      value: item.count,
+      color: SEVERITY_COLORS[item.severity as SeverityLevel],
+    })) || [];
 
   return (
     <Card>

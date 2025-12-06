@@ -13,7 +13,7 @@ import { QueryError } from "@/components/ui/error-boundary";
 import { LoadingState } from "@/components/ui/loading-state";
 import { StatsCard } from "@/components/ui/stats-card";
 import { SeverityLevel } from "@/lib/enums/severity";
-import type { LogAggregationResponse } from "@/lib/types/log";
+import type { RouterOutputs } from "@/trpc/react";
 
 const SEVERITY_ICONS = {
   [SeverityLevel.DEBUG]: BugIcon,
@@ -24,7 +24,7 @@ const SEVERITY_ICONS = {
 };
 
 interface DashboardStatsProps {
-  aggregationData?: LogAggregationResponse;
+  aggregationData?: RouterOutputs["logs"]["getAggregation"];
   isLoading: boolean;
   error?: unknown;
   dateRange?: DateRange;
