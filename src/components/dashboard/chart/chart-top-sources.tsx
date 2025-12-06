@@ -46,22 +46,20 @@ export function TopSourcesChart({
         ) : error ? (
           <QueryError error={error} title="Failed to load source data" />
         ) : aggregationData?.bySource.length ? (
-          <div className="h-80">
-            <ResponsiveContainer height="100%" width="100%">
-              <BarChart data={aggregationData.bySource.slice(0, 10)}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis
-                  angle={-45}
-                  dataKey="source"
-                  height={80}
-                  textAnchor="end"
-                />
-                <YAxis />
-                <ChartTooltip />
-                <Bar dataKey="count" fill="#3b82f6" />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
+          <ResponsiveContainer height={320} width="100%">
+            <BarChart data={aggregationData.bySource.slice(0, 10)}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis
+                angle={-45}
+                dataKey="source"
+                height={80}
+                textAnchor="end"
+              />
+              <YAxis />
+              <ChartTooltip />
+              <Bar dataKey="count" fill="#3b82f6" />
+            </BarChart>
+          </ResponsiveContainer>
         ) : (
           <EmptyState
             description="No logs found for the selected filters"

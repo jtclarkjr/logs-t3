@@ -53,37 +53,35 @@ export function TimelineChart({
         ) : error ? (
           <QueryError error={error} title="Failed to load chart data" />
         ) : timeSeriesData.length > 0 ? (
-          <div className="h-80">
-            <ResponsiveContainer height="100%" width="100%">
-              <LineChart data={timeSeriesData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="date" />
-                <YAxis />
-                <ChartTooltip
-                  content={({ active, payload, label }) => {
-                    if (active && payload && payload.length) {
-                      return (
-                        <div className="rounded-lg border bg-background p-3 shadow-md">
-                          <p className="font-medium">{label}</p>
-                          <p className="text-blue-600">
-                            Total: {payload[0]?.value}
-                          </p>
-                        </div>
-                      );
-                    }
-                    return null;
-                  }}
-                />
-                <Line
-                  dataKey="total"
-                  dot={{ fill: "#3b82f6", strokeWidth: 2, r: 4 }}
-                  stroke="#3b82f6"
-                  strokeWidth={2}
-                  type="monotone"
-                />
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
+          <ResponsiveContainer height={320} width="100%">
+            <LineChart data={timeSeriesData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="date" />
+              <YAxis />
+              <ChartTooltip
+                content={({ active, payload, label }) => {
+                  if (active && payload && payload.length) {
+                    return (
+                      <div className="rounded-lg border bg-background p-3 shadow-md">
+                        <p className="font-medium">{label}</p>
+                        <p className="text-blue-600">
+                          Total: {payload[0]?.value}
+                        </p>
+                      </div>
+                    );
+                  }
+                  return null;
+                }}
+              />
+              <Line
+                dataKey="total"
+                dot={{ fill: "#3b82f6", strokeWidth: 2, r: 4 }}
+                stroke="#3b82f6"
+                strokeWidth={2}
+                type="monotone"
+              />
+            </LineChart>
+          </ResponsiveContainer>
         ) : (
           <EmptyState
             description="No logs found for the selected filters and time period"

@@ -72,33 +72,31 @@ export function SeverityDistributionChart({
 
           return (
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-              <div className="h-80">
-                <ResponsiveContainer height="100%" width="100%">
-                  <PieChart>
-                    <Pie
-                      cx="50%"
-                      cy="50%"
-                      data={severityDistribution}
-                      dataKey="value"
-                      label={({ name, percent }) => {
-                        const percentValue =
-                          typeof percent === "number"
-                            ? (percent * 100).toFixed(0)
-                            : 0;
-                        return `${name} ${percentValue}%`;
-                      }}
-                      outerRadius={100}
-                    >
-                      {severityDistribution.map(
-                        (entry: (typeof severityDistribution)[number]) => (
-                          <Cell fill={entry.color} key={entry.name} />
-                        ),
-                      )}
-                    </Pie>
-                    <ChartTooltip />
-                  </PieChart>
-                </ResponsiveContainer>
-              </div>
+              <ResponsiveContainer height={320} width="100%">
+                <PieChart>
+                  <Pie
+                    cx="50%"
+                    cy="50%"
+                    data={severityDistribution}
+                    dataKey="value"
+                    label={({ name, percent }) => {
+                      const percentValue =
+                        typeof percent === "number"
+                          ? (percent * 100).toFixed(0)
+                          : 0;
+                      return `${name} ${percentValue}%`;
+                    }}
+                    outerRadius={100}
+                  >
+                    {severityDistribution.map(
+                      (entry: (typeof severityDistribution)[number]) => (
+                        <Cell fill={entry.color} key={entry.name} />
+                      ),
+                    )}
+                  </Pie>
+                  <ChartTooltip />
+                </PieChart>
+              </ResponsiveContainer>
 
               <div className="space-y-4">
                 <h4 className="font-medium">Severity Breakdown</h4>
