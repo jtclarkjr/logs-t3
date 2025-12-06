@@ -11,6 +11,7 @@ import { LogsHeader } from "@/components/logs/logs-header";
 import { LogsPagination } from "@/components/logs/logs-pagination";
 import { LogsTable } from "@/components/logs/logs-table";
 import { SpotlightSearch } from "@/components/logs/spotlight-search";
+import { authEnabled } from "@/lib/config/auth";
 import {
   useDeleteLog,
   useExportLogs,
@@ -60,7 +61,7 @@ export function LogsClient({
   // Auth protection
   const { requireAuth, AuthModalComponent, user } = useAuthAction();
   const currentUserId = user?.id;
-  const isDeleteEnabled = !!user;
+  const isDeleteEnabled = !authEnabled || !!user;
 
   // Spotlight search state
   const { isOpen: spotlightOpen, setIsOpen: setSpotlightOpen } =
