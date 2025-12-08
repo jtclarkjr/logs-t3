@@ -1,4 +1,4 @@
-.PHONY: help dev build start db db-stop db-push db-migrate db-studio clean logs logs-db logs-app up down
+.PHONY: help dev build start db db-stop db-push db-migrate db-studio clean logs logs-db logs-app up down storybook
 
 help: ## Show this help message
 	@echo 'Usage: make [target]'
@@ -54,3 +54,6 @@ logs-app: ## Show app logs
 
 db-seed: ## Generate 1000 sample log entries (add --reset to clear existing)
 	bun run scripts/seed.ts $(ARGS)
+
+storybook: ## Start Storybook development server
+	bun run storybook
