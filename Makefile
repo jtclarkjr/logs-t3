@@ -24,7 +24,7 @@ db-stop: ## Stop PostgreSQL database
 
 # Drizzle commands
 db-push: ## Sync Drizzle schema to database
-	bunx drizzle-kit push:pg
+	bunx drizzle-kit push
 
 db-migrate: ## Apply Drizzle migrations
 	bunx drizzle-kit migrate
