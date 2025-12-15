@@ -96,7 +96,7 @@
                 }
               ]
             },
-            "description": "Retrieves logs with filters. All filters use camelCase:\n- page: Page number (default 1)\n- pageSize: Items per page (default 20)\n- severity: DEBUG, INFO, WARNING, ERROR, CRITICAL\n- source: Filter by source name\n- startDate/endDate: ISO date strings\n- search: Search in message\n- sortBy: timestamp, severity, source (default: timestamp)\n- sortOrder: asc or desc (default: desc)"
+            "description": "Retrieves logs with filters. All filters use camelCase:\n- page: Page number (default 1)\n- pageSize: Items per page (default 20)\n- severity: DEBUG, INFO, WARNING, ERROR, CRITICAL\n- source: Filter by source name\n- startDate/endDate: ISO date strings\n- search: Search in message\n- sortBy: timestamp, severity, source (default: timestamp)\n- sortOrder: asc or desc (default: desc)\n- createdBy: Filter by user ID who created the log (UUID string)\n- updatedBy: Filter by user ID who last updated the log (UUID string)"
           },
           "response": [
             {
@@ -118,6 +118,104 @@
               "body": "{\n  \"result\": {\n    \"data\": {\n      \"logs\": [\n        {\n          \"id\": \"123e4567-e89b-12d3-a456-426614174000\",\n          \"message\": \"Application started\",\n          \"severity\": \"INFO\",\n          \"source\": \"api-server\",\n          \"timestamp\": \"2024-01-15T10:30:00.000Z\",\n          \"createdAt\": \"2024-01-15T10:30:00.000Z\",\n          \"updatedAt\": \"2024-01-15T10:30:00.000Z\"\n        }\n      ],\n      \"total\": 100,\n      \"page\": 1,\n      \"pageSize\": 20,\n      \"totalPages\": 5\n    }\n  }\n}"
             }
           ]
+        },
+        {
+          "name": "Get Logs by Created By User",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/trpc/logs.getAll?input={\"json\":{\"page\":1,\"pageSize\":20,\"createdBy\":\"{{userId}}\"}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "trpc", "logs.getAll"],
+              "query": [
+                {
+                  "key": "input",
+                  "value": "{\"json\":{\"page\":1,\"pageSize\":20,\"createdBy\":\"{{userId}}\"}}"
+                }
+              ]
+            },
+            "description": "Retrieves logs created by a specific user. Replace {{userId}} with the actual user UUID.\n\nExample:\n- createdBy: \"550e8400-e29b-41d4-a716-446655440000\"\n\nThis filter matches the created_by column in the database."
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/trpc/logs.getAll?input={\"json\":{\"page\":1,\"pageSize\":20,\"createdBy\":\"550e8400-e29b-41d4-a716-446655440000\"}}",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "trpc", "logs.getAll"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [],
+              "cookie": [],
+              "body": "{\n  \"result\": {\n    \"data\": {\n      \"logs\": [\n        {\n          \"id\": \"123e4567-e89b-12d3-a456-426614174000\",\n          \"message\": \"Log created by user\",\n          \"severity\": \"INFO\",\n          \"source\": \"web-app\",\n          \"timestamp\": \"2024-01-15T10:30:00.000Z\",\n          \"createdAt\": \"2024-01-15T10:30:00.000Z\",\n          \"updatedAt\": \"2024-01-15T10:30:00.000Z\",\n          \"createdBy\": \"550e8400-e29b-41d4-a716-446655440000\",\n          \"updatedBy\": null\n        }\n      ],\n      \"total\": 42,\n      \"page\": 1,\n      \"pageSize\": 20,\n      \"totalPages\": 3\n    }\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Logs by Updated By User",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/trpc/logs.getAll?input={\"json\":{\"page\":1,\"pageSize\":20,\"updatedBy\":\"{{userId}}\"}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "trpc", "logs.getAll"],
+              "query": [
+                {
+                  "key": "input",
+                  "value": "{\"json\":{\"page\":1,\"pageSize\":20,\"updatedBy\":\"{{userId}}\"}}"
+                }
+              ]
+            },
+            "description": "Retrieves logs last updated by a specific user. Replace {{userId}} with the actual user UUID.\n\nExample:\n- updatedBy: \"550e8400-e29b-41d4-a716-446655440000\"\n\nThis filter matches the updated_by column in the database."
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/trpc/logs.getAll?input={\"json\":{\"page\":1,\"pageSize\":20,\"updatedBy\":\"550e8400-e29b-41d4-a716-446655440000\"}}",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "trpc", "logs.getAll"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [],
+              "cookie": [],
+              "body": "{\n  \"result\": {\n    \"data\": {\n      \"logs\": [\n        {\n          \"id\": \"987e6543-e21b-12d3-a456-426614174111\",\n          \"message\": \"Log updated by user\",\n          \"severity\": \"WARNING\",\n          \"source\": \"web-app\",\n          \"timestamp\": \"2024-01-15T09:00:00.000Z\",\n          \"createdAt\": \"2024-01-15T09:00:00.000Z\",\n          \"updatedAt\": \"2024-01-15T11:30:00.000Z\",\n          \"createdBy\": \"123e4567-e89b-12d3-a456-426614174000\",\n          \"updatedBy\": \"550e8400-e29b-41d4-a716-446655440000\"\n        }\n      ],\n      \"total\": 15,\n      \"page\": 1,\n      \"pageSize\": 20,\n      \"totalPages\": 1\n    }\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Logs by User (Created OR Updated)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/trpc/logs.getAll?input={\"json\":{\"page\":1,\"pageSize\":20,\"createdBy\":\"{{userId}}\"}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "trpc", "logs.getAll"],
+              "query": [
+                {
+                  "key": "input",
+                  "value": "{\"json\":{\"page\":1,\"pageSize\":20,\"createdBy\":\"{{userId}}\"}}"
+                }
+              ]
+            },
+            "description": "To get logs where the user either created OR updated them, you'll need to make two separate requests and merge the results client-side, OR filter by one field at a time.\n\nNote: The current API applies filters using AND logic, so specifying both createdBy and updatedBy will only return logs where the same user both created AND updated them.\n\nFor OR logic, make separate requests:\n1. Filter by createdBy\n2. Filter by updatedBy\n3. Merge and deduplicate results in your application"
+          },
+          "response": []
         },
         {
           "name": "Get Log by ID",
@@ -402,6 +500,12 @@
       "value": "http://localhost:3000",
       "type": "string",
       "description": "Base URL for the API. Change to http://localhost:3002 if port 3000 is in use."
+    },
+    {
+      "key": "userId",
+      "value": "550e8400-e29b-41d4-a716-446655440000",
+      "type": "string",
+      "description": "User ID (UUID) for filtering logs by createdBy or updatedBy. Replace with your actual user ID."
     }
   ]
 }
