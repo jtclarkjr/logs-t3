@@ -105,7 +105,7 @@ export const LogsAppExamples: Story = {
 
       <div className="space-y-2">
         <h3 className="font-medium text-sm">Recent Contributors</h3>
-        <div className="-space-x-2 flex">
+        <div className="flex -space-x-2">
           <Avatar className="size-8 border-2 border-background">
             <AvatarImage src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=32&h=32&fit=crop&crop=face" />
             <AvatarFallback>JD</AvatarFallback>
@@ -133,19 +133,19 @@ export const WithStatus: Story = {
           <AvatarImage src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=32&h=32&fit=crop&crop=face" />
           <AvatarFallback>JD</AvatarFallback>
         </Avatar>
-        <div className="-bottom-0 -right-0 absolute size-3 rounded-full border-2 border-background bg-green-500"></div>
+        <div className="absolute -right-0 -bottom-0 size-3 rounded-full border-2 border-background bg-green-500"></div>
       </div>
       <div className="relative">
         <Avatar>
           <AvatarFallback>AB</AvatarFallback>
         </Avatar>
-        <div className="-bottom-0 -right-0 absolute size-3 rounded-full border-2 border-background bg-yellow-500"></div>
+        <div className="absolute -right-0 -bottom-0 size-3 rounded-full border-2 border-background bg-yellow-500"></div>
       </div>
       <div className="relative">
         <Avatar>
           <AvatarFallback>CD</AvatarFallback>
         </Avatar>
-        <div className="-bottom-0 -right-0 absolute size-3 rounded-full border-2 border-background bg-gray-400"></div>
+        <div className="absolute -right-0 -bottom-0 size-3 rounded-full border-2 border-background bg-gray-400"></div>
       </div>
     </div>
   ),
