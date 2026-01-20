@@ -5,8 +5,8 @@ WORKDIR /app
 # Install curl for health checks / diagnostics
 RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 
-# Copy package files and tsconfig files needed for postinstall
-COPY package.json bun.lock* drizzle.config.ts tsconfig*.json ./
+# Copy package files
+COPY package.json bun.lock* drizzle.config.ts ./
 
 # Install dependencies
 RUN bun install --frozen-lockfile
