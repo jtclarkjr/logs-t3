@@ -1,16 +1,16 @@
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Card, CardContent, CardHeader } from '@/components/ui/card'
+import { Skeleton } from '@/components/ui/skeleton'
 
 interface LoadingStateProps {
-  variant?: "table" | "cards" | "chart" | "simple";
-  count?: number;
+  variant?: 'table' | 'cards' | 'chart' | 'simple'
+  count?: number
 }
 
 export function LoadingState({
-  variant = "simple",
-  count = 3,
+  variant = 'simple',
+  count = 3
 }: LoadingStateProps) {
-  if (variant === "table") {
+  if (variant === 'table') {
     return (
       <div className="rounded-md border">
         <div className="relative w-full overflow-x-auto">
@@ -57,16 +57,16 @@ export function LoadingState({
                       <Skeleton className="h-8 w-8 rounded" />
                     </td>
                   </tr>
-                ),
+                )
               )}
             </tbody>
           </table>
         </div>
       </div>
-    );
+    )
   }
 
-  if (variant === "cards") {
+  if (variant === 'cards') {
     return (
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
         {Array.from({ length: count }, (_, i) => `card-${i}`).map((key) => (
@@ -82,10 +82,10 @@ export function LoadingState({
           </Card>
         ))}
       </div>
-    );
+    )
   }
 
-  if (variant === "chart") {
+  if (variant === 'chart') {
     return (
       <Card>
         <CardHeader>
@@ -95,7 +95,7 @@ export function LoadingState({
           <Skeleton className="h-64 w-full" />
         </CardContent>
       </Card>
-    );
+    )
   }
 
   // Simple variant
@@ -105,5 +105,5 @@ export function LoadingState({
         <Skeleton className="h-4 w-full" key={key} />
       ))}
     </div>
-  );
+  )
 }

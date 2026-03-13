@@ -1,32 +1,32 @@
-"use client";
+'use client'
 
-import { type ReactNode, useEffect } from "react";
-import { cn } from "@/lib/utils";
+import { type ReactNode, useEffect } from 'react'
+import { cn } from '@/lib/utils'
 
 interface FadeTransitionBaseProps {
-  children: ReactNode;
-  isVisible?: boolean;
-  duration?: "fast" | "normal" | "slow";
-  className?: string;
-  onTransitionComplete?: () => void;
+  children: ReactNode
+  isVisible?: boolean
+  duration?: 'fast' | 'normal' | 'slow'
+  className?: string
+  onTransitionComplete?: () => void
 }
 
-type FadeTransitionProps<T extends React.ElementType = "div"> =
+type FadeTransitionProps<T extends React.ElementType = 'div'> =
   FadeTransitionBaseProps & {
-    as?: T;
-  } & Omit<React.ComponentPropsWithoutRef<T>, keyof FadeTransitionBaseProps>;
+    as?: T
+  } & Omit<React.ComponentPropsWithoutRef<T>, keyof FadeTransitionBaseProps>
 
 const durationClasses = {
-  fast: "transition-opacity duration-150",
-  normal: "transition-opacity duration-300",
-  slow: "transition-opacity duration-500",
-};
+  fast: 'transition-opacity duration-150',
+  normal: 'transition-opacity duration-300',
+  slow: 'transition-opacity duration-500'
+}
 
-export function FadeTransition<T extends React.ElementType = "div">({
+export function FadeTransition<T extends React.ElementType = 'div'>({
   as,
   children,
   isVisible = true,
-  duration = "normal",
+  duration = 'normal',
   className,
   onTransitionComplete,
   ...props
@@ -35,27 +35,27 @@ export function FadeTransition<T extends React.ElementType = "div">({
     if (onTransitionComplete) {
       const timeout = setTimeout(
         () => {
-          onTransitionComplete();
+          onTransitionComplete()
         },
-        duration === "fast" ? 150 : duration === "normal" ? 300 : 500,
-      );
+        duration === 'fast' ? 150 : duration === 'normal' ? 300 : 500
+      )
 
-      return () => clearTimeout(timeout);
+      return () => clearTimeout(timeout)
     }
-  }, [duration, onTransitionComplete]);
+  }, [duration, onTransitionComplete])
 
-  const Component = as || "div";
+  const Component = as || 'div'
 
   return (
     <Component
       className={cn(
         durationClasses[duration],
-        isVisible ? "opacity-100" : "opacity-0",
-        className,
+        isVisible ? 'opacity-100' : 'opacity-0',
+        className
       )}
       {...props}
     >
       {children}
     </Component>
-  );
+  )
 }

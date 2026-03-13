@@ -1,20 +1,20 @@
-import type { Meta, StoryObj } from "@storybook/nextjs";
-import { AlertCircleIcon, HelpCircleIcon, InfoIcon } from "lucide-react";
-import { Badge } from "../badge";
-import { Button } from "../button";
-import { Tooltip, TooltipContent, TooltipTrigger } from "../tooltip";
+import type { Meta, StoryObj } from '@storybook/nextjs'
+import { AlertCircleIcon, HelpCircleIcon, InfoIcon } from 'lucide-react'
+import { Badge } from '../badge'
+import { Button } from '../button'
+import { Tooltip, TooltipContent, TooltipTrigger } from '../tooltip'
 
 const meta: Meta<typeof Tooltip> = {
-  title: "UI/Tooltip",
+  title: 'UI/Tooltip',
   component: Tooltip,
   parameters: {
-    layout: "centered",
+    layout: 'centered'
   },
-  tags: ["autodocs"],
-};
+  tags: ['autodocs']
+}
 
-export default meta;
-type Story = StoryObj<typeof meta>;
+export default meta
+type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   render: () => (
@@ -26,8 +26,8 @@ export const Default: Story = {
         <p>This is a tooltip</p>
       </TooltipContent>
     </Tooltip>
-  ),
-};
+  )
+}
 
 export const WithIcon: Story = {
   render: () => (
@@ -42,8 +42,8 @@ export const WithIcon: Story = {
         </TooltipContent>
       </Tooltip>
     </div>
-  ),
-};
+  )
+}
 
 export const DifferentSides: Story = {
   render: () => (
@@ -84,8 +84,8 @@ export const DifferentSides: Story = {
         </TooltipContent>
       </Tooltip>
     </div>
-  ),
-};
+  )
+}
 
 export const LogsAppExamples: Story = {
   render: () => (
@@ -211,8 +211,8 @@ export const LogsAppExamples: Story = {
         </div>
       </div>
     </div>
-  ),
-};
+  )
+}
 
 export const LongContent: Story = {
   render: () => (
@@ -228,8 +228,8 @@ export const LongContent: Story = {
         </p>
       </TooltipContent>
     </Tooltip>
-  ),
-};
+  )
+}
 
 export const WithCustomStyling: Story = {
   render: () => (
@@ -252,5 +252,5 @@ export const WithCustomStyling: Story = {
         </TooltipContent>
       </Tooltip>
     </div>
-  ),
-};
+  )
+}

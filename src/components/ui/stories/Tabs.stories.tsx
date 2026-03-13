@@ -1,32 +1,32 @@
-import type { Meta, StoryObj } from "@storybook/nextjs";
+import type { Meta, StoryObj } from '@storybook/nextjs'
 import {
   ActivityIcon,
   BarChart3Icon,
   LineChartIcon,
-  PieChartIcon,
-} from "lucide-react";
-import { Badge } from "../badge";
-import { Button } from "../button";
+  PieChartIcon
+} from 'lucide-react'
+import { Badge } from '../badge'
+import { Button } from '../button'
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
-  CardTitle,
-} from "../card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../tabs";
+  CardTitle
+} from '../card'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../tabs'
 
 const meta: Meta<typeof Tabs> = {
-  title: "UI/Tabs",
+  title: 'UI/Tabs',
   component: Tabs,
   parameters: {
-    layout: "centered",
+    layout: 'centered'
   },
-  tags: ["autodocs"],
-};
+  tags: ['autodocs']
+}
 
-export default meta;
-type Story = StoryObj<typeof meta>;
+export default meta
+type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   render: () => (
@@ -46,8 +46,8 @@ export const Default: Story = {
         <p>Content for tab three</p>
       </TabsContent>
     </Tabs>
-  ),
-};
+  )
+}
 
 export const WithIcons: Story = {
   render: () => (
@@ -97,8 +97,8 @@ export const WithIcons: Story = {
         </Card>
       </TabsContent>
     </Tabs>
-  ),
-};
+  )
+}
 
 export const WithCards: Story = {
   render: () => (
@@ -176,8 +176,8 @@ export const WithCards: Story = {
         </Card>
       </TabsContent>
     </Tabs>
-  ),
-};
+  )
+}
 
 export const LogsAppExamples: Story = {
   render: () => (
@@ -251,8 +251,8 @@ export const LogsAppExamples: Story = {
         </Card>
       </TabsContent>
     </Tabs>
-  ),
-};
+  )
+}
 
 export const WithBadges: Story = {
   render: () => (
@@ -262,13 +262,13 @@ export const WithBadges: Story = {
           All <Badge className="ml-2">12</Badge>
         </TabsTrigger>
         <TabsTrigger value="errors">
-          Errors{" "}
+          Errors{' '}
           <Badge className="ml-2" variant="destructive">
             3
           </Badge>
         </TabsTrigger>
         <TabsTrigger value="warnings">
-          Warnings{" "}
+          Warnings{' '}
           <Badge className="ml-2" variant="secondary">
             5
           </Badge>
@@ -290,8 +290,8 @@ export const WithBadges: Story = {
         </div>
       </TabsContent>
     </Tabs>
-  ),
-};
+  )
+}
 
 export const Vertical: Story = {
   render: () => (
@@ -334,8 +334,8 @@ export const Vertical: Story = {
         </TabsContent>
       </div>
     </Tabs>
-  ),
-};
+  )
+}
 
 export const DisabledTab: Story = {
   render: () => (
@@ -357,5 +357,5 @@ export const DisabledTab: Story = {
         <p>Content for another tab</p>
       </TabsContent>
     </Tabs>
-  ),
-};
+  )
+}

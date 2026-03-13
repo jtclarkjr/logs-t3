@@ -1,61 +1,61 @@
-"use client";
+'use client'
 
-import { X } from "lucide-react";
-import * as React from "react";
-import { cn } from "@/lib/utils";
-import { Button } from "./button";
+import { X } from 'lucide-react'
+import * as React from 'react'
+import { cn } from '@/lib/utils'
+import { Button } from './button'
 
 interface DrawerProps {
-  open?: boolean;
-  onOpenChange?: (open: boolean) => void;
-  children?: React.ReactNode;
+  open?: boolean
+  onOpenChange?: (open: boolean) => void
+  children?: React.ReactNode
 }
 
 interface DrawerContentProps extends React.HTMLAttributes<HTMLDivElement> {
-  children?: React.ReactNode;
+  children?: React.ReactNode
 }
 
 interface DrawerHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
-  children?: React.ReactNode;
+  children?: React.ReactNode
 }
 
 interface DrawerTitleProps extends React.HTMLAttributes<HTMLHeadingElement> {
-  children?: React.ReactNode;
+  children?: React.ReactNode
 }
 
 interface DrawerBodyProps extends React.HTMLAttributes<HTMLDivElement> {
-  children?: React.ReactNode;
+  children?: React.ReactNode
 }
 
 interface DrawerFooterProps extends React.HTMLAttributes<HTMLDivElement> {
-  children?: React.ReactNode;
+  children?: React.ReactNode
 }
 
 const DrawerContext = React.createContext<{
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
+  open: boolean
+  onOpenChange: (open: boolean) => void
 }>({
   open: false,
-  onOpenChange: () => {},
-});
+  onOpenChange: () => {}
+})
 
 const Drawer = React.forwardRef<HTMLDivElement, DrawerProps>(
   ({ open = false, onOpenChange, children }, ref) => {
-    const [isVisible, setIsVisible] = React.useState(false);
-    const [isAnimating, setIsAnimating] = React.useState(false);
+    const [isVisible, setIsVisible] = React.useState(false)
+    const [isAnimating, setIsAnimating] = React.useState(false)
 
     React.useEffect(() => {
       if (open) {
-        setIsVisible(true);
+        setIsVisible(true)
         // Small delay to ensure the element is rendered before starting animation
-        setTimeout(() => setIsAnimating(true), 10);
+        setTimeout(() => setIsAnimating(true), 10)
       } else {
-        setIsAnimating(false);
+        setIsAnimating(false)
         // Keep element visible during exit animation
-        const timer = setTimeout(() => setIsVisible(false), 300);
-        return () => clearTimeout(timer);
+        const timer = setTimeout(() => setIsVisible(false), 300)
+        return () => clearTimeout(timer)
       }
-    }, [open]);
+    }, [open])
 
     return (
       <DrawerContext.Provider
@@ -66,14 +66,14 @@ const Drawer = React.forwardRef<HTMLDivElement, DrawerProps>(
             {/* Backdrop */}
             <button
               className={cn(
-                "absolute inset-0 bg-black/50 transition-opacity duration-300 ease-in-out",
-                isAnimating ? "opacity-100" : "opacity-0",
+                'absolute inset-0 bg-black/50 transition-opacity duration-300 ease-in-out',
+                isAnimating ? 'opacity-100' : 'opacity-0'
               )}
               onClick={() => onOpenChange?.(false)}
               onKeyDown={(event) => {
-                if (event.key === "Enter" || event.key === " ") {
-                  event.preventDefault();
-                  onOpenChange?.(false);
+                if (event.key === 'Enter' || event.key === ' ') {
+                  event.preventDefault()
+                  onOpenChange?.(false)
                 }
               }}
               type="button"
@@ -81,9 +81,9 @@ const Drawer = React.forwardRef<HTMLDivElement, DrawerProps>(
             {/* Drawer */}
             <div
               className={cn(
-                "fixed top-0 right-0 z-50 h-full w-full max-w-md bg-background shadow-lg",
-                "transform transition-transform duration-300 ease-in-out",
-                isAnimating ? "translate-x-0" : "translate-x-full",
+                'fixed top-0 right-0 z-50 h-full w-full max-w-md bg-background shadow-lg',
+                'transform transition-transform duration-300 ease-in-out',
+                isAnimating ? 'translate-x-0' : 'translate-x-full'
               )}
               ref={ref}
             >
@@ -92,38 +92,38 @@ const Drawer = React.forwardRef<HTMLDivElement, DrawerProps>(
           </div>
         )}
       </DrawerContext.Provider>
-    );
-  },
-);
-Drawer.displayName = "Drawer";
+    )
+  }
+)
+Drawer.displayName = 'Drawer'
 
 const DrawerContent = React.forwardRef<HTMLDivElement, DrawerContentProps>(
   ({ className, children, ...props }, ref) => {
     return (
       <div
         className={cn(
-          "flex h-full w-full flex-col border-l bg-background",
-          className,
+          'flex h-full w-full flex-col border-l bg-background',
+          className
         )}
         ref={ref}
         {...props}
       >
         {children}
       </div>
-    );
-  },
-);
-DrawerContent.displayName = "DrawerContent";
+    )
+  }
+)
+DrawerContent.displayName = 'DrawerContent'
 
 const DrawerHeader = React.forwardRef<HTMLDivElement, DrawerHeaderProps>(
   ({ className, children, ...props }, ref) => {
-    const { onOpenChange } = React.useContext(DrawerContext);
+    const { onOpenChange } = React.useContext(DrawerContext)
 
     return (
       <div
         className={cn(
-          "flex items-center justify-between border-b px-6 py-4",
-          className,
+          'flex items-center justify-between border-b px-6 py-4',
+          className
         )}
         ref={ref}
         {...props}
@@ -139,51 +139,51 @@ const DrawerHeader = React.forwardRef<HTMLDivElement, DrawerHeaderProps>(
           <span className="sr-only">Close</span>
         </Button>
       </div>
-    );
-  },
-);
-DrawerHeader.displayName = "DrawerHeader";
+    )
+  }
+)
+DrawerHeader.displayName = 'DrawerHeader'
 
 const DrawerTitle = React.forwardRef<HTMLHeadingElement, DrawerTitleProps>(
   ({ className, children, ...props }, ref) => {
     return (
       <h2
-        className={cn("font-semibold text-foreground text-lg", className)}
+        className={cn('font-semibold text-foreground text-lg', className)}
         ref={ref}
         {...props}
       >
         {children}
       </h2>
-    );
-  },
-);
-DrawerTitle.displayName = "DrawerTitle";
+    )
+  }
+)
+DrawerTitle.displayName = 'DrawerTitle'
 
 const DrawerBody = React.forwardRef<HTMLDivElement, DrawerBodyProps>(
   ({ className, children, ...props }, ref) => {
     return (
       <div
-        className={cn("flex-1 overflow-y-auto px-6 py-4", className)}
+        className={cn('flex-1 overflow-y-auto px-6 py-4', className)}
         ref={ref}
         {...props}
       >
         {children}
       </div>
-    );
-  },
-);
-DrawerBody.displayName = "DrawerBody";
+    )
+  }
+)
+DrawerBody.displayName = 'DrawerBody'
 
 const DrawerFooter = React.forwardRef<HTMLDivElement, DrawerFooterProps>(
   ({ className, children, ...props }, ref) => {
     return (
-      <div className={cn("border-t px-6 py-4", className)} ref={ref} {...props}>
+      <div className={cn('border-t px-6 py-4', className)} ref={ref} {...props}>
         {children}
       </div>
-    );
-  },
-);
-DrawerFooter.displayName = "DrawerFooter";
+    )
+  }
+)
+DrawerFooter.displayName = 'DrawerFooter'
 
 export {
   Drawer,
@@ -191,5 +191,5 @@ export {
   DrawerHeader,
   DrawerTitle,
   DrawerBody,
-  DrawerFooter,
-};
+  DrawerFooter
+}

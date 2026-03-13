@@ -1,27 +1,27 @@
-import type { Meta, StoryObj } from "@storybook/nextjs";
+import type { Meta, StoryObj } from '@storybook/nextjs'
 import {
   CalendarIcon,
   FilterIcon,
   HelpCircleIcon,
   InfoIcon,
-  SettingsIcon,
-} from "lucide-react";
-import { Button } from "../button";
-import { Input } from "../input";
-import { Label } from "../label";
-import { Popover, PopoverContent, PopoverTrigger } from "../popover";
+  SettingsIcon
+} from 'lucide-react'
+import { Button } from '../button'
+import { Input } from '../input'
+import { Label } from '../label'
+import { Popover, PopoverContent, PopoverTrigger } from '../popover'
 
 const meta: Meta<typeof Popover> = {
-  title: "UI/Popover",
+  title: 'UI/Popover',
   component: Popover,
   parameters: {
-    layout: "centered",
+    layout: 'centered'
   },
-  tags: ["autodocs"],
-};
+  tags: ['autodocs']
+}
 
-export default meta;
-type Story = StoryObj<typeof meta>;
+export default meta
+type Story = StoryObj<typeof meta>
 
 export const Basic: Story = {
   render: () => (
@@ -38,8 +38,8 @@ export const Basic: Story = {
         </div>
       </PopoverContent>
     </Popover>
-  ),
-};
+  )
+}
 
 export const WithForm: Story = {
   render: () => (
@@ -75,8 +75,8 @@ export const WithForm: Story = {
         </div>
       </PopoverContent>
     </Popover>
-  ),
-};
+  )
+}
 
 export const QuickFilters: Story = {
   render: () => (
@@ -128,8 +128,8 @@ export const QuickFilters: Story = {
         </div>
       </PopoverContent>
     </Popover>
-  ),
-};
+  )
+}
 
 export const LogEntryInfo: Story = {
   render: () => (
@@ -171,8 +171,8 @@ export const LogEntryInfo: Story = {
         </div>
       </PopoverContent>
     </Popover>
-  ),
-};
+  )
+}
 
 export const DatePicker: Story = {
   render: () => (
@@ -224,8 +224,8 @@ export const DatePicker: Story = {
         </div>
       </PopoverContent>
     </Popover>
-  ),
-};
+  )
+}
 
 export const Help: Story = {
   render: () => (
@@ -298,8 +298,8 @@ export const Help: Story = {
         </div>
       </PopoverContent>
     </Popover>
-  ),
-};
+  )
+}
 
 export const Positioning: Story = {
   render: () => (
@@ -340,8 +340,8 @@ export const Positioning: Story = {
         </PopoverContent>
       </Popover>
     </div>
-  ),
-};
+  )
+}
 
 export const UserActions: Story = {
   render: () => (
@@ -396,5 +396,5 @@ export const UserActions: Story = {
         </div>
       </PopoverContent>
     </Popover>
-  ),
-};
+  )
+}

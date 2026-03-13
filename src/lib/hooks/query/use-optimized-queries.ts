@@ -1,10 +1,10 @@
 // @ts-nocheck
 
-import { useQuery } from "@tanstack/react-query";
-import { format } from "date-fns";
-import type { DateRange } from "react-day-picker";
-import { healthService } from "@/lib/services/health";
-import { logsService } from "@/lib/services/logs";
+import { useQuery } from '@tanstack/react-query'
+import { format } from 'date-fns'
+import type { DateRange } from 'react-day-picker'
+import { healthService } from '@/lib/services/health'
+import { logsService } from '@/lib/services/logs'
 import type {
   FilterAllOption,
   GroupBy,
@@ -12,12 +12,12 @@ import type {
   SeverityFilter,
   SortByField,
   SortOrder,
-  SourceFilter,
-} from "@/lib/types/filters";
+  SourceFilter
+} from '@/lib/types/filters'
 import {
   createAggregationFilters,
-  createChartFilters,
-} from "@/lib/utils/filter-helpers";
+  createChartFilters
+} from '@/lib/utils/filter-helpers'
 
 /**
  * Optimized hook for dashboard data that combines filters and data transformation
@@ -27,67 +27,67 @@ export function useDashboardData({
   dateRange,
   selectedSeverity,
   selectedSource,
-  timeGrouping,
+  timeGrouping
 }: {
-  dateRange?: DateRange;
-  selectedSeverity: SeverityFilter;
-  selectedSource: SourceFilter;
-  timeGrouping: GroupBy;
+  dateRange?: DateRange
+  selectedSeverity: SeverityFilter
+  selectedSource: SourceFilter
+  timeGrouping: GroupBy
 }) {
   const aggregationFilters = createAggregationFilters(
     dateRange,
     selectedSeverity,
-    selectedSource,
-  );
+    selectedSource
+  )
 
   const chartFilters = createChartFilters(
     dateRange,
     selectedSeverity,
     selectedSource,
-    timeGrouping,
-  );
+    timeGrouping
+  )
 
   // Aggregation data query
   const aggregationQuery = useQuery({
-    queryKey: ["log-aggregation", aggregationFilters],
+    queryKey: ['log-aggregation', aggregationFilters],
     queryFn: () => {
       if (!aggregationFilters) {
-        throw new Error("Aggregation filters are required");
+        throw new Error('Aggregation filters are required')
       }
-      return logsService.getLogAggregation(aggregationFilters);
+      return logsService.getLogAggregation(aggregationFilters)
     },
-    enabled: Boolean(aggregationFilters),
-  });
+    enabled: Boolean(aggregationFilters)
+  })
 
   // Chart data query with transformation
   const chartQuery = useQuery({
-    queryKey: ["chart-data", chartFilters],
+    queryKey: ['chart-data', chartFilters],
     queryFn: () => {
       if (!chartFilters) {
-        throw new Error("Chart filters are required");
+        throw new Error('Chart filters are required')
       }
-      return logsService.getChartData(chartFilters);
+      return logsService.getChartData(chartFilters)
     },
     enabled: Boolean(chartFilters),
     select: (data) => {
-      if (!data?.data) return [];
+      if (!data?.data) return []
 
       return data.data.map((item) => ({
         ...item,
         date: format(
           new Date(item.timestamp),
-          timeGrouping === ("hour" as GroupBy) ? "MMM dd HH:mm" : "MMM dd",
-        ),
-      }));
-    },
-  });
+          timeGrouping === ('hour' as GroupBy) ? 'MMM dd HH:mm' : 'MMM dd'
+        )
+      }))
+    }
+  })
 
   // Metadata query
   const metadataQuery = useQuery({
-    queryKey: ["metadata"],
+    queryKey: ['metadata'],
     queryFn: () => healthService.getMetadata(),
-    staleTime: 10 * 60 * 1000, // 10 minutes
-  });
+    staleTime: 10 * 60 * 1000 // 10 minutes
+  })
 
   return {
     // Aggregation data
@@ -109,8 +109,8 @@ export function useDashboardData({
     isLoading:
       aggregationQuery.isLoading ||
       chartQuery.isLoading ||
-      metadataQuery.isLoading,
-  };
+      metadataQuery.isLoading
+  }
 }
 
 /**
@@ -124,39 +124,39 @@ export function useOptimizedLogs({
   selectedSource,
   sortBy,
   sortOrder,
-  dateRange,
+  dateRange
 }: {
-  currentPage: number;
-  pageSize: number;
-  searchQuery: string;
-  selectedSeverity: SeverityFilter;
-  selectedSource: SourceFilter;
-  sortBy: SortByField;
-  sortOrder: SortOrder;
-  dateRange?: DateRange;
+  currentPage: number
+  pageSize: number
+  searchQuery: string
+  selectedSeverity: SeverityFilter
+  selectedSource: SourceFilter
+  sortBy: SortByField
+  sortOrder: SortOrder
+  dateRange?: DateRange
 }) {
   return useQuery({
     queryKey: [
-      "logs",
+      'logs',
       {
         page: currentPage,
         page_size: pageSize,
         sort_by: sortBy,
         sort_order: sortOrder,
         ...(searchQuery && { search: searchQuery }),
-        ...(selectedSeverity !== ("all" as FilterAllOption) && {
-          severity: selectedSeverity,
+        ...(selectedSeverity !== ('all' as FilterAllOption) && {
+          severity: selectedSeverity
         }),
-        ...(selectedSource !== ("all" as FilterAllOption) && {
-          source: selectedSource,
+        ...(selectedSource !== ('all' as FilterAllOption) && {
+          source: selectedSource
         }),
         ...(dateRange?.from && { start_date: dateRange.from.toISOString() }),
-        ...(dateRange?.to && { end_date: dateRange.to.toISOString() }),
-      } as LogFilters,
+        ...(dateRange?.to && { end_date: dateRange.to.toISOString() })
+      } as LogFilters
     ],
     queryFn: ({ queryKey }) => {
-      const filters = queryKey[1] as LogFilters;
-      return logsService.getLogs(filters);
-    },
-  });
+      const filters = queryKey[1] as LogFilters
+      return logsService.getLogs(filters)
+    }
+  })
 }

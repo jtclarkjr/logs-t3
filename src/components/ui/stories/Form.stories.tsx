@@ -1,8 +1,8 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import type { Meta, StoryObj } from "@storybook/nextjs";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { Button } from "../button";
+import { zodResolver } from '@hookform/resolvers/zod'
+import type { Meta, StoryObj } from '@storybook/nextjs'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
+import { Button } from '../button'
 import {
   Form,
   FormControl,
@@ -10,48 +10,48 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
-} from "../form";
-import { FormFieldWrapper } from "../form-field";
-import { Input } from "../input";
+  FormMessage
+} from '../form'
+import { FormFieldWrapper } from '../form-field'
+import { Input } from '../input'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
-} from "../select";
-import { Textarea } from "../textarea";
+  SelectValue
+} from '../select'
+import { Textarea } from '../textarea'
 
 const meta: Meta<typeof Form> = {
-  title: "UI/Form",
+  title: 'UI/Form',
   component: Form,
   parameters: {
-    layout: "centered",
+    layout: 'centered'
   },
-  tags: ["autodocs"],
-};
+  tags: ['autodocs']
+}
 
-export default meta;
-type Story = StoryObj<typeof meta>;
+export default meta
+type Story = StoryObj<typeof meta>
 
 // Schema definitions for react-hook-form examples
 const loginFormSchema = z.object({
-  email: z.string().email({ message: "Please enter a valid email address." }),
+  email: z.string().email({ message: 'Please enter a valid email address.' }),
   password: z
     .string()
-    .min(8, { message: "Password must be at least 8 characters." }),
-});
+    .min(8, { message: 'Password must be at least 8 characters.' })
+})
 
 const profileFormSchema = z.object({
-  firstName: z.string().min(1, { message: "First name is required." }),
-  lastName: z.string().min(1, { message: "Last name is required." }),
+  firstName: z.string().min(1, { message: 'First name is required.' }),
+  lastName: z.string().min(1, { message: 'Last name is required.' }),
   bio: z
     .string()
-    .max(500, { message: "Bio must be 500 characters or less." })
+    .max(500, { message: 'Bio must be 500 characters or less.' })
     .optional(),
-  role: z.string().min(1, { message: "Please select a role." }),
-});
+  role: z.string().min(1, { message: 'Please select a role.' })
+})
 
 // React Hook Form Examples
 export const ReactHookFormLogin: Story = {
@@ -59,13 +59,13 @@ export const ReactHookFormLogin: Story = {
     const form = useForm<z.infer<typeof loginFormSchema>>({
       resolver: zodResolver(loginFormSchema),
       defaultValues: {
-        email: "",
-        password: "",
-      },
-    });
+        email: '',
+        password: ''
+      }
+    })
 
     function onSubmit(values: z.infer<typeof loginFormSchema>) {
-      console.log("Login form submitted:", values);
+      console.log('Login form submitted:', values)
     }
 
     return (
@@ -121,24 +121,24 @@ export const ReactHookFormLogin: Story = {
           </form>
         </Form>
       </div>
-    );
-  },
-};
+    )
+  }
+}
 
 export const ReactHookFormProfile: Story = {
   render: function ReactHookFormProfileExample() {
     const form = useForm<z.infer<typeof profileFormSchema>>({
       resolver: zodResolver(profileFormSchema),
       defaultValues: {
-        firstName: "",
-        lastName: "",
-        bio: "",
-        role: "",
-      },
-    });
+        firstName: '',
+        lastName: '',
+        bio: '',
+        role: ''
+      }
+    })
 
     function onSubmit(values: z.infer<typeof profileFormSchema>) {
-      console.log("Profile form submitted:", values);
+      console.log('Profile form submitted:', values)
     }
 
     return (
@@ -242,9 +242,9 @@ export const ReactHookFormProfile: Story = {
           </form>
         </Form>
       </div>
-    );
-  },
-};
+    )
+  }
+}
 
 // FormFieldWrapper Examples (existing pattern)
 export const FormFieldWrapperExample: Story = {
@@ -259,7 +259,7 @@ export const FormFieldWrapperExample: Story = {
       </FormFieldWrapper>
 
       <FormFieldWrapper
-        errors={["Password must be at least 8 characters"]}
+        errors={['Password must be at least 8 characters']}
         label="Password"
         required
       >
@@ -290,8 +290,8 @@ export const FormFieldWrapperExample: Story = {
         </Select>
       </FormFieldWrapper>
     </div>
-  ),
-};
+  )
+}
 
 export const LogCreationForm: Story = {
   render: () => (
@@ -347,5 +347,5 @@ export const LogCreationForm: Story = {
         </Button>
       </div>
     </form>
-  ),
-};
+  )
+}

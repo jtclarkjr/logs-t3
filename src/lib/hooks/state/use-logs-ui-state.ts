@@ -1,63 +1,63 @@
-import { useState } from "react";
-import type { LogResponse } from "@/lib/types/log";
+import { useState } from 'react'
+import type { LogResponse } from '@/lib/types/log'
 
 interface LogsUIState {
-  deleteDialogOpen: boolean;
-  logToDelete: LogResponse | null;
-  drawerOpen: boolean;
-  selectedLog: LogResponse | null;
-  createDialogOpen: boolean;
+  deleteDialogOpen: boolean
+  logToDelete: LogResponse | null
+  drawerOpen: boolean
+  selectedLog: LogResponse | null
+  createDialogOpen: boolean
 }
 
 export function useLogsUIState() {
   // UI state management
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [logToDelete, setLogToDelete] = useState<LogResponse | null>(null);
-  const [drawerOpen, setDrawerOpen] = useState(false);
-  const [selectedLog, setSelectedLog] = useState<LogResponse | null>(null);
-  const [createDialogOpen, setCreateDialogOpen] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+  const [logToDelete, setLogToDelete] = useState<LogResponse | null>(null)
+  const [drawerOpen, setDrawerOpen] = useState(false)
+  const [selectedLog, setSelectedLog] = useState<LogResponse | null>(null)
+  const [createDialogOpen, setCreateDialogOpen] = useState(false)
 
   // Compound actions
   const openDeleteDialog = (log: LogResponse) => {
-    setLogToDelete(log);
-    setDeleteDialogOpen(true);
-  };
+    setLogToDelete(log)
+    setDeleteDialogOpen(true)
+  }
 
   const closeDeleteDialog = () => {
-    setDeleteDialogOpen(false);
-    setLogToDelete(null);
-  };
+    setDeleteDialogOpen(false)
+    setLogToDelete(null)
+  }
 
   const openLogDetails = (log: LogResponse) => {
-    setSelectedLog(log);
-    setDrawerOpen(true);
-  };
+    setSelectedLog(log)
+    setDrawerOpen(true)
+  }
 
   const closeLogDetails = () => {
-    setDrawerOpen(false);
-    setSelectedLog(null);
-  };
+    setDrawerOpen(false)
+    setSelectedLog(null)
+  }
 
   const openCreateDialog = () => {
     // Close the view drawer if it's open when creating a new log
     if (drawerOpen) {
-      closeLogDetails();
+      closeLogDetails()
     }
-    setCreateDialogOpen(true);
-  };
+    setCreateDialogOpen(true)
+  }
 
   const closeCreateDialog = () => {
-    setCreateDialogOpen(false);
-  };
+    setCreateDialogOpen(false)
+  }
 
   // Reset all UI state
   const resetUIState = () => {
-    setDeleteDialogOpen(false);
-    setLogToDelete(null);
-    setDrawerOpen(false);
-    setSelectedLog(null);
-    setCreateDialogOpen(false);
-  };
+    setDeleteDialogOpen(false)
+    setLogToDelete(null)
+    setDrawerOpen(false)
+    setSelectedLog(null)
+    setCreateDialogOpen(false)
+  }
 
   // Return state and actions
   return {
@@ -85,8 +85,8 @@ export function useLogsUIState() {
     resetUIState,
 
     // Derived state
-    hasOpenModals: Boolean(deleteDialogOpen || drawerOpen || createDialogOpen),
-  };
+    hasOpenModals: Boolean(deleteDialogOpen || drawerOpen || createDialogOpen)
+  }
 }
 
-export type { LogsUIState };
+export type { LogsUIState }

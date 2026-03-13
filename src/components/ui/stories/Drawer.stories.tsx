@@ -1,41 +1,41 @@
-import type { Meta, StoryObj } from "@storybook/nextjs";
+import type { Meta, StoryObj } from '@storybook/nextjs'
 import {
   BellIcon,
   FileTextIcon,
   FilterIcon,
   SettingsIcon,
-  UserIcon,
-} from "lucide-react";
-import { useState } from "react";
-import { Badge } from "../badge";
-import { Button } from "../button";
+  UserIcon
+} from 'lucide-react'
+import { useState } from 'react'
+import { Badge } from '../badge'
+import { Button } from '../button'
 import {
   Drawer,
   DrawerBody,
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
-  DrawerTitle,
-} from "../drawer";
-import { Input } from "../input";
-import { Label } from "../label";
-import { Textarea } from "../textarea";
+  DrawerTitle
+} from '../drawer'
+import { Input } from '../input'
+import { Label } from '../label'
+import { Textarea } from '../textarea'
 
 const meta: Meta<typeof Drawer> = {
-  title: "UI/Drawer",
+  title: 'UI/Drawer',
   component: Drawer,
   parameters: {
-    layout: "centered",
+    layout: 'centered'
   },
-  tags: ["autodocs"],
-};
+  tags: ['autodocs']
+}
 
-export default meta;
-type Story = StoryObj<typeof meta>;
+export default meta
+type Story = StoryObj<typeof meta>
 
 export const Basic: Story = {
   render: function BasicDrawerExample() {
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(false)
 
     return (
       <div>
@@ -72,13 +72,13 @@ export const Basic: Story = {
           </DrawerContent>
         </Drawer>
       </div>
-    );
-  },
-};
+    )
+  }
+}
 
 export const UserProfileDrawer: Story = {
   render: function UserProfileDrawerExample() {
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(false)
 
     return (
       <div>
@@ -188,13 +188,13 @@ export const UserProfileDrawer: Story = {
           </DrawerContent>
         </Drawer>
       </div>
-    );
-  },
-};
+    )
+  }
+}
 
 export const LogFiltersDrawer: Story = {
   render: function LogFiltersDrawerExample() {
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(false)
 
     return (
       <div>
@@ -226,33 +226,33 @@ export const LogFiltersDrawer: Story = {
                 <div className="space-y-3">
                   <Label>Severity Level</Label>
                   <div className="space-y-2">
-                    {["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"].map(
+                    {['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'].map(
                       (level) => (
                         <label className="flex items-center gap-2" key={level}>
                           <input
                             className="rounded"
-                            defaultChecked={level !== "DEBUG"}
+                            defaultChecked={level !== 'DEBUG'}
                             type="checkbox"
                           />
                           <span className="text-sm">{level}</span>
                           <Badge
                             className="ml-auto text-xs"
                             variant={
-                              level === "ERROR" || level === "CRITICAL"
-                                ? "destructive"
-                                : "secondary"
+                              level === 'ERROR' || level === 'CRITICAL'
+                                ? 'destructive'
+                                : 'secondary'
                             }
                           >
-                            {level === "INFO"
-                              ? "1.2k"
-                              : level === "ERROR"
-                                ? "234"
-                                : level === "WARNING"
-                                  ? "45"
-                                  : "12"}
+                            {level === 'INFO'
+                              ? '1.2k'
+                              : level === 'ERROR'
+                                ? '234'
+                                : level === 'WARNING'
+                                  ? '45'
+                                  : '12'}
                           </Badge>
                         </label>
-                      ),
+                      )
                     )}
                   </div>
                 </div>
@@ -298,13 +298,13 @@ export const LogFiltersDrawer: Story = {
           </DrawerContent>
         </Drawer>
       </div>
-    );
-  },
-};
+    )
+  }
+}
 
 export const LogDetailsDrawer: Story = {
   render: function LogDetailsDrawerExample() {
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(false)
 
     return (
       <div>
@@ -417,20 +417,20 @@ export const LogDetailsDrawer: Story = {
                   <div className="mt-2 space-y-2">
                     {[
                       {
-                        id: "12344",
-                        message: "Database connection pool exhausted",
-                        time: "14:32:15",
+                        id: '12344',
+                        message: 'Database connection pool exhausted',
+                        time: '14:32:15'
                       },
                       {
-                        id: "12346",
-                        message: "Retry attempt failed",
-                        time: "14:32:20",
+                        id: '12346',
+                        message: 'Retry attempt failed',
+                        time: '14:32:20'
                       },
                       {
-                        id: "12347",
-                        message: "Fallback service activated",
-                        time: "14:32:22",
-                      },
+                        id: '12347',
+                        message: 'Fallback service activated',
+                        time: '14:32:22'
+                      }
                     ].map((log) => (
                       <div className="rounded border p-2 text-sm" key={log.id}>
                         <div className="flex items-start justify-between">
@@ -461,13 +461,13 @@ export const LogDetailsDrawer: Story = {
           </DrawerContent>
         </Drawer>
       </div>
-    );
-  },
-};
+    )
+  }
+}
 
 export const SettingsDrawer: Story = {
   render: function SettingsDrawerExample() {
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(false)
 
     return (
       <div>
@@ -594,13 +594,13 @@ export const SettingsDrawer: Story = {
           </DrawerContent>
         </Drawer>
       </div>
-    );
-  },
-};
+    )
+  }
+}
 
 export const NotificationDrawer: Story = {
   render: function NotificationDrawerExample() {
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(false)
 
     return (
       <div>
@@ -624,57 +624,57 @@ export const NotificationDrawer: Story = {
                 {[
                   {
                     id: 1,
-                    type: "error",
-                    title: "Database Connection Failed",
+                    type: 'error',
+                    title: 'Database Connection Failed',
                     message:
-                      "Multiple connection timeouts detected in production",
-                    time: "2 minutes ago",
-                    unread: true,
+                      'Multiple connection timeouts detected in production',
+                    time: '2 minutes ago',
+                    unread: true
                   },
                   {
                     id: 2,
-                    type: "warning",
-                    title: "High Memory Usage",
-                    message: "API server memory usage above 85% threshold",
-                    time: "15 minutes ago",
-                    unread: true,
+                    type: 'warning',
+                    title: 'High Memory Usage',
+                    message: 'API server memory usage above 85% threshold',
+                    time: '15 minutes ago',
+                    unread: true
                   },
                   {
                     id: 3,
-                    type: "info",
-                    title: "Deployment Complete",
+                    type: 'info',
+                    title: 'Deployment Complete',
                     message:
-                      "Version 2.1.4 successfully deployed to production",
-                    time: "1 hour ago",
-                    unread: false,
+                      'Version 2.1.4 successfully deployed to production',
+                    time: '1 hour ago',
+                    unread: false
                   },
                   {
                     id: 4,
-                    type: "error",
-                    title: "Authentication Service Down",
-                    message: "Auth service not responding to health checks",
-                    time: "2 hours ago",
-                    unread: true,
-                  },
+                    type: 'error',
+                    title: 'Authentication Service Down',
+                    message: 'Auth service not responding to health checks',
+                    time: '2 hours ago',
+                    unread: true
+                  }
                 ].map((notification) => (
                   <div
-                    className={`rounded-lg border p-4 ${notification.unread ? "bg-accent/50" : ""}`}
+                    className={`rounded-lg border p-4 ${notification.unread ? 'bg-accent/50' : ''}`}
                     key={notification.id}
                   >
                     <div className="flex items-start gap-3">
                       <div
                         className={`mt-2 h-2 w-2 rounded-full ${
-                          notification.type === "error"
-                            ? "bg-red-500"
-                            : notification.type === "warning"
-                              ? "bg-yellow-500"
-                              : "bg-blue-500"
+                          notification.type === 'error'
+                            ? 'bg-red-500'
+                            : notification.type === 'warning'
+                              ? 'bg-yellow-500'
+                              : 'bg-blue-500'
                         }`}
                       />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between">
                           <h4
-                            className={`font-medium text-sm ${notification.unread ? "text-foreground" : "text-muted-foreground"}`}
+                            className={`font-medium text-sm ${notification.unread ? 'text-foreground' : 'text-muted-foreground'}`}
                           >
                             {notification.title}
                           </h4>
@@ -705,6 +705,6 @@ export const NotificationDrawer: Story = {
           </DrawerContent>
         </Drawer>
       </div>
-    );
-  },
-};
+    )
+  }
+}

@@ -1,35 +1,35 @@
-"use client";
+'use client'
 
-import { SearchIcon, XIcon } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
-import { Button } from "@/components/ui/button";
+import { SearchIcon, XIcon } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
+import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogTitle,
-} from "@/components/ui/dialog";
+  DialogTitle
+} from '@/components/ui/dialog'
 
 interface SpotlightSearchProps {
-  searchQuery: string;
-  onSearchQueryChange: (query: string) => void;
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
+  searchQuery: string
+  onSearchQueryChange: (query: string) => void
+  open: boolean
+  onOpenChange: (open: boolean) => void
 }
 
 export function SpotlightSearch({
   searchQuery,
   onSearchQueryChange,
   open,
-  onOpenChange,
+  onOpenChange
 }: SpotlightSearchProps) {
-  const [localSearch, setLocalSearch] = useState(searchQuery);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const [localSearch, setLocalSearch] = useState(searchQuery)
+  const inputRef = useRef<HTMLInputElement>(null)
 
   // Sync with parent searchQuery when it changes externally (e.g., reset filters)
   useEffect(() => {
-    setLocalSearch(searchQuery);
-  }, [searchQuery]);
+    setLocalSearch(searchQuery)
+  }, [searchQuery])
 
   useEffect(() => {
     if (open) {
@@ -37,42 +37,42 @@ export function SpotlightSearch({
       const timers = [
         setTimeout(() => inputRef.current?.focus(), 0),
         setTimeout(() => inputRef.current?.focus(), 50),
-        setTimeout(() => inputRef.current?.focus(), 100),
-      ];
-      return () => timers.forEach(clearTimeout);
+        setTimeout(() => inputRef.current?.focus(), 100)
+      ]
+      return () => timers.forEach(clearTimeout)
     }
-  }, [open]);
+  }, [open])
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setLocalSearch(value);
-    onSearchQueryChange(value);
-  };
+    const value = e.target.value
+    setLocalSearch(value)
+    onSearchQueryChange(value)
+  }
 
   const handleClear = () => {
-    setLocalSearch("");
-    onSearchQueryChange("");
-  };
+    setLocalSearch('')
+    onSearchQueryChange('')
+  }
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Escape") {
-      onOpenChange(false);
+    if (e.key === 'Escape') {
+      onOpenChange(false)
     }
-  };
+  }
 
   return (
     <Dialog onOpenChange={onOpenChange} open={open}>
       <DialogContent
         className="gap-0 p-0 sm:max-w-[600px]"
         onEscapeKeyDown={() => {
-          onOpenChange(false);
+          onOpenChange(false)
         }}
         onInteractOutside={() => {
-          onOpenChange(false);
+          onOpenChange(false)
         }}
         onOpenAutoFocus={(e) => {
-          e.preventDefault();
-          inputRef.current?.focus();
+          e.preventDefault()
+          inputRef.current?.focus()
         }}
         showCloseButton={false}
       >
@@ -93,7 +93,7 @@ export function SpotlightSearch({
             onMouseDown={(e) => e.stopPropagation()}
             placeholder="Search logs..."
             ref={inputRef}
-            style={{ pointerEvents: "auto" }}
+            style={{ pointerEvents: 'auto' }}
             type="text"
             value={localSearch}
           />
@@ -112,10 +112,10 @@ export function SpotlightSearch({
         <div className="px-4 py-3 text-center text-muted-foreground text-sm">
           <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-medium font-mono text-[10px] text-muted-foreground opacity-100">
             <span className="text-xs">ESC</span>
-          </kbd>{" "}
+          </kbd>{' '}
           to close
         </div>
       </DialogContent>
     </Dialog>
-  );
+  )
 }

@@ -1,100 +1,100 @@
-import type { Meta, StoryObj } from "@storybook/nextjs";
-import { DownloadIcon, PlusIcon, TrashIcon } from "lucide-react";
-import { Button } from "../button";
+import type { Meta, StoryObj } from '@storybook/nextjs'
+import { DownloadIcon, PlusIcon, TrashIcon } from 'lucide-react'
+import { Button } from '../button'
 
 const meta: Meta<typeof Button> = {
-  title: "UI/Button",
+  title: 'UI/Button',
   component: Button,
   parameters: {
-    layout: "centered",
+    layout: 'centered'
   },
-  tags: ["autodocs"],
+  tags: ['autodocs'],
   argTypes: {
     variant: {
-      control: "select",
+      control: 'select',
       options: [
-        "default",
-        "destructive",
-        "outline",
-        "secondary",
-        "ghost",
-        "link",
-      ],
+        'default',
+        'destructive',
+        'outline',
+        'secondary',
+        'ghost',
+        'link'
+      ]
     },
     size: {
-      control: "select",
-      options: ["default", "sm", "lg", "icon", "icon-sm", "icon-lg"],
+      control: 'select',
+      options: ['default', 'sm', 'lg', 'icon', 'icon-sm', 'icon-lg']
     },
     disabled: {
-      control: "boolean",
-    },
-  },
-};
+      control: 'boolean'
+    }
+  }
+}
 
-export default meta;
-type Story = StoryObj<typeof meta>;
+export default meta
+type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   args: {
-    children: "Button",
-  },
-};
+    children: 'Button'
+  }
+}
 
 export const Primary: Story = {
   args: {
-    variant: "default",
-    children: "Primary Button",
-  },
-};
+    variant: 'default',
+    children: 'Primary Button'
+  }
+}
 
 export const Secondary: Story = {
   args: {
-    variant: "secondary",
-    children: "Secondary Button",
-  },
-};
+    variant: 'secondary',
+    children: 'Secondary Button'
+  }
+}
 
 export const Destructive: Story = {
   args: {
-    variant: "destructive",
-    children: "Destructive Button",
-  },
-};
+    variant: 'destructive',
+    children: 'Destructive Button'
+  }
+}
 
 export const Outline: Story = {
   args: {
-    variant: "outline",
-    children: "Outline Button",
-  },
-};
+    variant: 'outline',
+    children: 'Outline Button'
+  }
+}
 
 export const Ghost: Story = {
   args: {
-    variant: "ghost",
-    children: "Ghost Button",
-  },
-};
+    variant: 'ghost',
+    children: 'Ghost Button'
+  }
+}
 
 export const Link: Story = {
   args: {
-    variant: "link",
-    children: "Link Button",
-  },
-};
+    variant: 'link',
+    children: 'Link Button'
+  }
+}
 
 export const Small: Story = {
   args: {
-    size: "sm",
-    children: "Small Button",
-  },
-};
+    size: 'sm',
+    children: 'Small Button'
+  }
+}
 
 export const Large: Story = {
   args: {
-    size: "lg",
-    children: "Large Button",
-  },
-};
+    size: 'lg',
+    children: 'Large Button'
+  }
+}
 
 export const WithIcon: Story = {
   args: {
@@ -103,23 +103,23 @@ export const WithIcon: Story = {
         <PlusIcon />
         Create Log
       </>
-    ),
-  },
-};
+    )
+  }
+}
 
 export const WithIconOnly: Story = {
   args: {
-    size: "icon",
-    children: <PlusIcon />,
-  },
-};
+    size: 'icon',
+    children: <PlusIcon />
+  }
+}
 
 export const Disabled: Story = {
   args: {
     disabled: true,
-    children: "Disabled Button",
-  },
-};
+    children: 'Disabled Button'
+  }
+}
 
 export const AllVariants: Story = {
   render: () => (
@@ -131,8 +131,8 @@ export const AllVariants: Story = {
       <Button variant="ghost">Ghost</Button>
       <Button variant="link">Link</Button>
     </div>
-  ),
-};
+  )
+}
 
 export const AllSizes: Story = {
   render: () => (
@@ -150,8 +150,8 @@ export const AllSizes: Story = {
         <PlusIcon />
       </Button>
     </div>
-  ),
-};
+  )
+}
 
 export const LogsAppExamples: Story = {
   render: () => (
@@ -172,5 +172,5 @@ export const LogsAppExamples: Story = {
         Reset Filters
       </Button>
     </div>
-  ),
-};
+  )
+}

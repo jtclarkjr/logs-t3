@@ -1,5 +1,5 @@
-import { describe, expect, it } from "bun:test";
-import { ApiError } from "@/lib/clients/errors";
+import { describe, expect, it } from 'bun:test'
+import { ApiError } from '@/lib/clients/errors'
 import {
   useChartData,
   useCreateLog,
@@ -10,36 +10,36 @@ import {
   useLogAggregation,
   useLogs,
   useMetadata,
-  useUpdateLog,
-} from "@/lib/hooks/query/use-logs";
+  useUpdateLog
+} from '@/lib/hooks/query/use-logs'
 
-describe("ApiError", () => {
-  it("formats validation details when provided", () => {
-    const apiError = new ApiError("Validation failed", 422, {
+describe('ApiError', () => {
+  it('formats validation details when provided', () => {
+    const apiError = new ApiError('Validation failed', 422, {
       error: {
-        message: "Validation failed",
+        message: 'Validation failed',
         details: {
           validation_errors: [
-            { field: "email", message: "Invalid format" },
-            { field: "password", reason: "Too short" },
-          ],
-        },
-      },
-    });
+            { field: 'email', message: 'Invalid format' },
+            { field: 'password', reason: 'Too short' }
+          ]
+        }
+      }
+    })
 
     expect(apiError.getDetailedMessage()).toContain(
-      "Validation failed. Validation errors: email: Invalid format; password: Too short",
-    );
-  });
+      'Validation failed. Validation errors: email: Invalid format; password: Too short'
+    )
+  })
 
-  it("returns base message when no details exist", () => {
-    const apiError = new ApiError("Something went wrong", 500);
-    expect(apiError.getDetailedMessage()).toBe("Something went wrong");
-  });
-});
+  it('returns base message when no details exist', () => {
+    const apiError = new ApiError('Something went wrong', 500)
+    expect(apiError.getDetailedMessage()).toBe('Something went wrong')
+  })
+})
 
-describe("hook exports", () => {
-  it("exposes all query/mutation hooks as functions", () => {
+describe('hook exports', () => {
+  it('exposes all query/mutation hooks as functions', () => {
     const hooks = [
       useLogs,
       useLogAggregation,
@@ -50,11 +50,11 @@ describe("hook exports", () => {
       useDeleteLog,
       useExportLogs,
       useCreateLog,
-      useUpdateLog,
-    ];
+      useUpdateLog
+    ]
 
     hooks.forEach((hook) => {
-      expect(typeof hook).toBe("function");
-    });
-  });
-});
+      expect(typeof hook).toBe('function')
+    })
+  })
+})

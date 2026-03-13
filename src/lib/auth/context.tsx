@@ -1,69 +1,73 @@
-"use client";
+'use client'
 
-import type { User } from "@supabase/supabase-js";
-import { createContext, useContext, useEffect, useState } from "react";
-import { authEnabled } from "@/lib/config/auth";
-import { getCurrentUser, onAuthStateChange } from "./client";
+import type { User } from '@supabase/supabase-js'
+import { createContext, useContext, useEffect, useState } from 'react'
+import { authEnabled } from '@/lib/config/auth'
 
 interface AuthContextType {
-  user: User | null;
-  loading: boolean;
+  user: User | null
+  loading: boolean
 }
 
 const AuthContext = createContext<AuthContextType>({
   user: null,
-  loading: true,
-});
+  loading: true
+})
 
 export function useAuth() {
-  const context = useContext(AuthContext);
+  const context = useContext(AuthContext)
   if (!context) {
-    throw new Error("useAuth must be used within an AuthProvider");
+    throw new Error('useAuth must be used within an AuthProvider')
   }
-  return context;
+  return context
 }
 
 interface AuthProviderProps {
-  children: React.ReactNode;
+  children: React.ReactNode
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [user, setUser] = useState<User | null>(null)
+  const [loading, setLoading] = useState<boolean>(authEnabled)
 
   useEffect(() => {
-    // Skip auth initialization if auth is disabled
+    // Skip auth initialization entirely if auth is disabled
     if (!authEnabled) {
-      setUser(null);
-      setLoading(false);
-      return;
+      return
     }
 
-    getCurrentUser()
-      .then((user) => {
-        setUser(user);
-        setLoading(false);
-      })
-      .catch(() => {
-        setUser(null);
-        setLoading(false);
-      });
+    let unsubscribe: (() => void) | undefined
 
-    const {
-      data: { subscription },
-    } = onAuthStateChange((user) => {
-      setUser(user);
-      setLoading(false);
-    });
+    // Dynamic import to avoid loading Supabase when auth is disabled
+    import('./client').then(({ getCurrentUser, onAuthStateChange }) => {
+      getCurrentUser()
+        .then((currentUser) => {
+          setUser(currentUser)
+          setLoading(false)
+        })
+        .catch(() => {
+          setUser(null)
+          setLoading(false)
+        })
+
+      const {
+        data: { subscription }
+      } = onAuthStateChange((authUser) => {
+        setUser(authUser)
+        setLoading(false)
+      })
+
+      unsubscribe = () => subscription?.unsubscribe()
+    })
 
     return () => {
-      subscription?.unsubscribe();
-    };
-  }, []);
+      unsubscribe?.()
+    }
+  }, [])
 
   return (
     <AuthContext.Provider value={{ user, loading }}>
       {children}
     </AuthContext.Provider>
-  );
+  )
 }

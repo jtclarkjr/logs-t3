@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/nextjs";
-import { Button } from "../button";
+import type { Meta, StoryObj } from '@storybook/nextjs'
+import { Button } from '../button'
 import {
   Dialog,
   DialogContent,
@@ -7,23 +7,23 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
-} from "../dialog";
-import { Input } from "../input";
-import { Label } from "../label";
-import { Textarea } from "../textarea";
+  DialogTrigger
+} from '../dialog'
+import { Input } from '../input'
+import { Label } from '../label'
+import { Textarea } from '../textarea'
 
 const meta: Meta<typeof Dialog> = {
-  title: "UI/Dialog",
+  title: 'UI/Dialog',
   component: Dialog,
   parameters: {
-    layout: "centered",
+    layout: 'centered'
   },
-  tags: ["autodocs"],
-};
+  tags: ['autodocs']
+}
 
-export default meta;
-type Story = StoryObj<typeof meta>;
+export default meta
+type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   render: () => (
@@ -47,8 +47,8 @@ export const Default: Story = {
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  ),
-};
+  )
+}
 
 export const CreateLogDialog: Story = {
   render: () => (
@@ -89,8 +89,8 @@ export const CreateLogDialog: Story = {
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  ),
-};
+  )
+}
 
 export const DeleteConfirmDialog: Story = {
   render: () => (
@@ -123,5 +123,5 @@ export const DeleteConfirmDialog: Story = {
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  ),
-};
+  )
+}

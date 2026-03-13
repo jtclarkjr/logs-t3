@@ -1,26 +1,26 @@
-import type { Meta, StoryObj } from "@storybook/nextjs";
-import { AlertTriangleIcon, InfoIcon } from "lucide-react";
-import { Input } from "../input";
-import { Label } from "../label";
-import { Textarea } from "../textarea";
+import type { Meta, StoryObj } from '@storybook/nextjs'
+import { AlertTriangleIcon, InfoIcon } from 'lucide-react'
+import { Input } from '../input'
+import { Label } from '../label'
+import { Textarea } from '../textarea'
 
 const meta: Meta<typeof Label> = {
-  title: "UI/Label",
+  title: 'UI/Label',
   component: Label,
   parameters: {
-    layout: "centered",
+    layout: 'centered'
   },
-  tags: ["autodocs"],
-};
+  tags: ['autodocs']
+}
 
-export default meta;
-type Story = StoryObj<typeof meta>;
+export default meta
+type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   args: {
-    children: "Label",
-  },
-};
+    children: 'Label'
+  }
+}
 
 export const WithInput: Story = {
   render: () => (
@@ -28,8 +28,8 @@ export const WithInput: Story = {
       <Label htmlFor="input-example">Email Address</Label>
       <Input id="input-example" placeholder="Enter your email" type="email" />
     </div>
-  ),
-};
+  )
+}
 
 export const WithTextarea: Story = {
   render: () => (
@@ -37,8 +37,8 @@ export const WithTextarea: Story = {
       <Label htmlFor="textarea-example">Message</Label>
       <Textarea id="textarea-example" placeholder="Type your message..." />
     </div>
-  ),
-};
+  )
+}
 
 export const Required: Story = {
   render: () => (
@@ -48,8 +48,8 @@ export const Required: Story = {
       </Label>
       <Input id="required-input" placeholder="Required field" type="password" />
     </div>
-  ),
-};
+  )
+}
 
 export const WithIcon: Story = {
   render: () => (
@@ -60,8 +60,8 @@ export const WithIcon: Story = {
       </Label>
       <Input id="icon-input" placeholder="Enter additional info" />
     </div>
-  ),
-};
+  )
+}
 
 export const WithDescription: Story = {
   render: () => (
@@ -72,8 +72,8 @@ export const WithDescription: Story = {
         Your API key is used to authenticate requests to our service.
       </p>
     </div>
-  ),
-};
+  )
+}
 
 export const LogsAppExamples: Story = {
   render: () => (
@@ -115,8 +115,8 @@ export const LogsAppExamples: Story = {
         </p>
       </div>
     </div>
-  ),
-};
+  )
+}
 
 export const DifferentStates: Story = {
   render: () => (
@@ -141,8 +141,8 @@ export const DifferentStates: Story = {
         <Input placeholder="With small label" />
       </div>
     </div>
-  ),
-};
+  )
+}
 
 export const FormExample: Story = {
   render: () => (
@@ -188,5 +188,5 @@ export const FormExample: Story = {
         />
       </div>
     </form>
-  ),
-};
+  )
+}

@@ -1,157 +1,157 @@
-"use client";
+'use client'
 
-import { format } from "date-fns";
+import { format } from 'date-fns'
 import {
   CalendarIcon,
   ClockIcon,
   SaveIcon,
   ServerIcon,
-  TagIcon,
-} from "lucide-react";
-import { useEffect, useState } from "react";
-import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
+  TagIcon
+} from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { toast } from 'sonner'
+import { Button } from '@/components/ui/button'
 import {
   Drawer,
   DrawerBody,
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
-  DrawerTitle,
-} from "@/components/ui/drawer";
-import { Input } from "@/components/ui/input";
+  DrawerTitle
+} from '@/components/ui/drawer'
+import { Input } from '@/components/ui/input'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Separator } from "@/components/ui/separator";
-import { Textarea } from "@/components/ui/textarea";
-import { useAuth } from "@/lib/auth/context";
-import { authEnabled } from "@/lib/config/auth";
-import { SeverityLevel } from "@/lib/enums/severity";
-import { useUpdateLog } from "@/lib/hooks/query/use-logs";
-import type { LogResponse } from "@/lib/types/log";
-import { updateLogValidator } from "@/lib/validators/log";
+  SelectValue
+} from '@/components/ui/select'
+import { Separator } from '@/components/ui/separator'
+import { Textarea } from '@/components/ui/textarea'
+import { useAuth } from '@/lib/auth/context'
+import { authEnabled } from '@/lib/config/auth'
+import { SeverityLevel } from '@/lib/enums/severity'
+import { useUpdateLog } from '@/lib/hooks/query/use-logs'
+import type { LogResponse } from '@/lib/types/log'
+import { updateLogValidator } from '@/lib/validators/log'
 
 interface LogDetailsDrawerProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  log: LogResponse | null;
-  onDelete?: (log: LogResponse) => void;
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  log: LogResponse | null
+  onDelete?: (log: LogResponse) => void
 }
 
 export function LogDetailsDrawer({
   open,
   onOpenChange,
   log,
-  onDelete,
+  onDelete
 }: LogDetailsDrawerProps) {
-  const { user } = useAuth();
-  const isAuthenticated = !authEnabled || !!user;
+  const { user } = useAuth()
+  const isAuthenticated = !authEnabled || !!user
 
   const [formData, setFormData] = useState({
-    message: log?.message || "",
+    message: log?.message || '',
     severity: log?.severity || SeverityLevel.INFO,
-    source: log?.source || "",
+    source: log?.source || '',
     timestamp: log?.timestamp
       ? (() => {
-          const date = new Date(log.timestamp);
-          return Number.isNaN(date.getTime()) ? "" : date.toISOString();
+          const date = new Date(log.timestamp)
+          return Number.isNaN(date.getTime()) ? '' : date.toISOString()
         })()
-      : "",
-  });
+      : ''
+  })
 
-  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const updateLogMutation = useUpdateLog();
+  const updateLogMutation = useUpdateLog()
 
   // Validate individual field
   const validateField = (fieldName: string, value: unknown) => {
     const fieldValidator =
       updateLogValidator.shape[
         fieldName as keyof typeof updateLogValidator.shape
-      ];
+      ]
     if (fieldValidator) {
-      const result = fieldValidator.safeParse(value);
+      const result = fieldValidator.safeParse(value)
       if (!result.success) {
         setFieldErrors((prev) => ({
           ...prev,
-          [fieldName]: result.error.issues[0]?.message || "Invalid value",
-        }));
+          [fieldName]: result.error.issues[0]?.message || 'Invalid value'
+        }))
       } else {
         setFieldErrors((prev) => {
-          const newErrors = { ...prev };
-          delete newErrors[fieldName];
-          return newErrors;
-        });
+          const newErrors = { ...prev }
+          delete newErrors[fieldName]
+          return newErrors
+        })
       }
     }
-  };
+  }
 
   // Reset form when log ID changes (new log selected)
   useEffect(() => {
     if (log) {
       const timeoutId = setTimeout(() => {
-        const isoTimestamp =
-          log.timestamp && log.timestamp instanceof Date
-            ? log.timestamp.toISOString()
-            : log.timestamp
-              ? new Date(log.timestamp).toISOString()
-              : "";
+        let isoTimestamp = ''
+        if (log.timestamp instanceof Date) {
+          isoTimestamp = log.timestamp.toISOString()
+        } else if (log.timestamp) {
+          isoTimestamp = new Date(log.timestamp).toISOString()
+        }
         setFormData({
           message: log.message,
           severity: log.severity,
           source: log.source,
-          timestamp: isoTimestamp,
-        });
-        setFieldErrors({}); // Clear any previous errors
-      }, 0);
+          timestamp: isoTimestamp
+        })
+        setFieldErrors({}) // Clear any previous errors
+      }, 0)
 
-      return () => clearTimeout(timeoutId);
+      return () => clearTimeout(timeoutId)
     }
-  }, [log]);
+  }, [log])
 
-  if (!log) return null;
+  if (!log) return null
 
   const handleSave = async () => {
     // Validate the form data first
-    const validationResult = updateLogValidator.safeParse(formData);
+    const validationResult = updateLogValidator.safeParse(formData)
 
     if (!validationResult.success) {
       // Set field-level errors
-      const newFieldErrors: Record<string, string> = {};
+      const newFieldErrors: Record<string, string> = {}
       validationResult.error.issues.forEach((issue) => {
         if (issue.path.length > 0) {
-          newFieldErrors[issue.path[0] as string] = issue.message;
+          newFieldErrors[issue.path[0] as string] = issue.message
         }
-      });
-      setFieldErrors(newFieldErrors);
+      })
+      setFieldErrors(newFieldErrors)
 
       // Show validation errors
       const errors = validationResult.error.issues
         .map((issue) => issue.message)
-        .join(", ");
-      toast.error(`Please fix the following errors: ${errors}`);
-      return;
+        .join(', ')
+      toast.error(`Please fix the following errors: ${errors}`)
+      return
     } else {
       // Clear errors if validation passes
-      setFieldErrors({});
+      setFieldErrors({})
     }
 
     try {
       const originalTimestamp =
         log.timestamp instanceof Date
           ? log.timestamp.toISOString()
-          : log.timestamp;
+          : log.timestamp
 
       const parsedTimestamp =
         formData.timestamp &&
         !Number.isNaN(new Date(formData.timestamp).getTime())
           ? new Date(formData.timestamp)
-          : undefined;
+          : undefined
 
       await updateLogMutation.mutateAsync({
         id: log.id,
@@ -164,19 +164,19 @@ export function LogDetailsDrawer({
           timestamp:
             formData.timestamp && formData.timestamp !== originalTimestamp
               ? parsedTimestamp
-              : undefined,
-        },
-      });
-      onOpenChange(false);
+              : undefined
+        }
+      })
+      onOpenChange(false)
     } catch (error) {
-      console.error("Failed to update log:", error);
+      console.error('Failed to update log:', error)
     }
-  };
+  }
 
   const handleDelete = () => {
-    onDelete?.(log);
-    onOpenChange(false);
-  };
+    onDelete?.(log)
+    onOpenChange(false)
+  }
 
   return (
     <Drawer onOpenChange={onOpenChange} open={open}>
@@ -217,14 +217,14 @@ export function LogDetailsDrawer({
                   onValueChange={(value) => {
                     setFormData((prev) => ({
                       ...prev,
-                      severity: value as SeverityLevel,
-                    }));
-                    validateField("severity", value);
+                      severity: value as SeverityLevel
+                    }))
+                    validateField('severity', value)
                   }}
                   value={formData.severity}
                 >
                   <SelectTrigger
-                    className={`w-40 ${fieldErrors.severity ? "border-destructive" : ""}`}
+                    className={`w-40 ${fieldErrors.severity ? 'border-destructive' : ''}`}
                   >
                     <SelectValue />
                   </SelectTrigger>
@@ -252,15 +252,15 @@ export function LogDetailsDrawer({
               <div className="flex-1 space-y-2">
                 <div className="text-muted-foreground text-xs">Source</div>
                 <Input
-                  className={`max-w-xs ${fieldErrors.source ? "border-destructive" : ""}`}
+                  className={`max-w-xs ${fieldErrors.source ? 'border-destructive' : ''}`}
                   disabled={!isAuthenticated}
-                  onBlur={() => validateField("source", formData.source)}
+                  onBlur={() => validateField('source', formData.source)}
                   onChange={(e) => {
                     setFormData((prev) => ({
                       ...prev,
-                      source: e.target.value,
-                    }));
-                    validateField("source", e.target.value);
+                      source: e.target.value
+                    }))
+                    validateField('source', e.target.value)
                   }}
                   placeholder="e.g., api-server, database, auth-service"
                   value={formData.source}
@@ -292,30 +292,30 @@ export function LogDetailsDrawer({
                   Occurrence time
                 </div>
                 <Input
-                  className={`max-w-xs ${fieldErrors.timestamp ? "border-destructive" : ""}`}
+                  className={`max-w-xs ${fieldErrors.timestamp ? 'border-destructive' : ''}`}
                   disabled={!isAuthenticated}
-                  onBlur={() => validateField("timestamp", formData.timestamp)}
+                  onBlur={() => validateField('timestamp', formData.timestamp)}
                   onChange={(e) => {
-                    const date = new Date(e.target.value);
+                    const date = new Date(e.target.value)
                     const newTimestamp = Number.isNaN(date.getTime())
-                      ? ""
-                      : date.toISOString();
+                      ? ''
+                      : date.toISOString()
                     setFormData((prev) => ({
                       ...prev,
-                      timestamp: newTimestamp,
-                    }));
-                    validateField("timestamp", newTimestamp);
+                      timestamp: newTimestamp
+                    }))
+                    validateField('timestamp', newTimestamp)
                   }}
                   type="datetime-local"
                   value={
                     formData.timestamp
                       ? (() => {
-                          const date = new Date(formData.timestamp);
+                          const date = new Date(formData.timestamp)
                           return Number.isNaN(date.getTime())
-                            ? ""
-                            : date.toISOString().slice(0, 16);
+                            ? ''
+                            : date.toISOString().slice(0, 16)
                         })()
-                      : ""
+                      : ''
                   }
                 />
                 {fieldErrors.timestamp && (
@@ -337,9 +337,9 @@ export function LogDetailsDrawer({
                   {log.createdAt
                     ? format(
                         new Date(log.createdAt),
-                        "MMM dd, yyyy 'at' HH:mm:ss",
+                        "MMM dd, yyyy 'at' HH:mm:ss"
                       )
-                    : "—"}
+                    : '—'}
                 </div>
               </div>
             </div>
@@ -354,12 +354,12 @@ export function LogDetailsDrawer({
             </h3>
             <div className="space-y-2">
               <Textarea
-                className={`min-h-24 font-mono text-sm ${fieldErrors.message ? "border-destructive" : ""}`}
+                className={`min-h-24 font-mono text-sm ${fieldErrors.message ? 'border-destructive' : ''}`}
                 disabled={!isAuthenticated}
-                onBlur={() => validateField("message", formData.message)}
+                onBlur={() => validateField('message', formData.message)}
                 onChange={(e) => {
-                  setFormData((prev) => ({ ...prev, message: e.target.value }));
-                  validateField("message", e.target.value);
+                  setFormData((prev) => ({ ...prev, message: e.target.value }))
+                  validateField('message', e.target.value)
                 }}
                 placeholder="Enter log message..."
                 value={formData.message}
@@ -396,7 +396,7 @@ export function LogDetailsDrawer({
               variant="default"
             >
               <SaveIcon className="mr-2 h-4 w-4" />
-              {updateLogMutation.isPending ? "Saving..." : "Save"}
+              {updateLogMutation.isPending ? 'Saving...' : 'Save'}
             </Button>
             {onDelete && (
               <Button
@@ -412,5 +412,5 @@ export function LogDetailsDrawer({
         </DrawerFooter>
       </DrawerContent>
     </Drawer>
-  );
+  )
 }

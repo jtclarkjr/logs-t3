@@ -1,6 +1,6 @@
-"use client";
+'use client'
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 export function CreateLogHelp() {
   return (
@@ -19,5 +19,5 @@ export function CreateLogHelp() {
         </p>
       </CardContent>
     </Card>
-  );
+  )
 }

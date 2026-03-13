@@ -1,30 +1,30 @@
-import type { Meta, StoryObj } from "@storybook/nextjs";
+import type { Meta, StoryObj } from '@storybook/nextjs'
 import {
   AlertCircleIcon,
   AlertTriangleIcon,
   CheckCircleIcon,
   InfoIcon,
-  XCircleIcon,
-} from "lucide-react";
-import { Alert, AlertDescription, AlertTitle } from "../alert";
+  XCircleIcon
+} from 'lucide-react'
+import { Alert, AlertDescription, AlertTitle } from '../alert'
 
 const meta: Meta<typeof Alert> = {
-  title: "UI/Alert",
+  title: 'UI/Alert',
   component: Alert,
   parameters: {
-    layout: "centered",
+    layout: 'centered'
   },
-  tags: ["autodocs"],
+  tags: ['autodocs'],
   argTypes: {
     variant: {
-      control: "select",
-      options: ["default", "destructive"],
-    },
-  },
-};
+      control: 'select',
+      options: ['default', 'destructive']
+    }
+  }
+}
 
-export default meta;
-type Story = StoryObj<typeof meta>;
+export default meta
+type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   render: () => (
@@ -35,8 +35,8 @@ export const Default: Story = {
         You can add components and dependencies to your app using the cli.
       </AlertDescription>
     </Alert>
-  ),
-};
+  )
+}
 
 export const Destructive: Story = {
   render: () => (
@@ -47,8 +47,8 @@ export const Destructive: Story = {
         Your session has expired. Please log in again.
       </AlertDescription>
     </Alert>
-  ),
-};
+  )
+}
 
 export const WithoutIcon: Story = {
   render: () => (
@@ -58,8 +58,8 @@ export const WithoutIcon: Story = {
         This alert doesn&apos;t have an icon, so it takes up less space.
       </AlertDescription>
     </Alert>
-  ),
-};
+  )
+}
 
 export const OnlyTitle: Story = {
   render: () => (
@@ -67,8 +67,8 @@ export const OnlyTitle: Story = {
       <InfoIcon />
       <AlertTitle>Just a title</AlertTitle>
     </Alert>
-  ),
-};
+  )
+}
 
 export const OnlyDescription: Story = {
   render: () => (
@@ -76,8 +76,8 @@ export const OnlyDescription: Story = {
       <AlertTriangleIcon />
       <AlertDescription>Just a description without a title.</AlertDescription>
     </Alert>
-  ),
-};
+  )
+}
 
 export const DifferentIcons: Story = {
   render: () => (
@@ -114,8 +114,8 @@ export const DifferentIcons: Story = {
         </AlertDescription>
       </Alert>
     </div>
-  ),
-};
+  )
+}
 
 export const LogsAppExamples: Story = {
   render: () => (
@@ -163,8 +163,8 @@ export const LogsAppExamples: Story = {
         </AlertDescription>
       </Alert>
     </div>
-  ),
-};
+  )
+}
 
 export const SystemAlerts: Story = {
   render: () => (
@@ -196,8 +196,8 @@ export const SystemAlerts: Story = {
         </AlertDescription>
       </Alert>
     </div>
-  ),
-};
+  )
+}
 
 export const InlineAlert: Story = {
   render: () => (
@@ -230,8 +230,8 @@ export const InlineAlert: Story = {
         Create Log
       </button>
     </div>
-  ),
-};
+  )
+}
 
 export const CompactAlerts: Story = {
   render: () => (
@@ -251,5 +251,5 @@ export const CompactAlerts: Story = {
         <AlertDescription>Success message with icon</AlertDescription>
       </Alert>
     </div>
-  ),
-};
+  )
+}

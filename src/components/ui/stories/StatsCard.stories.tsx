@@ -1,73 +1,73 @@
-import type { Meta, StoryObj } from "@storybook/nextjs";
+import type { Meta, StoryObj } from '@storybook/nextjs'
 import {
   ActivityIcon,
   AlertTriangleIcon,
   DatabaseIcon,
   InfoIcon,
   TrendingUpIcon,
-  UsersIcon,
-} from "lucide-react";
-import { StatsCard } from "../stats-card";
+  UsersIcon
+} from 'lucide-react'
+import { StatsCard } from '../stats-card'
 
 const meta: Meta<typeof StatsCard> = {
-  title: "UI/StatsCard",
+  title: 'UI/StatsCard',
   component: StatsCard,
   parameters: {
-    layout: "centered",
+    layout: 'centered'
   },
-  tags: ["autodocs"],
+  tags: ['autodocs'],
   argTypes: {
-    title: { control: "text" },
-    value: { control: "text" },
-    description: { control: "text" },
-  },
-};
+    title: { control: 'text' },
+    value: { control: 'text' },
+    description: { control: 'text' }
+  }
+}
 
-export default meta;
-type Story = StoryObj<typeof meta>;
+export default meta
+type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   args: {
-    title: "Total Users",
-    value: "12,345",
-    description: "Active users this month",
-  },
-};
+    title: 'Total Users',
+    value: '12,345',
+    description: 'Active users this month'
+  }
+}
 
 export const WithIcon: Story = {
   args: {
-    title: "Total Logs",
-    value: "24,789",
-    description: "Logs processed today",
-    icon: <ActivityIcon />,
-  },
-};
+    title: 'Total Logs',
+    value: '24,789',
+    description: 'Logs processed today',
+    icon: <ActivityIcon />
+  }
+}
 
 export const WithPositiveTrend: Story = {
   args: {
-    title: "API Requests",
-    value: "45,231",
-    description: "from last week",
+    title: 'API Requests',
+    value: '45,231',
+    description: 'from last week',
     icon: <TrendingUpIcon />,
     trend: {
       value: 12.5,
-      isPositive: true,
-    },
-  },
-};
+      isPositive: true
+    }
+  }
+}
 
 export const WithNegativeTrend: Story = {
   args: {
-    title: "Error Rate",
-    value: "2.1%",
-    description: "from last hour",
+    title: 'Error Rate',
+    value: '2.1%',
+    description: 'from last hour',
     icon: <AlertTriangleIcon />,
     trend: {
       value: 5.2,
-      isPositive: false,
-    },
-  },
-};
+      isPositive: false
+    }
+  }
+}
 
 export const LogsAppExamples: Story = {
   render: () => (
@@ -103,8 +103,8 @@ export const LogsAppExamples: Story = {
         value="23"
       />
     </div>
-  ),
-};
+  )
+}
 
 export const DifferentFormats: Story = {
   render: () => (
@@ -131,8 +131,8 @@ export const DifferentFormats: Story = {
         value="1.2s"
       />
     </div>
-  ),
-};
+  )
+}
 
 export const SystemMetrics: Story = {
   render: () => (
@@ -182,8 +182,8 @@ export const SystemMetrics: Story = {
         value="99.9%"
       />
     </div>
-  ),
-};
+  )
+}
 
 export const LargeNumbers: Story = {
   render: () => (
@@ -204,8 +204,8 @@ export const LargeNumbers: Story = {
         value="1.2TB"
       />
     </div>
-  ),
-};
+  )
+}
 
 export const WithoutTrend: Story = {
   render: () => (
@@ -231,19 +231,19 @@ export const WithoutTrend: Story = {
         value="Valid"
       />
     </div>
-  ),
-};
+  )
+}
 
 export const SingleCard: Story = {
   args: {
-    title: "Daily Active Users",
-    value: "8,427",
-    description: "unique users today",
+    title: 'Daily Active Users',
+    value: '8,427',
+    description: 'unique users today',
     icon: <UsersIcon />,
     trend: {
       value: 12.3,
-      isPositive: true,
+      isPositive: true
     },
-    className: "w-64",
-  },
-};
+    className: 'w-64'
+  }
+}

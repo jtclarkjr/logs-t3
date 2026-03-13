@@ -1,113 +1,113 @@
-"use client";
+'use client'
 
-import { LogIn, Mail } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
+import { LogIn, Mail } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import { toast } from 'sonner'
+import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { GitHubIcon } from "@/components/ui/icons";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
+  DialogTitle
+} from '@/components/ui/dialog'
+import { GitHubIcon } from '@/components/ui/icons'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Separator } from '@/components/ui/separator'
 import {
   signInWithEmail,
   signInWithGitHub,
-  signUpWithEmail,
-} from "@/lib/auth/client";
-import { signUpEnabled } from "@/lib/config/auth";
+  signUpWithEmail
+} from '@/lib/auth/client'
+import { signUpEnabled } from '@/lib/config/auth'
 
 interface AuthModalProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  redirectPath?: string;
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  redirectPath?: string
 }
 
 export function AuthModal({
   open,
   onOpenChange,
-  redirectPath,
+  redirectPath
 }: AuthModalProps) {
-  const router = useRouter();
-  const [loading, setLoading] = useState<string | null>(null);
-  const [isSignUp, setIsSignUp] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const router = useRouter()
+  const [loading, setLoading] = useState<string | null>(null)
+  const [isSignUp, setIsSignUp] = useState(false)
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
 
   const handleOAuthSignIn = async (
-    provider: "github",
-    signIn: () => Promise<{ error: Error | null }>,
+    provider: 'github',
+    signIn: () => Promise<{ error: Error | null }>
   ) => {
     try {
-      setLoading(provider);
+      setLoading(provider)
 
-      const { error } = await signIn();
+      const { error } = await signIn()
 
       if (error) {
-        console.error(`Error signing in with ${provider}:`, error);
-        toast.error(`Failed to sign in with ${provider}`);
-        setLoading(null);
+        console.error(`Error signing in with ${provider}:`, error)
+        toast.error(`Failed to sign in with ${provider}`)
+        setLoading(null)
       }
     } catch (error) {
-      console.error(`Error signing in with ${provider}:`, error);
-      toast.error(`Failed to sign in with ${provider}`);
-      setLoading(null);
+      console.error(`Error signing in with ${provider}:`, error)
+      toast.error(`Failed to sign in with ${provider}`)
+      setLoading(null)
     }
-  };
+  }
 
   const handleGitHubSignIn = () =>
-    handleOAuthSignIn("github", () => signInWithGitHub(redirectPath));
+    handleOAuthSignIn('github', () => signInWithGitHub(redirectPath))
 
   const handleEmailAuth = async (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault()
 
     if (!email || !password) {
-      toast.error("Please enter email and password");
-      return;
+      toast.error('Please enter email and password')
+      return
     }
 
     // Prevent sign up if disabled
     if (isSignUp && !signUpEnabled) {
-      toast.error("Sign up is currently disabled");
-      return;
+      toast.error('Sign up is currently disabled')
+      return
     }
 
     try {
-      setLoading("email");
+      setLoading('email')
 
       if (isSignUp) {
-        const { error } = await signUpWithEmail(email, password);
+        const { error } = await signUpWithEmail(email, password)
         if (error) {
-          toast.error(error.message);
+          toast.error(error.message)
         } else {
-          toast.success("Check your email to confirm your account");
-          onOpenChange(false);
+          toast.success('Check your email to confirm your account')
+          onOpenChange(false)
         }
       } else {
-        const { error } = await signInWithEmail(email, password);
+        const { error } = await signInWithEmail(email, password)
         if (error) {
-          toast.error(error.message);
+          toast.error(error.message)
         } else {
-          toast.success("Signed in successfully");
-          onOpenChange(false);
+          toast.success('Signed in successfully')
+          onOpenChange(false)
           // Redirect to the stored path if provided
           if (redirectPath) {
-            router.push(redirectPath);
+            router.push(redirectPath)
           }
         }
       }
-    } catch (_error) {
-      toast.error("Authentication failed");
+    } catch {
+      toast.error('Authentication failed')
     } finally {
-      setLoading(null);
+      setLoading(null)
     }
-  };
+  }
 
   return (
     <Dialog onOpenChange={onOpenChange} open={open}>
@@ -142,7 +142,7 @@ export function AuthModal({
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
               <Input
-                autoComplete={isSignUp ? "new-password" : "current-password"}
+                autoComplete={isSignUp ? 'new-password' : 'current-password'}
                 disabled={!!loading}
                 id="password"
                 onChange={(e) => setPassword(e.target.value)}
@@ -159,12 +159,12 @@ export function AuthModal({
               size="lg"
               type="submit"
             >
-              {loading === "email" ? (
-                "Loading..."
+              {loading === 'email' ? (
+                'Loading...'
               ) : (
                 <>
                   <Mail className="mr-2 h-4 w-4" />
-                  {isSignUp ? "Sign Up" : "Sign In"}
+                  {isSignUp ? 'Sign Up' : 'Sign In'}
                 </>
               )}
             </Button>
@@ -178,8 +178,8 @@ export function AuthModal({
                 variant="link"
               >
                 {isSignUp
-                  ? "Already have an account? Sign in"
-                  : "Need an account? Sign up"}
+                  ? 'Already have an account? Sign in'
+                  : 'Need an account? Sign up'}
               </Button>
             )}
           </form>
@@ -203,8 +203,8 @@ export function AuthModal({
             size="lg"
             variant="github"
           >
-            {loading === "github" ? (
-              "Signing in..."
+            {loading === 'github' ? (
+              'Signing in...'
             ) : (
               <>
                 <GitHubIcon />
@@ -219,5 +219,5 @@ export function AuthModal({
         </div>
       </DialogContent>
     </Dialog>
-  );
+  )
 }

@@ -1,21 +1,21 @@
-import type { Meta, StoryObj } from "@storybook/nextjs";
-import { Skeleton } from "../skeleton";
+import type { Meta, StoryObj } from '@storybook/nextjs'
+import { Skeleton } from '../skeleton'
 
 const meta: Meta<typeof Skeleton> = {
-  title: "UI/Skeleton",
+  title: 'UI/Skeleton',
   component: Skeleton,
   parameters: {
-    layout: "centered",
+    layout: 'centered'
   },
-  tags: ["autodocs"],
-};
+  tags: ['autodocs']
+}
 
-export default meta;
-type Story = StoryObj<typeof meta>;
+export default meta
+type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
-  render: () => <Skeleton className="h-4 w-80" />,
-};
+  render: () => <Skeleton className="h-4 w-80" />
+}
 
 export const DifferentSizes: Story = {
   render: () => (
@@ -25,8 +25,8 @@ export const DifferentSizes: Story = {
       <Skeleton className="h-4 w-1/2" />
       <Skeleton className="h-4 w-1/4" />
     </div>
-  ),
-};
+  )
+}
 
 export const CardSkeleton: Story = {
   render: () => (
@@ -44,8 +44,8 @@ export const CardSkeleton: Story = {
         <Skeleton className="h-4 w-2/3" />
       </div>
     </div>
-  ),
-};
+  )
+}
 
 export const LogsTableSkeleton: Story = {
   render: () => (
@@ -80,8 +80,8 @@ export const LogsTableSkeleton: Story = {
         ))}
       </div>
     </div>
-  ),
-};
+  )
+}
 
 export const DashboardSkeleton: Story = {
   render: () => (
@@ -109,8 +109,8 @@ export const DashboardSkeleton: Story = {
         <Skeleton className="h-64 w-full" />
       </div>
     </div>
-  ),
-};
+  )
+}
 
 export const ListSkeleton: Story = {
   render: () => (
@@ -125,8 +125,8 @@ export const ListSkeleton: Story = {
         </div>
       ))}
     </div>
-  ),
-};
+  )
+}
 
 export const FormSkeleton: Story = {
   render: () => (
@@ -148,8 +148,8 @@ export const FormSkeleton: Story = {
         <Skeleton className="h-9 w-16" />
       </div>
     </div>
-  ),
-};
+  )
+}
 
 export const AvatarSkeleton: Story = {
   render: () => (
@@ -159,8 +159,8 @@ export const AvatarSkeleton: Story = {
       <Skeleton className="h-12 w-12 rounded-full" />
       <Skeleton className="h-16 w-16 rounded-full" />
     </div>
-  ),
-};
+  )
+}
 
 export const ButtonSkeleton: Story = {
   render: () => (
@@ -170,5 +170,5 @@ export const ButtonSkeleton: Story = {
       <Skeleton className="h-10 w-24" />
       <Skeleton className="h-8 w-8" />
     </div>
-  ),
-};
+  )
+}

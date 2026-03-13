@@ -1,15 +1,15 @@
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
 
 interface EmptyStateProps {
-  icon?: React.ReactNode;
-  title: string;
-  description?: string;
+  icon?: React.ReactNode
+  title: string
+  description?: string
   action?: {
-    label: string;
-    onClick: () => void;
-  };
-  className?: string;
+    label: string
+    onClick: () => void
+  }
+  className?: string
 }
 
 export function EmptyState({
@@ -17,7 +17,7 @@ export function EmptyState({
   title,
   description,
   action,
-  className,
+  className
 }: EmptyStateProps) {
   return (
     <Card className={className}>
@@ -40,5 +40,5 @@ export function EmptyState({
         )}
       </CardContent>
     </Card>
-  );
+  )
 }

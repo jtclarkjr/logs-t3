@@ -1,94 +1,94 @@
-"use client";
+'use client'
 
-import { useForm } from "@tanstack/react-form";
-import { SaveIcon } from "lucide-react";
-import { toast } from "sonner";
-import type { z } from "zod";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
+import { useForm } from '@tanstack/react-form'
+import { SaveIcon } from 'lucide-react'
+import { toast } from 'sonner'
+import type { z } from 'zod'
+import { Alert, AlertDescription } from '@/components/ui/alert'
+import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { FormFieldWrapper } from "@/components/ui/form-field";
-import { Input } from "@/components/ui/input";
+  DialogTitle
+} from '@/components/ui/dialog'
+import { FormFieldWrapper } from '@/components/ui/form-field'
+import { Input } from '@/components/ui/input'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { SeverityBadge } from "@/components/ui/severity-badge";
-import { Textarea } from "@/components/ui/textarea";
-import { SeverityLevel } from "@/lib/enums/severity";
-import { useCreateLog } from "@/lib/hooks/query/use-logs";
-import { createLogValidator } from "@/lib/validators/log";
+  SelectValue
+} from '@/components/ui/select'
+import { SeverityBadge } from '@/components/ui/severity-badge'
+import { Textarea } from '@/components/ui/textarea'
+import { SeverityLevel } from '@/lib/enums/severity'
+import { useCreateLog } from '@/lib/hooks/query/use-logs'
+import { createLogValidator } from '@/lib/validators/log'
 
-type CreateLogFormData = z.infer<typeof createLogValidator>;
+type CreateLogFormData = z.infer<typeof createLogValidator>
 
 interface CreateLogDialogProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
+  open: boolean
+  onOpenChange: (open: boolean) => void
 }
 
 export function CreateLogDialog({ open, onOpenChange }: CreateLogDialogProps) {
-  const createLogMutation = useCreateLog();
+  const createLogMutation = useCreateLog()
 
   const form = useForm({
     defaultValues: {
       severity: SeverityLevel.INFO,
-      source: "",
-      message: "",
+      source: '',
+      message: ''
     } as CreateLogFormData,
     validators: {
-      onSubmit: createLogValidator,
+      onSubmit: createLogValidator
     },
     onSubmit: async ({ value: formData }) => {
       // Use current time (no buffer to prevent "future timestamp" error)
-      const now = new Date();
+      const now = new Date()
 
       const submitData = {
         ...formData,
-        timestamp: now,
-      };
+        timestamp: now
+      }
 
       await new Promise<void>((resolve, reject) => {
         createLogMutation.mutate(submitData, {
           onSuccess: () => {
-            toast.success("Log created successfully!");
-            handleClose();
-            resolve();
+            toast.success('Log created successfully!')
+            handleClose()
+            resolve()
           },
           onError: (error) => {
             const normalizedError =
               error instanceof Error
                 ? error
-                : new Error("Failed to create log entry");
-            reject(normalizedError);
-          },
-        });
-      });
-    },
-  });
+                : new Error('Failed to create log entry')
+            reject(normalizedError)
+          }
+        })
+      })
+    }
+  })
 
   const handleClose = () => {
     // Reset form
-    form.reset();
-    onOpenChange(false);
-  };
+    form.reset()
+    onOpenChange(false)
+  }
 
-  const handleOpenChange = (open: boolean) => {
-    if (!open) {
+  const handleOpenChange = (isOpen: boolean) => {
+    if (!isOpen) {
       // Reset form when dialog closes
-      form.reset();
+      form.reset()
     }
-    onOpenChange(open);
-  };
+    onOpenChange(isOpen)
+  }
 
   return (
     <Dialog onOpenChange={handleOpenChange} open={open}>
@@ -103,9 +103,9 @@ export function CreateLogDialog({ open, onOpenChange }: CreateLogDialogProps) {
         <form
           className="space-y-6"
           onSubmit={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            form.handleSubmit();
+            e.preventDefault()
+            e.stopPropagation()
+            form.handleSubmit()
           }}
         >
           {/* Severity */}
@@ -127,8 +127,8 @@ export function CreateLogDialog({ open, onOpenChange }: CreateLogDialogProps) {
                   <SelectTrigger
                     className={
                       field.state.meta.errors.length > 0
-                        ? "border-destructive"
-                        : ""
+                        ? 'border-destructive'
+                        : ''
                     }
                   >
                     <SelectValue />
@@ -153,14 +153,14 @@ export function CreateLogDialog({ open, onOpenChange }: CreateLogDialogProps) {
             validators={{
               onBlur: ({ value }) => {
                 // Only validate if the user has entered something or tried to leave empty
-                if (!value || value.trim() === "") {
-                  return "Source is required";
+                if (!value || value.trim() === '') {
+                  return 'Source is required'
                 }
-                const result = createLogValidator.shape.source.safeParse(value);
+                const result = createLogValidator.shape.source.safeParse(value)
                 return !result.success
                   ? result.error.issues[0]?.message
-                  : undefined;
-              },
+                  : undefined
+              }
             }}
           >
             {(field) => (
@@ -175,8 +175,8 @@ export function CreateLogDialog({ open, onOpenChange }: CreateLogDialogProps) {
                 <Input
                   className={
                     field.state.meta.errors.length > 0
-                      ? "border-destructive"
-                      : ""
+                      ? 'border-destructive'
+                      : ''
                   }
                   onBlur={field.handleBlur}
                   onChange={(e) => field.handleChange(e.target.value)}
@@ -193,15 +193,14 @@ export function CreateLogDialog({ open, onOpenChange }: CreateLogDialogProps) {
             validators={{
               onBlur: ({ value }) => {
                 // Only validate if the user has entered something or tried to leave empty
-                if (!value || value.trim() === "") {
-                  return "Message is required";
+                if (!value || value.trim() === '') {
+                  return 'Message is required'
                 }
-                const result =
-                  createLogValidator.shape.message.safeParse(value);
+                const result = createLogValidator.shape.message.safeParse(value)
                 return !result.success
                   ? result.error.issues[0]?.message
-                  : undefined;
-              },
+                  : undefined
+              }
             }}
           >
             {(field) => (
@@ -215,8 +214,8 @@ export function CreateLogDialog({ open, onOpenChange }: CreateLogDialogProps) {
                 <Textarea
                   className={
                     field.state.meta.errors.length > 0
-                      ? "border-destructive"
-                      : ""
+                      ? 'border-destructive'
+                      : ''
                   }
                   onBlur={field.handleBlur}
                   onChange={(e) => field.handleChange(e.target.value)}
@@ -243,11 +242,11 @@ export function CreateLogDialog({ open, onOpenChange }: CreateLogDialogProps) {
               values.message && (
                 <Alert>
                   <AlertDescription>
-                    <strong>Preview:</strong> This log will be created with{" "}
+                    <strong>Preview:</strong> This log will be created with{' '}
                     <SeverityBadge
                       className="mx-1 inline-flex"
                       severity={values.severity}
-                    />{" "}
+                    />{' '}
                     severity from source &ldquo;{values.source}&rdquo;.
                   </AlertDescription>
                 </Alert>
@@ -267,10 +266,10 @@ export function CreateLogDialog({ open, onOpenChange }: CreateLogDialogProps) {
             <form.Subscribe>
               {({
                 canSubmit,
-                isSubmitting,
+                isSubmitting
               }: {
-                canSubmit: boolean;
-                isSubmitting: boolean;
+                canSubmit: boolean
+                isSubmitting: boolean
               }) => (
                 <Button
                   className="flex items-center gap-2"
@@ -281,8 +280,8 @@ export function CreateLogDialog({ open, onOpenChange }: CreateLogDialogProps) {
                 >
                   <SaveIcon className="h-4 w-4" />
                   {createLogMutation.isPending || isSubmitting
-                    ? "Creating..."
-                    : "Create Log"}
+                    ? 'Creating...'
+                    : 'Create Log'}
                 </Button>
               )}
             </form.Subscribe>
@@ -290,5 +289,5 @@ export function CreateLogDialog({ open, onOpenChange }: CreateLogDialogProps) {
         </form>
       </DialogContent>
     </Dialog>
-  );
+  )
 }

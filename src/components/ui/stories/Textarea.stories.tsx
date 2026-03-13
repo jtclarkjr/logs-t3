@@ -1,35 +1,35 @@
-import type { Meta, StoryObj } from "@storybook/nextjs";
-import { Label } from "../label";
-import { Textarea } from "../textarea";
+import type { Meta, StoryObj } from '@storybook/nextjs'
+import { Label } from '../label'
+import { Textarea } from '../textarea'
 
 const meta: Meta<typeof Textarea> = {
-  title: "UI/Textarea",
+  title: 'UI/Textarea',
   component: Textarea,
   parameters: {
-    layout: "centered",
+    layout: 'centered'
   },
-  tags: ["autodocs"],
+  tags: ['autodocs'],
   argTypes: {
     disabled: {
-      control: "boolean",
+      control: 'boolean'
     },
     placeholder: {
-      control: "text",
+      control: 'text'
     },
     rows: {
-      control: "number",
-    },
-  },
-};
+      control: 'number'
+    }
+  }
+}
 
-export default meta;
-type Story = StoryObj<typeof meta>;
+export default meta
+type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   args: {
-    placeholder: "Type your message here...",
-  },
-};
+    placeholder: 'Type your message here...'
+  }
+}
 
 export const WithLabel: Story = {
   render: () => (
@@ -40,29 +40,29 @@ export const WithLabel: Story = {
         placeholder="Enter the log message details..."
       />
     </div>
-  ),
-};
+  )
+}
 
 export const WithRows: Story = {
   args: {
-    placeholder: "Textarea with 5 rows...",
-    rows: 5,
-  },
-};
+    placeholder: 'Textarea with 5 rows...',
+    rows: 5
+  }
+}
 
 export const Disabled: Story = {
   args: {
-    placeholder: "This textarea is disabled",
-    disabled: true,
-  },
-};
+    placeholder: 'This textarea is disabled',
+    disabled: true
+  }
+}
 
 export const AutoResize: Story = {
   args: {
-    placeholder: "This textarea will auto-resize as you type...",
-    className: "resize-none",
-  },
-};
+    placeholder: 'This textarea will auto-resize as you type...',
+    className: 'resize-none'
+  }
+}
 
 export const LogsAppExamples: Story = {
   render: () => (
@@ -94,8 +94,8 @@ export const LogsAppExamples: Story = {
         <Textarea placeholder="Any additional context or notes..." rows={3} />
       </div>
     </div>
-  ),
-};
+  )
+}
 
 export const DifferentSizes: Story = {
   render: () => (
@@ -113,8 +113,8 @@ export const DifferentSizes: Story = {
         <Textarea placeholder="Large textarea..." rows={8} />
       </div>
     </div>
-  ),
-};
+  )
+}
 
 export const States: Story = {
   render: () => (
@@ -123,5 +123,5 @@ export const States: Story = {
       <Textarea className="border-destructive" placeholder="Error state" />
       <Textarea disabled placeholder="Disabled state" />
     </div>
-  ),
-};
+  )
+}

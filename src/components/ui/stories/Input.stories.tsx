@@ -1,38 +1,38 @@
-import type { Meta, StoryObj } from "@storybook/nextjs";
-import { EyeIcon, EyeOffIcon, SearchIcon } from "lucide-react";
-import { useState } from "react";
-import { Input } from "../input";
-import { Label } from "../label";
+import type { Meta, StoryObj } from '@storybook/nextjs'
+import { EyeIcon, EyeOffIcon, SearchIcon } from 'lucide-react'
+import { useState } from 'react'
+import { Input } from '../input'
+import { Label } from '../label'
 
 const meta: Meta<typeof Input> = {
-  title: "UI/Input",
+  title: 'UI/Input',
   component: Input,
   parameters: {
-    layout: "centered",
+    layout: 'centered'
   },
-  tags: ["autodocs"],
+  tags: ['autodocs'],
   argTypes: {
     type: {
-      control: "select",
-      options: ["text", "password", "email", "number", "search", "tel", "url"],
+      control: 'select',
+      options: ['text', 'password', 'email', 'number', 'search', 'tel', 'url']
     },
     disabled: {
-      control: "boolean",
+      control: 'boolean'
     },
     placeholder: {
-      control: "text",
-    },
-  },
-};
+      control: 'text'
+    }
+  }
+}
 
-export default meta;
-type Story = StoryObj<typeof meta>;
+export default meta
+type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   args: {
-    placeholder: "Enter text...",
-  },
-};
+    placeholder: 'Enter text...'
+  }
+}
 
 export const WithLabel: Story = {
   render: () => (
@@ -44,29 +44,29 @@ export const WithLabel: Story = {
         type="email"
       />
     </div>
-  ),
-};
+  )
+}
 
 export const Password: Story = {
   args: {
-    type: "password",
-    placeholder: "Enter password...",
-  },
-};
+    type: 'password',
+    placeholder: 'Enter password...'
+  }
+}
 
 export const Search: Story = {
   args: {
-    type: "search",
-    placeholder: "Search...",
-  },
-};
+    type: 'search',
+    placeholder: 'Search...'
+  }
+}
 
 export const Disabled: Story = {
   args: {
-    placeholder: "Disabled input",
-    disabled: true,
-  },
-};
+    placeholder: 'Disabled input',
+    disabled: true
+  }
+}
 
 export const WithIcon: Story = {
   render: () => (
@@ -74,18 +74,18 @@ export const WithIcon: Story = {
       <SearchIcon className="absolute top-3 left-3 h-4 w-4 text-muted-foreground" />
       <Input className="pl-9" placeholder="Search logs..." />
     </div>
-  ),
-};
+  )
+}
 export const PasswordToggle: Story = {
   render: function PasswordToggleComponent() {
-    const [showPassword, setShowPassword] = useState(false);
+    const [showPassword, setShowPassword] = useState(false)
 
     return (
       <div className="relative">
         <Input
           className="pr-9"
           placeholder="Enter password..."
-          type={showPassword ? "text" : "password"}
+          type={showPassword ? 'text' : 'password'}
         />
         <button
           className="absolute top-3 right-3 h-4 w-4 cursor-pointer text-muted-foreground hover:text-foreground"
@@ -95,9 +95,9 @@ export const PasswordToggle: Story = {
           {showPassword ? <EyeOffIcon /> : <EyeIcon />}
         </button>
       </div>
-    );
-  },
-};
+    )
+  }
+}
 
 export const DifferentTypes: Story = {
   render: () => (
@@ -123,8 +123,8 @@ export const DifferentTypes: Story = {
         <Input placeholder="Search..." type="search" />
       </div>
     </div>
-  ),
-};
+  )
+}
 
 export const LogsAppExamples: Story = {
   render: () => (
@@ -145,8 +145,8 @@ export const LogsAppExamples: Story = {
         <Input type="datetime-local" />
       </div>
     </div>
-  ),
-};
+  )
+}
 
 export const States: Story = {
   render: () => (
@@ -159,5 +159,5 @@ export const States: Story = {
       <Input className="border-destructive" placeholder="Error state" />
       <Input disabled placeholder="Disabled state" />
     </div>
-  ),
-};
+  )
+}

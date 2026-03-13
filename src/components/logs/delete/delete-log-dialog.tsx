@@ -1,25 +1,25 @@
-"use client";
+'use client'
 
-import { format } from "date-fns";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { format } from 'date-fns'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { SeverityBadge } from "@/components/ui/severity-badge";
-import type { LogResponse } from "@/lib/types/log";
+  DialogTitle
+} from '@/components/ui/dialog'
+import { SeverityBadge } from '@/components/ui/severity-badge'
+import type { LogResponse } from '@/lib/types/log'
 
 interface DeleteLogDialogProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  logToDelete: LogResponse | null;
-  onConfirmDelete: () => void;
-  isDeleting: boolean;
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  logToDelete: LogResponse | null
+  onConfirmDelete: () => void
+  isDeleting: boolean
 }
 
 export function DeleteLogDialog({
@@ -27,7 +27,7 @@ export function DeleteLogDialog({
   onOpenChange,
   logToDelete,
   onConfirmDelete,
-  isDeleting,
+  isDeleting
 }: DeleteLogDialogProps) {
   return (
     <Dialog onOpenChange={onOpenChange} open={open}>
@@ -49,7 +49,7 @@ export function DeleteLogDialog({
               <p className="font-mono text-sm">
                 {format(
                   new Date(logToDelete.timestamp),
-                  "MMM dd, yyyy HH:mm:ss",
+                  'MMM dd, yyyy HH:mm:ss'
                 )}
               </p>
               <p className="text-sm">{logToDelete.message}</p>
@@ -69,10 +69,10 @@ export function DeleteLogDialog({
             onClick={onConfirmDelete}
             variant="destructive"
           >
-            {isDeleting ? "Deleting..." : "Delete"}
+            {isDeleting ? 'Deleting...' : 'Delete'}
           </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  );
+  )
 }

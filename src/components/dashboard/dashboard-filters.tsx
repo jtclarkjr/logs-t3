@@ -1,43 +1,39 @@
-"use client";
+'use client'
 
-import { FilterIcon } from "lucide-react";
-import type { DateRange } from "react-day-picker";
-import { Button } from "@/components/ui/button";
+import { FilterIcon } from 'lucide-react'
+import type { DateRange } from 'react-day-picker'
+import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { DateRangePicker } from "@/components/ui/date-range-picker";
+  CardTitle
+} from '@/components/ui/card'
+import { DateRangePicker } from '@/components/ui/date-range-picker'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { SeverityBadge } from "@/components/ui/severity-badge";
-import { SeverityLevel } from "@/lib/enums/severity";
-import type { MetadataResponse } from "@/lib/types/common";
-import type {
-  GroupBy,
-  SeverityFilter,
-  SourceFilter,
-} from "@/lib/types/filters";
+  SelectValue
+} from '@/components/ui/select'
+import { SeverityBadge } from '@/components/ui/severity-badge'
+import { SeverityLevel } from '@/lib/enums/severity'
+import type { MetadataResponse } from '@/lib/types/common'
+import type { GroupBy, SeverityFilter, SourceFilter } from '@/lib/types/filters'
 
 interface DashboardFiltersProps {
-  dateRange: DateRange | undefined;
-  onDateRangeChange: (dateRange: DateRange | undefined) => void;
-  selectedSeverity: SeverityFilter;
-  onSeverityChange: (severity: SeverityFilter) => void;
-  selectedSource: SourceFilter;
-  onSourceChange: (source: SourceFilter) => void;
-  timeGrouping: GroupBy;
-  onTimeGroupingChange: (grouping: GroupBy) => void;
-  metadata?: MetadataResponse;
-  onResetFilters: () => void;
+  dateRange: DateRange | undefined
+  onDateRangeChange: (dateRange: DateRange | undefined) => void
+  selectedSeverity: SeverityFilter
+  onSeverityChange: (severity: SeverityFilter) => void
+  selectedSource: SourceFilter
+  onSourceChange: (source: SourceFilter) => void
+  timeGrouping: GroupBy
+  onTimeGroupingChange: (grouping: GroupBy) => void
+  metadata?: MetadataResponse
+  onResetFilters: () => void
 }
 
 export function DashboardFilters({
@@ -50,7 +46,7 @@ export function DashboardFilters({
   timeGrouping,
   onTimeGroupingChange,
   metadata,
-  onResetFilters,
+  onResetFilters
 }: DashboardFiltersProps) {
   return (
     <Card>
@@ -126,5 +122,5 @@ export function DashboardFilters({
         </div>
       </CardContent>
     </Card>
-  );
+  )
 }

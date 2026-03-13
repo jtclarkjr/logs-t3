@@ -1,9 +1,9 @@
-import type { Meta, StoryObj } from "@storybook/nextjs";
-import { EyeIcon, MoreHorizontalIcon, TrashIcon } from "lucide-react";
-import { SeverityLevel } from "@/lib/enums/severity";
-import { Badge } from "../badge";
-import { Button } from "../button";
-import { SeverityBadge } from "../severity-badge";
+import type { Meta, StoryObj } from '@storybook/nextjs'
+import { EyeIcon, MoreHorizontalIcon, TrashIcon } from 'lucide-react'
+import { SeverityLevel } from '@/lib/enums/severity'
+import { Badge } from '../badge'
+import { Button } from '../button'
+import { SeverityBadge } from '../severity-badge'
 import {
   Table,
   TableBody,
@@ -12,20 +12,20 @@ import {
   TableFooter,
   TableHead,
   TableHeader,
-  TableRow,
-} from "../table";
+  TableRow
+} from '../table'
 
 const meta: Meta<typeof Table> = {
-  title: "UI/Table",
+  title: 'UI/Table',
   component: Table,
   parameters: {
-    layout: "centered",
+    layout: 'centered'
   },
-  tags: ["autodocs"],
-};
+  tags: ['autodocs']
+}
 
-export default meta;
-type Story = StoryObj<typeof meta>;
+export default meta
+type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   render: () => (
@@ -66,8 +66,8 @@ export const Default: Story = {
         </TableRow>
       </TableFooter>
     </Table>
-  ),
-};
+  )
+}
 
 export const LogsTable: Story = {
   render: () => (
@@ -161,8 +161,8 @@ export const LogsTable: Story = {
         </TableRow>
       </TableBody>
     </Table>
-  ),
-};
+  )
+}
 
 export const WithActions: Story = {
   render: () => (
@@ -212,8 +212,8 @@ export const WithActions: Story = {
         </TableRow>
       </TableBody>
     </Table>
-  ),
-};
+  )
+}
 
 export const Dense: Story = {
   render: () => (
@@ -243,8 +243,8 @@ export const Dense: Story = {
         </TableRow>
       </TableBody>
     </Table>
-  ),
-};
+  )
+}
 
 export const StripedRows: Story = {
   render: () => (
@@ -279,8 +279,8 @@ export const StripedRows: Story = {
         </TableRow>
       </TableBody>
     </Table>
-  ),
-};
+  )
+}
 
 export const Empty: Story = {
   render: () => (
@@ -304,8 +304,8 @@ export const Empty: Story = {
         </TableRow>
       </TableBody>
     </Table>
-  ),
-};
+  )
+}
 
 export const Responsive: Story = {
   render: () => (
@@ -344,5 +344,5 @@ export const Responsive: Story = {
         </TableBody>
       </Table>
     </div>
-  ),
-};
+  )
+}

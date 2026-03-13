@@ -1,16 +1,16 @@
-"use client";
+'use client'
 
-import { DownloadIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { DownloadIcon } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 
 interface DashboardHeaderProps {
-  onExportCsv: () => void;
-  isExporting: boolean;
+  onExportCsv: () => void
+  isExporting: boolean
 }
 
 export function DashboardHeader({
   onExportCsv,
-  isExporting,
+  isExporting
 }: DashboardHeaderProps) {
   return (
     <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
@@ -27,9 +27,9 @@ export function DashboardHeader({
           onClick={onExportCsv}
         >
           <DownloadIcon className="h-4 w-4" />
-          {isExporting ? "Exporting..." : "Export CSV"}
+          {isExporting ? 'Exporting...' : 'Export CSV'}
         </Button>
       </div>
     </div>
-  );
+  )
 }

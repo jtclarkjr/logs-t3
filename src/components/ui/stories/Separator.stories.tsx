@@ -1,26 +1,26 @@
-import type { Meta, StoryObj } from "@storybook/nextjs";
-import { Separator } from "../separator";
+import type { Meta, StoryObj } from '@storybook/nextjs'
+import { Separator } from '../separator'
 
 const meta: Meta<typeof Separator> = {
-  title: "UI/Separator",
+  title: 'UI/Separator',
   component: Separator,
   parameters: {
-    layout: "centered",
+    layout: 'centered'
   },
-  tags: ["autodocs"],
+  tags: ['autodocs'],
   argTypes: {
     orientation: {
-      control: "select",
-      options: ["horizontal", "vertical"],
+      control: 'select',
+      options: ['horizontal', 'vertical']
     },
     decorative: {
-      control: "boolean",
-    },
-  },
-};
+      control: 'boolean'
+    }
+  }
+}
 
-export default meta;
-type Story = StoryObj<typeof meta>;
+export default meta
+type Story = StoryObj<typeof meta>
 
 export const Horizontal: Story = {
   render: () => (
@@ -29,8 +29,8 @@ export const Horizontal: Story = {
       <Separator />
       <div>Content below separator</div>
     </div>
-  ),
-};
+  )
+}
 
 export const Vertical: Story = {
   render: () => (
@@ -39,8 +39,8 @@ export const Vertical: Story = {
       <Separator orientation="vertical" />
       <div>Right content</div>
     </div>
-  ),
-};
+  )
+}
 
 export const InMenu: Story = {
   render: () => (
@@ -63,8 +63,8 @@ export const InMenu: Story = {
         Delete
       </div>
     </div>
-  ),
-};
+  )
+}
 
 export const LogsAppExamples: Story = {
   render: () => (
@@ -121,8 +121,8 @@ export const LogsAppExamples: Story = {
         </div>
       </div>
     </div>
-  ),
-};
+  )
+}
 
 export const BreadcrumbSeparator: Story = {
   render: () => (
@@ -133,8 +133,8 @@ export const BreadcrumbSeparator: Story = {
       <Separator className="h-4" orientation="vertical" />
       <span className="text-muted-foreground">Details</span>
     </div>
-  ),
-};
+  )
+}
 
 export const ToolbarSeparator: Story = {
   render: () => (
@@ -172,8 +172,8 @@ export const ToolbarSeparator: Story = {
         Delete
       </button>
     </div>
-  ),
-};
+  )
+}
 
 export const CardSections: Story = {
   render: () => (
@@ -213,5 +213,5 @@ export const CardSections: Story = {
         </button>
       </div>
     </div>
-  ),
-};
+  )
+}

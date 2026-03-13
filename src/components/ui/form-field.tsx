@@ -1,16 +1,16 @@
-"use client";
+'use client'
 
-import type * as React from "react";
-import { cn } from "@/lib/utils";
+import type * as React from 'react'
+import { cn } from '@/lib/utils'
 
 // Form field wrapper that integrates with forms
 interface FormFieldWrapperProps {
-  label?: string;
-  description?: string;
-  required?: boolean;
-  errors?: string[];
-  children: React.ReactNode;
-  className?: string;
+  label?: string
+  description?: string
+  required?: boolean
+  errors?: string[]
+  children: React.ReactNode
+  className?: string
 }
 
 export function FormFieldWrapper({
@@ -19,17 +19,17 @@ export function FormFieldWrapper({
   required,
   errors,
   children,
-  className,
+  className
 }: FormFieldWrapperProps) {
-  const hasError = errors && errors.length > 0;
+  const hasError = errors && errors.length > 0
 
   return (
-    <div className={cn("space-y-2", className)}>
+    <div className={cn('space-y-2', className)}>
       {label && (
         <div
           className={cn(
-            "font-medium text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70",
-            hasError && "text-destructive",
+            'font-medium text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70',
+            hasError && 'text-destructive'
           )}
         >
           {label}
@@ -48,5 +48,5 @@ export function FormFieldWrapper({
         </div>
       )}
     </div>
-  );
+  )
 }

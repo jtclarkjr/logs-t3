@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import {
   CartesianGrid,
@@ -6,38 +6,88 @@ import {
   LineChart,
   ResponsiveContainer,
   XAxis,
-  YAxis,
-} from "recharts";
+  YAxis
+} from 'recharts'
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { ChartTooltip } from "@/components/ui/chart";
-import { EmptyState } from "@/components/ui/empty-state";
-import { QueryError } from "@/components/ui/error-boundary";
-import { LoadingState } from "@/components/ui/loading-state";
-import type { ChartDataResponse } from "@/lib/types/chart";
+  CardTitle
+} from '@/components/ui/card'
+import { ChartTooltip } from '@/components/ui/chart'
+import { EmptyState } from '@/components/ui/empty-state'
+import { QueryError } from '@/components/ui/error-boundary'
+import { LoadingState } from '@/components/ui/loading-state'
+import type { ChartDataResponse } from '@/lib/types/chart'
 
 interface TimelineChartProps {
-  chartData?: ChartDataResponse;
+  chartData?: ChartDataResponse
   timeSeriesData: Array<{
-    date: string;
-    total: number;
-    timestamp: string;
-  }>;
-  isLoading: boolean;
-  error?: unknown;
-  timeGrouping: "hour" | "day" | "week" | "month";
+    date: string
+    total: number
+    timestamp: string
+  }>
+  isLoading: boolean
+  error?: unknown
+  timeGrouping: 'hour' | 'day' | 'week' | 'month'
+}
+
+function TimelineChartContent({
+  isLoading,
+  error,
+  timeSeriesData
+}: Pick<TimelineChartProps, 'isLoading' | 'error' | 'timeSeriesData'>) {
+  if (isLoading) {
+    return <LoadingState variant="chart" />
+  }
+  if (error) {
+    return <QueryError error={error} title="Failed to load chart data" />
+  }
+  if (timeSeriesData.length === 0) {
+    return (
+      <EmptyState
+        description="No logs found for the selected filters and time period"
+        title="No chart data available"
+      />
+    )
+  }
+  return (
+    <ResponsiveContainer height={320} width="100%">
+      <LineChart data={timeSeriesData}>
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis dataKey="date" />
+        <YAxis />
+        <ChartTooltip
+          content={({ active, payload, label }) => {
+            if (active && payload && payload.length) {
+              return (
+                <div className="rounded-lg border bg-background p-3 shadow-md">
+                  <p className="font-medium">{label}</p>
+                  <p className="text-blue-600">Total: {payload[0]?.value}</p>
+                </div>
+              )
+            }
+            return null
+          }}
+        />
+        <Line
+          dataKey="total"
+          dot={{ fill: '#3b82f6', strokeWidth: 2, r: 4 }}
+          stroke="#3b82f6"
+          strokeWidth={2}
+          type="monotone"
+        />
+      </LineChart>
+    </ResponsiveContainer>
+  )
 }
 
 export function TimelineChart({
   timeSeriesData,
   isLoading,
   error,
-  timeGrouping,
+  timeGrouping
 }: TimelineChartProps) {
   return (
     <Card>
@@ -48,47 +98,12 @@ export function TimelineChart({
         </CardDescription>
       </CardHeader>
       <CardContent>
-        {isLoading ? (
-          <LoadingState variant="chart" />
-        ) : error ? (
-          <QueryError error={error} title="Failed to load chart data" />
-        ) : timeSeriesData.length > 0 ? (
-          <ResponsiveContainer height={320} width="100%">
-            <LineChart data={timeSeriesData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="date" />
-              <YAxis />
-              <ChartTooltip
-                content={({ active, payload, label }) => {
-                  if (active && payload && payload.length) {
-                    return (
-                      <div className="rounded-lg border bg-background p-3 shadow-md">
-                        <p className="font-medium">{label}</p>
-                        <p className="text-blue-600">
-                          Total: {payload[0]?.value}
-                        </p>
-                      </div>
-                    );
-                  }
-                  return null;
-                }}
-              />
-              <Line
-                dataKey="total"
-                dot={{ fill: "#3b82f6", strokeWidth: 2, r: 4 }}
-                stroke="#3b82f6"
-                strokeWidth={2}
-                type="monotone"
-              />
-            </LineChart>
-          </ResponsiveContainer>
-        ) : (
-          <EmptyState
-            description="No logs found for the selected filters and time period"
-            title="No chart data available"
-          />
-        )}
+        <TimelineChartContent
+          error={error}
+          isLoading={isLoading}
+          timeSeriesData={timeSeriesData}
+        />
       </CardContent>
     </Card>
-  );
+  )
 }

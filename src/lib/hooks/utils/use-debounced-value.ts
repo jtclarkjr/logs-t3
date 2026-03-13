@@ -1,30 +1,30 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react'
 
 interface UseDebouncedValueOptions {
-  delay?: number;
+  delay?: number
 }
 
 export function useDebouncedValue<T>(
   value: T,
-  { delay = 300 }: UseDebouncedValueOptions = {},
+  { delay = 300 }: UseDebouncedValueOptions = {}
 ) {
-  const [debouncedValue, setDebouncedValue] = useState(value);
+  const [debouncedValue, setDebouncedValue] = useState(value)
 
   useEffect(() => {
     // For falsy values (clears, toggles), update immediately to match UX expectations
     if (!value) {
-      setDebouncedValue(value);
-      return;
+      setDebouncedValue(value)
+      return
     }
 
     const timer = setTimeout(() => {
-      setDebouncedValue(value);
-    }, delay);
+      setDebouncedValue(value)
+    }, delay)
 
     return () => {
-      clearTimeout(timer);
-    };
-  }, [value, delay]);
+      clearTimeout(timer)
+    }
+  }, [value, delay])
 
-  return debouncedValue;
+  return debouncedValue
 }

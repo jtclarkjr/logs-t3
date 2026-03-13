@@ -1,159 +1,155 @@
-import { useState } from "react";
-import type { DateRange } from "react-day-picker";
-import { DEFAULT_PAGE_SIZE } from "@/lib/constants/pagination";
-import type { SeverityLevel } from "@/lib/enums/severity";
+import { useState } from 'react'
+import type { DateRange } from 'react-day-picker'
+import { DEFAULT_PAGE_SIZE } from '@/lib/constants/pagination'
+import type { SeverityLevel } from '@/lib/enums/severity'
 import type {
   FilterAllOption,
   SeverityFilter,
   SortByField,
   SortOrder,
   SourceFilter,
-  UserFilter,
-} from "@/lib/types/filters";
-import type { RouterInputs } from "@/trpc/react";
+  UserFilter
+} from '@/lib/types/filters'
+import type { RouterInputs } from '@/trpc/react'
 
 interface LogsFiltersState {
-  searchQuery: string;
-  selectedSeverity: SeverityFilter;
-  selectedSource: SourceFilter;
-  sortBy: SortByField;
-  sortOrder: SortOrder;
-  currentPage: number;
-  pageSize: number;
-  dateRange: DateRange | undefined;
-  createdByFilter: UserFilter;
-  updatedByFilter: UserFilter;
+  searchQuery: string
+  selectedSeverity: SeverityFilter
+  selectedSource: SourceFilter
+  sortBy: SortByField
+  sortOrder: SortOrder
+  currentPage: number
+  pageSize: number
+  dateRange: DateRange | undefined
+  createdByFilter: UserFilter
+  updatedByFilter: UserFilter
 }
 
 interface InitialLogsFilters {
-  searchQuery?: string;
-  selectedSeverity?: SeverityFilter;
-  selectedSource?: SourceFilter;
-  sortBy?: SortByField;
-  sortOrder?: SortOrder;
-  currentPage?: number;
-  pageSize?: number;
-  dateRange?: DateRange;
-  createdByFilter?: UserFilter;
-  updatedByFilter?: UserFilter;
+  searchQuery?: string
+  selectedSeverity?: SeverityFilter
+  selectedSource?: SourceFilter
+  sortBy?: SortByField
+  sortOrder?: SortOrder
+  currentPage?: number
+  pageSize?: number
+  dateRange?: DateRange
+  createdByFilter?: UserFilter
+  updatedByFilter?: UserFilter
 }
 
 export function useLogsFilters(
   initialFilters: InitialLogsFilters = {},
-  currentUserId?: string,
+  currentUserId?: string
 ) {
   // State management
   const [searchQuery, setSearchQuery] = useState(
-    initialFilters.searchQuery || "",
-  );
+    initialFilters.searchQuery || ''
+  )
   const [selectedSeverity, setSelectedSeverity] = useState<SeverityFilter>(
-    initialFilters.selectedSeverity || ("all" as FilterAllOption),
-  );
+    initialFilters.selectedSeverity || ('all' as FilterAllOption)
+  )
   const [selectedSource, setSelectedSource] = useState<SourceFilter>(
-    initialFilters.selectedSource || ("all" as FilterAllOption),
-  );
+    initialFilters.selectedSource || ('all' as FilterAllOption)
+  )
   const [sortBy, setSortBy] = useState<SortByField>(
-    initialFilters.sortBy || ("timestamp" as SortByField),
-  );
+    initialFilters.sortBy || ('timestamp' as SortByField)
+  )
   const [sortOrder, setSortOrder] = useState<SortOrder>(
-    initialFilters.sortOrder || "desc",
-  );
+    initialFilters.sortOrder || 'desc'
+  )
   const [currentPage, setCurrentPage] = useState(
-    initialFilters.currentPage || 1,
-  );
+    initialFilters.currentPage || 1
+  )
   const [pageSize, setPageSize] = useState(
-    initialFilters.pageSize || DEFAULT_PAGE_SIZE,
-  );
+    initialFilters.pageSize || DEFAULT_PAGE_SIZE
+  )
   const [dateRange, setDateRange] = useState<DateRange | undefined>(
-    initialFilters.dateRange,
-  );
+    initialFilters.dateRange
+  )
   const [createdByFilter, setCreatedByFilter] = useState<UserFilter>(
-    initialFilters.createdByFilter || ("all" as UserFilter),
-  );
+    initialFilters.createdByFilter || ('all' as UserFilter)
+  )
   const [updatedByFilter, setUpdatedByFilter] = useState<UserFilter>(
-    initialFilters.updatedByFilter || ("all" as UserFilter),
-  );
+    initialFilters.updatedByFilter || ('all' as UserFilter)
+  )
 
   const resetFilters = () => {
-    setSearchQuery("");
-    setSelectedSeverity("all" as FilterAllOption);
-    setSelectedSource("all" as FilterAllOption);
-    setSortBy("timestamp" as SortByField);
-    setSortOrder("desc" as SortOrder);
-    setCurrentPage(1);
-    setDateRange(undefined);
-    setCreatedByFilter("all");
-    setUpdatedByFilter("all");
-  };
+    setSearchQuery('')
+    setSelectedSeverity('all' as FilterAllOption)
+    setSelectedSource('all' as FilterAllOption)
+    setSortBy('timestamp' as SortByField)
+    setSortOrder('desc' as SortOrder)
+    setCurrentPage(1)
+    setDateRange(undefined)
+    setCreatedByFilter('all')
+    setUpdatedByFilter('all')
+  }
 
   // Handle page changes with reset to page 1 when filters change
   const handlePageChange = (newPage: number) => {
-    setCurrentPage(newPage);
-  };
-
-  const handleFilterChange = (filterSetter: () => void) => {
-    filterSetter();
-  };
+    setCurrentPage(newPage)
+  }
 
   // Safe filter setters that reset pagination
   const setSearchQueryWithReset = (query: string) => {
-    handleFilterChange(() => setSearchQuery(query));
-  };
+    setSearchQuery(query)
+  }
 
   const setSelectedSeverityWithReset = (severity: SeverityFilter) => {
-    handleFilterChange(() => setSelectedSeverity(severity));
-  };
+    setSelectedSeverity(severity)
+  }
 
   const setSelectedSourceWithReset = (source: SourceFilter) => {
-    handleFilterChange(() => setSelectedSource(source));
-  };
+    setSelectedSource(source)
+  }
 
   const setDateRangeWithReset = (range: DateRange | undefined) => {
-    handleFilterChange(() => setDateRange(range));
-  };
+    setDateRange(range)
+  }
 
   const setCreatedByFilterWithReset = (filter: UserFilter) => {
-    handleFilterChange(() => setCreatedByFilter(filter));
-  };
+    setCreatedByFilter(filter)
+  }
 
   const setUpdatedByFilterWithReset = (filter: UserFilter) => {
-    handleFilterChange(() => setUpdatedByFilter(filter));
-  };
+    setUpdatedByFilter(filter)
+  }
 
   const setPageSizeWithReset = (size: number) => {
-    setPageSize(size);
-    setCurrentPage(1); // Reset to first page when page size changes
-  };
+    setPageSize(size)
+    setCurrentPage(1) // Reset to first page when page size changes
+  }
 
   const handleSortChange = (field: SortByField, order: SortOrder) => {
-    setSortBy(field);
-    setSortOrder(order);
-  };
+    setSortBy(field)
+    setSortOrder(order)
+  }
 
   // Generate API filters object
-  const getAPIFilters = (): RouterInputs["logs"]["getAll"] => ({
+  const getAPIFilters = (): RouterInputs['logs']['getAll'] => ({
     page: currentPage,
     pageSize,
     sortBy,
     sortOrder,
     ...(searchQuery && { search: searchQuery }),
-    ...(selectedSeverity !== ("all" as FilterAllOption) && {
-      severity: selectedSeverity as SeverityLevel,
+    ...(selectedSeverity !== ('all' as FilterAllOption) && {
+      severity: selectedSeverity as SeverityLevel
     }),
-    ...(selectedSource !== ("all" as FilterAllOption) && {
-      source: selectedSource,
+    ...(selectedSource !== ('all' as FilterAllOption) && {
+      source: selectedSource
     }),
     ...(dateRange?.from && { startDate: dateRange.from }),
     ...(dateRange?.to && { endDate: dateRange.to }),
-    ...(createdByFilter === "me" &&
+    ...(createdByFilter === 'me' &&
       currentUserId && {
-        createdBy: currentUserId,
+        createdBy: currentUserId
       }),
-    ...(updatedByFilter === "me" &&
+    ...(updatedByFilter === 'me' &&
       currentUserId && {
-        updatedBy: currentUserId,
-      }),
-  });
+        updatedBy: currentUserId
+      })
+  })
 
   // Return state and actions
   return {
@@ -191,14 +187,14 @@ export function useLogsFilters(
     // Derived state
     hasActiveFilters: Boolean(
       searchQuery ||
-        selectedSeverity !== ("all" as FilterAllOption) ||
-        selectedSource !== ("all" as FilterAllOption) ||
-        dateRange?.from ||
-        dateRange?.to ||
-        createdByFilter === "me" ||
-        updatedByFilter === "me",
-    ),
-  };
+      selectedSeverity !== ('all' as FilterAllOption) ||
+      selectedSource !== ('all' as FilterAllOption) ||
+      dateRange?.from ||
+      dateRange?.to ||
+      createdByFilter === 'me' ||
+      updatedByFilter === 'me'
+    )
+  }
 }
 
-export type { LogsFiltersState, InitialLogsFilters };
+export type { LogsFiltersState, InitialLogsFilters }

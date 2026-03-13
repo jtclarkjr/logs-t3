@@ -1,6 +1,6 @@
-import type { Meta, StoryObj } from "@storybook/nextjs";
-import { SeverityLevel } from "@/lib/enums/severity";
-import { Label } from "../label";
+import type { Meta, StoryObj } from '@storybook/nextjs'
+import { SeverityLevel } from '@/lib/enums/severity'
+import { Label } from '../label'
 import {
   Select,
   SelectContent,
@@ -9,21 +9,21 @@ import {
   SelectLabel,
   SelectSeparator,
   SelectTrigger,
-  SelectValue,
-} from "../select";
-import { SeverityBadge } from "../severity-badge";
+  SelectValue
+} from '../select'
+import { SeverityBadge } from '../severity-badge'
 
 const meta: Meta<typeof Select> = {
-  title: "UI/Select",
+  title: 'UI/Select',
   component: Select,
   parameters: {
-    layout: "centered",
+    layout: 'centered'
   },
-  tags: ["autodocs"],
-};
+  tags: ['autodocs']
+}
 
-export default meta;
-type Story = StoryObj<typeof meta>;
+export default meta
+type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   render: () => (
@@ -37,8 +37,8 @@ export const Default: Story = {
         <SelectItem value="option3">Option 3</SelectItem>
       </SelectContent>
     </Select>
-  ),
-};
+  )
+}
 
 export const WithLabel: Story = {
   render: () => (
@@ -55,8 +55,8 @@ export const WithLabel: Story = {
         </SelectContent>
       </Select>
     </div>
-  ),
-};
+  )
+}
 
 export const WithGroups: Story = {
   render: () => (
@@ -80,8 +80,8 @@ export const WithGroups: Story = {
         </SelectGroup>
       </SelectContent>
     </Select>
-  ),
-};
+  )
+}
 
 export const SeveritySelect: Story = {
   render: () => (
@@ -102,8 +102,8 @@ export const SeveritySelect: Story = {
         </SelectContent>
       </Select>
     </div>
-  ),
-};
+  )
+}
 
 export const SmallSize: Story = {
   render: () => (
@@ -117,8 +117,8 @@ export const SmallSize: Story = {
         <SelectItem value="option3">Option 3</SelectItem>
       </SelectContent>
     </Select>
-  ),
-};
+  )
+}
 
 export const Disabled: Story = {
   render: () => (
@@ -131,8 +131,8 @@ export const Disabled: Story = {
         <SelectItem value="option2">Option 2</SelectItem>
       </SelectContent>
     </Select>
-  ),
-};
+  )
+}
 
 export const LogsAppExamples: Story = {
   render: () => (
@@ -195,8 +195,8 @@ export const LogsAppExamples: Story = {
         </Select>
       </div>
     </div>
-  ),
-};
+  )
+}
 
 export const DifferentWidths: Story = {
   render: () => (
@@ -237,8 +237,8 @@ export const DifferentWidths: Story = {
         </SelectContent>
       </Select>
     </div>
-  ),
-};
+  )
+}
 
 export const LongContent: Story = {
   render: () => (
@@ -258,5 +258,5 @@ export const LongContent: Story = {
         </SelectItem>
       </SelectContent>
     </Select>
-  ),
-};
+  )
+}

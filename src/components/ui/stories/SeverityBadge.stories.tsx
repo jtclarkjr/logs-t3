@@ -1,54 +1,54 @@
-import type { Meta, StoryObj } from "@storybook/nextjs";
-import { SeverityLevel } from "@/lib/enums/severity";
-import { SeverityBadge } from "../severity-badge";
+import type { Meta, StoryObj } from '@storybook/nextjs'
+import { SeverityLevel } from '@/lib/enums/severity'
+import { SeverityBadge } from '../severity-badge'
 
 const meta: Meta<typeof SeverityBadge> = {
-  title: "UI/SeverityBadge",
+  title: 'UI/SeverityBadge',
   component: SeverityBadge,
   parameters: {
-    layout: "centered",
+    layout: 'centered'
   },
-  tags: ["autodocs"],
+  tags: ['autodocs'],
   argTypes: {
     severity: {
-      control: "select",
-      options: Object.values(SeverityLevel),
-    },
-  },
-};
+      control: 'select',
+      options: Object.values(SeverityLevel)
+    }
+  }
+}
 
-export default meta;
-type Story = StoryObj<typeof meta>;
+export default meta
+type Story = StoryObj<typeof meta>
 
 export const Debug: Story = {
   args: {
-    severity: SeverityLevel.DEBUG,
-  },
-};
+    severity: SeverityLevel.DEBUG
+  }
+}
 
 export const Info: Story = {
   args: {
-    severity: SeverityLevel.INFO,
-  },
-};
+    severity: SeverityLevel.INFO
+  }
+}
 
 export const Warning: Story = {
   args: {
-    severity: SeverityLevel.WARNING,
-  },
-};
+    severity: SeverityLevel.WARNING
+  }
+}
 
 export const ErrorStory: Story = {
   args: {
-    severity: SeverityLevel.ERROR,
-  },
-};
+    severity: SeverityLevel.ERROR
+  }
+}
 
 export const Critical: Story = {
   args: {
-    severity: SeverityLevel.CRITICAL,
-  },
-};
+    severity: SeverityLevel.CRITICAL
+  }
+}
 
 export const AllSeverities: Story = {
   render: () => (
@@ -59,8 +59,8 @@ export const AllSeverities: Story = {
       <SeverityBadge severity={SeverityLevel.ERROR} />
       <SeverityBadge severity={SeverityLevel.CRITICAL} />
     </div>
-  ),
-};
+  )
+}
 
 export const InLogContext: Story = {
   render: () => (
@@ -97,8 +97,8 @@ export const InLogContext: Story = {
         <span className="text-muted-foreground text-xs">12:36:01</span>
       </div>
     </div>
-  ),
-};
+  )
+}
 
 export const WithCustomSizing: Story = {
   render: () => (
@@ -110,5 +110,5 @@ export const WithCustomSizing: Story = {
         severity={SeverityLevel.ERROR}
       />
     </div>
-  ),
-};
+  )
+}

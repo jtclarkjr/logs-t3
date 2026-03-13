@@ -1,7 +1,7 @@
-import type { Meta, StoryObj } from "@storybook/nextjs";
-import { MoreHorizontalIcon, TrendingUpIcon } from "lucide-react";
-import { Badge } from "../badge";
-import { Button } from "../button";
+import type { Meta, StoryObj } from '@storybook/nextjs'
+import { MoreHorizontalIcon, TrendingUpIcon } from 'lucide-react'
+import { Badge } from '../badge'
+import { Button } from '../button'
 import {
   Card,
   CardAction,
@@ -9,20 +9,20 @@ import {
   CardDescription,
   CardFooter,
   CardHeader,
-  CardTitle,
-} from "../card";
+  CardTitle
+} from '../card'
 
 const meta: Meta<typeof Card> = {
-  title: "UI/Card",
+  title: 'UI/Card',
   component: Card,
   parameters: {
-    layout: "centered",
+    layout: 'centered'
   },
-  tags: ["autodocs"],
-};
+  tags: ['autodocs']
+}
 
-export default meta;
-type Story = StoryObj<typeof meta>;
+export default meta
+type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   render: () => (
@@ -38,8 +38,8 @@ export const Default: Story = {
         <Button>Action</Button>
       </CardFooter>
     </Card>
-  ),
-};
+  )
+}
 
 export const WithAction: Story = {
   render: () => (
@@ -59,8 +59,8 @@ export const WithAction: Story = {
         <p>The action button appears in the top-right corner of the card.</p>
       </CardContent>
     </Card>
-  ),
-};
+  )
+}
 
 export const SimpleCard: Story = {
   render: () => (
@@ -69,8 +69,8 @@ export const SimpleCard: Story = {
         <p>A simple card with just content, no header or footer.</p>
       </CardContent>
     </Card>
-  ),
-};
+  )
+}
 
 export const StatsCard: Story = {
   render: () => (
@@ -87,8 +87,8 @@ export const StatsCard: Story = {
         <p className="text-muted-foreground text-xs">+20% from last week</p>
       </CardContent>
     </Card>
-  ),
-};
+  )
+}
 
 export const LogsFilterCard: Story = {
   render: () => (
@@ -120,8 +120,8 @@ export const LogsFilterCard: Story = {
         </div>
       </CardContent>
     </Card>
-  ),
-};
+  )
+}
 
 export const LogEntry: Story = {
   render: () => (
@@ -151,8 +151,8 @@ export const LogEntry: Story = {
         </Button>
       </CardFooter>
     </Card>
-  ),
-};
+  )
+}
 
 export const CardGrid: Story = {
   render: () => (
@@ -184,5 +184,5 @@ export const CardGrid: Story = {
         </CardContent>
       </Card>
     </div>
-  ),
-};
+  )
+}

@@ -1,18 +1,18 @@
-"use client";
+'use client'
 
-import { Download, PlusIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Download, PlusIcon } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 
 interface LogsHeaderProps {
-  onCreateLog: () => void;
-  onExport?: () => void;
-  isExporting?: boolean;
+  onCreateLog: () => void
+  onExport?: () => void
+  isExporting?: boolean
 }
 
 export function LogsHeader({
   onCreateLog,
   onExport,
-  isExporting = false,
+  isExporting = false
 }: LogsHeaderProps) {
   return (
     <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
@@ -31,7 +31,7 @@ export function LogsHeader({
             variant="secondary"
           >
             <Download className="h-4 w-4" />
-            {isExporting ? "Exporting..." : "Export CSV"}
+            {isExporting ? 'Exporting...' : 'Export CSV'}
           </Button>
         ) : null}
         <Button className="flex items-center gap-2" onClick={onCreateLog}>
@@ -40,5 +40,5 @@ export function LogsHeader({
         </Button>
       </div>
     </div>
-  );
+  )
 }

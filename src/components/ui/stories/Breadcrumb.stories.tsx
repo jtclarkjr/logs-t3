@@ -1,24 +1,24 @@
-import type { Meta, StoryObj } from "@storybook/nextjs";
+import type { Meta, StoryObj } from '@storybook/nextjs'
 import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "../breadcrumb";
+  BreadcrumbSeparator
+} from '../breadcrumb'
 
 const meta: Meta<typeof Breadcrumb> = {
-  title: "UI/Breadcrumb",
+  title: 'UI/Breadcrumb',
   component: Breadcrumb,
   parameters: {
-    layout: "centered",
+    layout: 'centered'
   },
-  tags: ["autodocs"],
-};
+  tags: ['autodocs']
+}
 
-export default meta;
-type Story = StoryObj<typeof meta>;
+export default meta
+type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   render: () => (
@@ -37,8 +37,8 @@ export const Default: Story = {
         </BreadcrumbItem>
       </BreadcrumbList>
     </Breadcrumb>
-  ),
-};
+  )
+}
 
 export const LogsAppExamples: Story = {
   render: () => (
@@ -91,5 +91,5 @@ export const LogsAppExamples: Story = {
         </BreadcrumbList>
       </Breadcrumb>
     </div>
-  ),
-};
+  )
+}

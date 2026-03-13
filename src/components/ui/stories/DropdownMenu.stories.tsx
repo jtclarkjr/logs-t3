@@ -1,32 +1,32 @@
-import type { Meta, StoryObj } from "@storybook/nextjs";
+import type { Meta, StoryObj } from '@storybook/nextjs'
 import {
   DownloadIcon,
   EditIcon,
   EyeIcon,
   MoreHorizontalIcon,
-  TrashIcon,
-} from "lucide-react";
-import { Button } from "../button";
+  TrashIcon
+} from 'lucide-react'
+import { Button } from '../button'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "../dropdown-menu";
+  DropdownMenuTrigger
+} from '../dropdown-menu'
 
 const meta: Meta<typeof DropdownMenu> = {
-  title: "UI/DropdownMenu",
+  title: 'UI/DropdownMenu',
   component: DropdownMenu,
   parameters: {
-    layout: "centered",
+    layout: 'centered'
   },
-  tags: ["autodocs"],
-};
+  tags: ['autodocs']
+}
 
-export default meta;
-type Story = StoryObj<typeof meta>;
+export default meta
+type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   render: () => (
@@ -43,8 +43,8 @@ export const Default: Story = {
         <DropdownMenuItem>Logout</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  ),
-};
+  )
+}
 
 export const LogActions: Story = {
   render: () => (
@@ -75,5 +75,5 @@ export const LogActions: Story = {
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  ),
-};
+  )
+}

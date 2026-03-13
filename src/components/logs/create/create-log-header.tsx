@@ -1,10 +1,10 @@
-"use client";
+'use client'
 
-import { ArrowLeftIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { ArrowLeftIcon } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 
 interface CreateLogHeaderProps {
-  onBack: () => void;
+  onBack: () => void
 }
 
 export function CreateLogHeader({ onBack }: CreateLogHeaderProps) {
@@ -26,5 +26,5 @@ export function CreateLogHeader({ onBack }: CreateLogHeaderProps) {
         </p>
       </div>
     </div>
-  );
+  )
 }

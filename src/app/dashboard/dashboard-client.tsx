@@ -1,58 +1,54 @@
-"use client";
+'use client'
 
-import { useEffect } from "react";
-import type { DateRange } from "react-day-picker";
-import { toast } from "sonner";
-import { SeverityDistributionChart } from "@/components/dashboard/chart/chart-severity-distribution";
-import { TimelineChart } from "@/components/dashboard/chart/chart-timeline";
-import { TopSourcesChart } from "@/components/dashboard/chart/chart-top-sources";
-import { DashboardFilters } from "@/components/dashboard/dashboard-filters";
-import { DashboardHeader } from "@/components/dashboard/dashboard-header";
-import { DashboardMetadata } from "@/components/dashboard/dashboard-metadata";
-import { DashboardStats } from "@/components/dashboard/dashboard-stats";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useEffect } from 'react'
+import type { DateRange } from 'react-day-picker'
+import { toast } from 'sonner'
+import { SeverityDistributionChart } from '@/components/dashboard/chart/chart-severity-distribution'
+import { TimelineChart } from '@/components/dashboard/chart/chart-timeline'
+import { TopSourcesChart } from '@/components/dashboard/chart/chart-top-sources'
+import { DashboardFilters } from '@/components/dashboard/dashboard-filters'
+import { DashboardHeader } from '@/components/dashboard/dashboard-header'
+import { DashboardMetadata } from '@/components/dashboard/dashboard-metadata'
+import { DashboardStats } from '@/components/dashboard/dashboard-stats'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import {
   useExportLogs,
   useFormattedChartData,
   useLogAggregation,
-  useMetadata,
-} from "@/lib/hooks/query/use-logs";
-import { useDashboardFilters } from "@/lib/hooks/state/use-dashboard-filters";
-import type {
-  GroupBy,
-  SeverityFilter,
-  SourceFilter,
-} from "@/lib/types/filters";
-import type { RouterOutputs } from "@/trpc/react";
+  useMetadata
+} from '@/lib/hooks/query/use-logs'
+import { useDashboardFilters } from '@/lib/hooks/state/use-dashboard-filters'
+import type { GroupBy, SeverityFilter, SourceFilter } from '@/lib/types/filters'
+import type { RouterOutputs } from '@/trpc/react'
 
 interface DashboardClientProps {
   initialData?: {
-    aggregationData?: RouterOutputs["logs"]["getAggregation"];
-    timeSeriesData?: RouterOutputs["logs"]["getChartData"];
-    metadata?: RouterOutputs["logs"]["getMetadata"];
-  };
+    aggregationData?: RouterOutputs['logs']['getAggregation']
+    timeSeriesData?: RouterOutputs['logs']['getChartData']
+    metadata?: RouterOutputs['logs']['getMetadata']
+  }
   initialFilters?: {
-    dateRange?: DateRange;
-    selectedSeverity?: SeverityFilter;
-    selectedSource?: SourceFilter;
-    timeGrouping?: GroupBy;
-  };
-  prefetchErrors?: string[];
+    dateRange?: DateRange
+    selectedSeverity?: SeverityFilter
+    selectedSource?: SourceFilter
+    timeGrouping?: GroupBy
+  }
+  prefetchErrors?: string[]
 }
 
 export function DashboardClient({
   initialData,
   initialFilters = {},
-  prefetchErrors,
+  prefetchErrors
 }: DashboardClientProps) {
   // Show error toasts if initial data fetches failed
   useEffect(() => {
     if (prefetchErrors && prefetchErrors.length > 0) {
       for (const error of prefetchErrors) {
-        toast.error(error);
+        toast.error(error)
       }
     }
-  }, [prefetchErrors]);
+  }, [prefetchErrors])
   // Filter state management
   const {
     dateRange,
@@ -68,57 +64,56 @@ export function DashboardClient({
     getChartDataFilters,
     getExportFilters,
     getExportFilename,
-    canExport,
-  } = useDashboardFilters(initialFilters);
+    canExport
+  } = useDashboardFilters(initialFilters)
 
   // Data queries
   const {
     data: aggregationData,
     isLoading: isLoadingAggregation,
-    error: aggregationError,
-  } = useLogAggregation(getAggregationFilters(), initialData?.aggregationData);
+    error: aggregationError
+  } = useLogAggregation(getAggregationFilters(), initialData?.aggregationData)
 
   const {
     data: timeSeriesData,
     isLoading: isLoadingChart,
-    error: chartError,
+    error: chartError
   } = useFormattedChartData(
     getChartDataFilters(),
     timeGrouping,
-    initialData?.timeSeriesData,
-  );
+    initialData?.timeSeriesData
+  )
 
   const {
     data: metadata,
     isLoading: isLoadingMetadata,
-    error: metadataError,
-  } = useMetadata(initialData?.metadata);
+    error: metadataError
+  } = useMetadata(initialData?.metadata)
 
-  const exportLogsMutation = useExportLogs();
+  const exportLogsMutation = useExportLogs()
 
   const handleExportCsv = () => {
     if (!canExport) {
-      toast.error("Please select a date range");
-      return;
+      toast.error('Please select a date range')
+      return
     }
 
-    const filters = getExportFilters();
+    const filters = getExportFilters()
     if (!filters) {
-      toast.error("Invalid date range");
-      return;
+      toast.error('Invalid date range')
+      return
     }
 
     exportLogsMutation.mutate({
       filters,
-      filename: getExportFilename(),
-    });
-  };
+      filename: getExportFilename()
+    })
+  }
 
   // Use current data or fall back to initial data
-  const displayAggregationData =
-    aggregationData ?? initialData?.aggregationData;
-  const displayTimeSeriesData = timeSeriesData || [];
-  const displayMetadata = metadata || initialData?.metadata;
+  const displayAggregationData = aggregationData ?? initialData?.aggregationData
+  const displayTimeSeriesData = timeSeriesData || []
+  const displayMetadata = metadata || initialData?.metadata
 
   return (
     <div className="container mx-auto space-y-6 p-6">
@@ -195,5 +190,5 @@ export function DashboardClient({
         metadata={displayMetadata}
       />
     </div>
-  );
+  )
 }

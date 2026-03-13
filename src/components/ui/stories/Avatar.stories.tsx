@@ -1,17 +1,17 @@
-import type { Meta, StoryObj } from "@storybook/nextjs";
-import { Avatar, AvatarFallback, AvatarImage } from "../avatar";
+import type { Meta, StoryObj } from '@storybook/nextjs'
+import { Avatar, AvatarFallback, AvatarImage } from '../avatar'
 
 const meta: Meta<typeof Avatar> = {
-  title: "UI/Avatar",
+  title: 'UI/Avatar',
   component: Avatar,
   parameters: {
-    layout: "centered",
+    layout: 'centered'
   },
-  tags: ["autodocs"],
-};
+  tags: ['autodocs']
+}
 
-export default meta;
-type Story = StoryObj<typeof meta>;
+export default meta
+type Story = StoryObj<typeof meta>
 
 export const WithImage: Story = {
   render: () => (
@@ -22,8 +22,8 @@ export const WithImage: Story = {
       />
       <AvatarFallback>JD</AvatarFallback>
     </Avatar>
-  ),
-};
+  )
+}
 
 export const Fallback: Story = {
   render: () => (
@@ -31,8 +31,8 @@ export const Fallback: Story = {
       <AvatarImage alt="@jane" src="/broken-image.jpg" />
       <AvatarFallback>JS</AvatarFallback>
     </Avatar>
-  ),
-};
+  )
+}
 
 export const DifferentSizes: Story = {
   render: () => (
@@ -54,8 +54,8 @@ export const DifferentSizes: Story = {
         <AvatarFallback>XL</AvatarFallback>
       </Avatar>
     </div>
-  ),
-};
+  )
+}
 
 export const WithInitials: Story = {
   render: () => (
@@ -70,8 +70,8 @@ export const WithInitials: Story = {
         <AvatarFallback>CD</AvatarFallback>
       </Avatar>
     </div>
-  ),
-};
+  )
+}
 
 export const LogsAppExamples: Story = {
   render: () => (
@@ -122,8 +122,8 @@ export const LogsAppExamples: Story = {
         </div>
       </div>
     </div>
-  ),
-};
+  )
+}
 
 export const WithStatus: Story = {
   render: () => (
@@ -148,8 +148,8 @@ export const WithStatus: Story = {
         <div className="absolute -right-0 -bottom-0 size-3 rounded-full border-2 border-background bg-gray-400"></div>
       </div>
     </div>
-  ),
-};
+  )
+}
 
 export const CustomColors: Story = {
   render: () => (
@@ -175,5 +175,5 @@ export const CustomColors: Story = {
         </AvatarFallback>
       </Avatar>
     </div>
-  ),
-};
+  )
+}

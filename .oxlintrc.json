@@ -1,0 +1,49 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["react", "nextjs", "typescript", "unicorn"],
+  "categories": {
+    "correctness": "error",
+    "suspicious": "warn"
+  },
+  "rules": {
+    "react/react-in-jsx-scope": "off"
+  },
+  "overrides": [
+    {
+      "files": [
+        "src/app/**/*.{ts,tsx}",
+        "src/components/**/*.{ts,tsx}",
+        "src/hooks/**/*.{ts,tsx}"
+      ],
+      "rules": {
+        "no-nested-ternary": "error"
+      }
+    },
+    {
+      "files": [
+        "src/components/ui/**/*.{ts,tsx}",
+        "components/ui/**/*.{ts,tsx}",
+        "**/*.stories.{ts,tsx}"
+      ],
+      "rules": {
+        "no-nested-ternary": "off",
+        "no-shadow": "off",
+        "unicorn/consistent-function-scoping": "off"
+      }
+    },
+    {
+      "files": ["**/*.stories.{ts,tsx}"],
+      "rules": {
+        "nextjs/no-html-link-for-pages": "off"
+      }
+    }
+  ],
+  "ignorePatterns": [
+    ".next",
+    "out",
+    "build",
+    "storybook-static",
+    "public/storybook",
+    "next-env.d.ts"
+  ]
+}

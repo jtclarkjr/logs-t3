@@ -1,31 +1,31 @@
-import type { Meta, StoryObj } from "@storybook/nextjs";
-import React from "react";
-import { Label } from "../label";
-import { Progress } from "../progress";
+import type { Meta, StoryObj } from '@storybook/nextjs'
+import React from 'react'
+import { Label } from '../label'
+import { Progress } from '../progress'
 
 const meta: Meta<typeof Progress> = {
-  title: "UI/Progress",
+  title: 'UI/Progress',
   component: Progress,
   parameters: {
-    layout: "centered",
+    layout: 'centered'
   },
-  tags: ["autodocs"],
+  tags: ['autodocs'],
   argTypes: {
     value: {
-      control: { type: "range", min: 0, max: 100, step: 1 },
-    },
-  },
-};
+      control: { type: 'range', min: 0, max: 100, step: 1 }
+    }
+  }
+}
 
-export default meta;
-type Story = StoryObj<typeof meta>;
+export default meta
+type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   args: {
     value: 50,
-    className: "w-80",
-  },
-};
+    className: 'w-80'
+  }
+}
 
 export const WithLabel: Story = {
   render: () => (
@@ -36,8 +36,8 @@ export const WithLabel: Story = {
       </div>
       <Progress value={65} />
     </div>
-  ),
-};
+  )
+}
 
 export const DifferentValues: Story = {
   render: () => (
@@ -74,8 +74,8 @@ export const DifferentValues: Story = {
         <Progress value={100} />
       </div>
     </div>
-  ),
-};
+  )
+}
 
 export const LogsAppExamples: Story = {
   render: () => (
@@ -123,8 +123,8 @@ export const LogsAppExamples: Story = {
         <Progress className="h-2 bg-gray-100" value={8} />
       </div>
     </div>
-  ),
-};
+  )
+}
 
 export const DifferentSizes: Story = {
   render: () => (
@@ -149,17 +149,17 @@ export const DifferentSizes: Story = {
         <Progress className="h-4" value={60} />
       </div>
     </div>
-  ),
-};
+  )
+}
 
 export const AnimatedProgress: Story = {
   render: function AnimatedProgressComponent() {
-    const [progress, setProgress] = React.useState(0);
+    const [progress, setProgress] = React.useState(0)
 
     React.useEffect(() => {
-      const timer = setTimeout(() => setProgress(66), 500);
-      return () => clearTimeout(timer);
-    }, []);
+      const timer = setTimeout(() => setProgress(66), 500)
+      return () => clearTimeout(timer)
+    }, [])
 
     return (
       <div className="w-80 space-y-2">
@@ -169,6 +169,6 @@ export const AnimatedProgress: Story = {
         </div>
         <Progress value={progress} />
       </div>
-    );
-  },
-};
+    )
+  }
+}

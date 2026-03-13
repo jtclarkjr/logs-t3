@@ -1,67 +1,67 @@
-"use client";
+'use client'
 
-import { BarChart3Icon, FileTextIcon, LogOut, MenuIcon } from "lucide-react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useState } from "react";
-import { toast } from "sonner";
-import { AuthModal } from "@/components/auth/auth-modal";
-import { ThemeToggle } from "@/components/theme-toggle";
-import { Button } from "@/components/ui/button";
+import { BarChart3Icon, FileTextIcon, LogOut, MenuIcon } from 'lucide-react'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { useState } from 'react'
+import { toast } from 'sonner'
+import { AuthModal } from '@/components/auth/auth-modal'
+import { ThemeToggle } from '@/components/theme-toggle'
+import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+  DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu'
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+  SheetTrigger
+} from '@/components/ui/sheet'
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { UserAvatar } from "@/components/ui/user-avatar";
-import { signOut } from "@/lib/auth/client";
-import { useAuth } from "@/lib/auth/context";
-import { authEnabled } from "@/lib/config/auth";
-import { useIsMobile } from "@/lib/hooks/utils/use-mobile";
-import { cn } from "@/lib/utils";
+  TooltipTrigger
+} from '@/components/ui/tooltip'
+import { UserAvatar } from '@/components/ui/user-avatar'
+import { signOut } from '@/lib/auth/client'
+import { useAuth } from '@/lib/auth/context'
+import { authEnabled } from '@/lib/config/auth'
+import { useIsMobile } from '@/lib/hooks/utils/use-mobile'
+import { cn } from '@/lib/utils'
 
 const navigation = [
-  { name: "Dashboard", href: "/dashboard", icon: BarChart3Icon },
-  { name: "Logs", href: "/logs", icon: FileTextIcon },
-];
+  { name: 'Dashboard', href: '/dashboard', icon: BarChart3Icon },
+  { name: 'Logs', href: '/logs', icon: FileTextIcon }
+]
 
 export function MinimalSidebar() {
-  const pathname = usePathname();
-  const isMobile = useIsMobile();
-  const [isOpen, setIsOpen] = useState(false);
-  const [showAuthModal, setShowAuthModal] = useState(false);
-  const { user } = useAuth();
+  const pathname = usePathname()
+  const isMobile = useIsMobile()
+  const [isOpen, setIsOpen] = useState(false)
+  const [showAuthModal, setShowAuthModal] = useState(false)
+  const { user } = useAuth()
 
   const handleSignOut = async () => {
-    const { error } = await signOut();
+    const { error } = await signOut()
     if (error) {
-      toast.error("Failed to sign out");
+      toast.error('Failed to sign out')
     } else {
-      toast.success("Signed out successfully");
+      toast.success('Signed out successfully')
     }
-  };
+  }
 
   const handleAvatarClick = () => {
     if (!user) {
-      setShowAuthModal(true);
+      setShowAuthModal(true)
     }
-  };
+  }
 
   if (isMobile) {
     return (
@@ -69,18 +69,18 @@ export function MinimalSidebar() {
         {/* Mobile Bottom Navigation */}
         <nav className="fixed right-0 bottom-0 left-0 z-50 flex h-16 items-center justify-around border-t bg-background px-4 md:hidden">
           {navigation.map((item) => {
-            const Icon = item.icon;
+            const Icon = item.icon
             const isActive =
               pathname === item.href ||
-              (item.href !== "/" && pathname.startsWith(item.href));
+              (item.href !== '/' && pathname.startsWith(item.href))
 
             return (
               <Link
                 className={cn(
-                  "flex flex-col items-center justify-center gap-1 rounded-md px-4 py-2 transition-colors",
+                  'flex flex-col items-center justify-center gap-1 rounded-md px-4 py-2 transition-colors',
                   isActive
-                    ? "text-primary"
-                    : "text-muted-foreground hover:text-foreground",
+                    ? 'text-primary'
+                    : 'text-muted-foreground hover:text-foreground'
                 )}
                 href={item.href}
                 key={item.href}
@@ -88,7 +88,7 @@ export function MinimalSidebar() {
                 <Icon className="h-5 w-5" />
                 <span className="text-xs">{item.name}</span>
               </Link>
-            );
+            )
           })}
 
           {/* Mobile Menu Sheet */}
@@ -120,14 +120,14 @@ export function MinimalSidebar() {
                         <div className="flex items-center gap-3 rounded-lg border bg-muted/50 p-3">
                           <UserAvatar
                             alt={
-                              user.user_metadata?.name || user.email || "User"
+                              user.user_metadata?.name || user.email || 'User'
                             }
                             size="md"
                             src={user.user_metadata?.avatar_url}
                           />
                           <div className="flex-1 overflow-hidden">
                             <p className="truncate font-medium text-sm">
-                              {user.user_metadata?.name || "User"}
+                              {user.user_metadata?.name || 'User'}
                             </p>
                             <p className="truncate text-muted-foreground text-xs">
                               {user.email}
@@ -175,7 +175,7 @@ export function MinimalSidebar() {
         {/* Mobile padding for bottom nav */}
         <div className="h-16 md:hidden" />
       </>
-    );
+    )
   }
 
   // Desktop Sidebar
@@ -192,20 +192,20 @@ export function MinimalSidebar() {
         {/* Navigation */}
         <nav className="flex flex-1 flex-col gap-2 p-2">
           {navigation.map((item) => {
-            const Icon = item.icon;
+            const Icon = item.icon
             const isActive =
               pathname === item.href ||
-              (item.href !== "/" && pathname.startsWith(item.href));
+              (item.href !== '/' && pathname.startsWith(item.href))
 
             return (
               <Tooltip key={item.href}>
                 <TooltipTrigger asChild>
                   <Link
                     className={cn(
-                      "flex h-12 w-12 items-center justify-center rounded-md transition-colors",
+                      'flex h-12 w-12 items-center justify-center rounded-md transition-colors',
                       isActive
-                        ? "bg-primary text-primary-foreground"
-                        : "text-muted-foreground hover:bg-muted hover:text-foreground",
+                        ? 'bg-primary text-primary-foreground'
+                        : 'text-muted-foreground hover:bg-muted hover:text-foreground'
                     )}
                     href={item.href}
                   >
@@ -217,7 +217,7 @@ export function MinimalSidebar() {
                   <p>{item.name}</p>
                 </TooltipContent>
               </Tooltip>
-            );
+            )
           })}
         </nav>
 
@@ -234,7 +234,7 @@ export function MinimalSidebar() {
                       variant="ghost"
                     >
                       <UserAvatar
-                        alt={user.user_metadata?.name || user.email || "User"}
+                        alt={user.user_metadata?.name || user.email || 'User'}
                         size="md"
                         src={user.user_metadata?.avatar_url}
                       />
@@ -244,7 +244,7 @@ export function MinimalSidebar() {
                     <DropdownMenuLabel>
                       <div className="flex flex-col space-y-1">
                         <p className="font-medium text-sm">
-                          {user.user_metadata?.name || "User"}
+                          {user.user_metadata?.name || 'User'}
                         </p>
                         <p className="text-muted-foreground text-xs">
                           {user.email}
@@ -293,5 +293,5 @@ export function MinimalSidebar() {
         redirectPath={pathname}
       />
     </aside>
-  );
+  )
 }

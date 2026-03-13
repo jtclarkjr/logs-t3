@@ -1,71 +1,71 @@
-"use client";
+'use client'
 
-import { useEffect } from "react";
-import type { DateRange } from "react-day-picker";
-import { toast } from "sonner";
-import { CreateLogDialog } from "@/components/logs/create/create-log-dialog";
-import { DeleteLogDialog } from "@/components/logs/delete/delete-log-dialog";
-import { LogDetailsDrawer } from "@/components/logs/log-details-drawer";
-import { LogsFilters } from "@/components/logs/logs-filters";
-import { LogsHeader } from "@/components/logs/logs-header";
-import { LogsPagination } from "@/components/logs/logs-pagination";
-import { LogsTable } from "@/components/logs/logs-table";
-import { SpotlightSearch } from "@/components/logs/spotlight-search";
-import { authEnabled } from "@/lib/config/auth";
+import { useEffect } from 'react'
+import type { DateRange } from 'react-day-picker'
+import { toast } from 'sonner'
+import { CreateLogDialog } from '@/components/logs/create/create-log-dialog'
+import { DeleteLogDialog } from '@/components/logs/delete/delete-log-dialog'
+import { LogDetailsDrawer } from '@/components/logs/log-details-drawer'
+import { LogsFilters } from '@/components/logs/logs-filters'
+import { LogsHeader } from '@/components/logs/logs-header'
+import { LogsPagination } from '@/components/logs/logs-pagination'
+import { LogsTable } from '@/components/logs/logs-table'
+import { SpotlightSearch } from '@/components/logs/spotlight-search'
+import { authEnabled } from '@/lib/config/auth'
 import {
   useDeleteLog,
   useExportLogs,
-  useLogs,
-} from "@/lib/hooks/query/use-logs";
-import { useLogsFilters } from "@/lib/hooks/state/use-logs-filters";
-import { useLogsUIState } from "@/lib/hooks/state/use-logs-ui-state";
-import { useAuthAction } from "@/lib/hooks/use-auth-action";
-import { useSpotlightSearch } from "@/lib/hooks/utils/use-spotlight-search";
+  useLogs
+} from '@/lib/hooks/query/use-logs'
+import { useLogsFilters } from '@/lib/hooks/state/use-logs-filters'
+import { useLogsUIState } from '@/lib/hooks/state/use-logs-ui-state'
+import { useAuthAction } from '@/lib/hooks/use-auth-action'
+import { useSpotlightSearch } from '@/lib/hooks/utils/use-spotlight-search'
 import type {
   SeverityFilter,
   SortByField,
   SortOrder,
   SourceFilter,
-  UserFilter,
-} from "@/lib/types/filters";
-import type { LogListResponse } from "@/lib/types/log";
+  UserFilter
+} from '@/lib/types/filters'
+import type { LogListResponse } from '@/lib/types/log'
 
 interface LogsClientProps {
-  initialData?: LogListResponse;
+  initialData?: LogListResponse
   initialFilters?: {
-    searchQuery?: string;
-    selectedSeverity?: SeverityFilter;
-    selectedSource?: SourceFilter;
-    sortBy?: SortByField;
-    sortOrder?: SortOrder;
-    currentPage?: number;
-    dateRange?: DateRange;
-    createdByFilter?: UserFilter;
-    updatedByFilter?: UserFilter;
-  };
-  prefetchError?: string;
+    searchQuery?: string
+    selectedSeverity?: SeverityFilter
+    selectedSource?: SourceFilter
+    sortBy?: SortByField
+    sortOrder?: SortOrder
+    currentPage?: number
+    dateRange?: DateRange
+    createdByFilter?: UserFilter
+    updatedByFilter?: UserFilter
+  }
+  prefetchError?: string
 }
 
 export function LogsClient({
   initialData,
   initialFilters = {},
-  prefetchError,
+  prefetchError
 }: LogsClientProps) {
   // Show error toast if initial data fetch failed
   useEffect(() => {
     if (prefetchError) {
-      toast.error(prefetchError);
+      toast.error(prefetchError)
     }
-  }, [prefetchError]);
+  }, [prefetchError])
 
   // Auth protection
-  const { requireAuth, AuthModalComponent, user } = useAuthAction();
-  const currentUserId = user?.id;
-  const isDeleteEnabled = !authEnabled || !!user;
+  const { requireAuth, AuthModalComponent, user } = useAuthAction()
+  const currentUserId = user?.id
+  const isDeleteEnabled = !authEnabled || !!user
 
   // Spotlight search state
   const { isOpen: spotlightOpen, setIsOpen: setSpotlightOpen } =
-    useSpotlightSearch();
+    useSpotlightSearch()
 
   // Filter state management
   const {
@@ -85,8 +85,8 @@ export function LogsClient({
     setCurrentPage,
     setPageSize,
     resetFilters,
-    getAPIFilters,
-  } = useLogsFilters(initialFilters, currentUserId ?? undefined);
+    getAPIFilters
+  } = useLogsFilters(initialFilters, currentUserId ?? undefined)
 
   // UI state management
   const {
@@ -100,46 +100,46 @@ export function LogsClient({
     openLogDetails,
     closeLogDetails,
     openCreateDialog,
-    closeCreateDialog,
-  } = useLogsUIState();
+    closeCreateDialog
+  } = useLogsUIState()
 
   // React Query hooks - use computed filters from hook
-  const { data: logs, isLoading, error } = useLogs(getAPIFilters());
-  const deleteLogMutation = useDeleteLog();
-  const { exportLogs, isPending: isExporting } = useExportLogs();
+  const { data: logs, isLoading, error } = useLogs(getAPIFilters())
+  const deleteLogMutation = useDeleteLog()
+  const { exportLogs, isPending: isExporting } = useExportLogs()
 
   // Use current data or fall back to initial data
-  const displayLogs: LogListResponse | undefined = logs ?? initialData;
+  const displayLogs: LogListResponse | undefined = logs ?? initialData
 
   // Wrapped handlers that require auth
   const handleCreateLog = () => {
-    requireAuth(() => openCreateDialog());
-  };
+    requireAuth(() => openCreateDialog())
+  }
 
-  const handleDeleteLog = (log: NonNullable<typeof displayLogs>["logs"][0]) => {
+  const handleDeleteLog = (log: NonNullable<typeof displayLogs>['logs'][0]) => {
     // When delete is disabled, this shouldn't be called
     // But keep requireAuth as safety measure for any edge cases
-    if (!isDeleteEnabled) return;
-    openDeleteDialog(log);
-  };
+    if (!isDeleteEnabled) return
+    openDeleteDialog(log)
+  }
 
   const confirmDeleteLog = () => {
-    if (!logToDelete) return;
+    if (!logToDelete) return
 
     deleteLogMutation.mutate(
       { id: logToDelete.id },
       {
         onSuccess: () => {
-          closeDeleteDialog();
-        },
-      },
-    );
-  };
+          closeDeleteDialog()
+        }
+      }
+    )
+  }
 
   const handleExport = () => {
-    const filters = getAPIFilters();
-    void exportLogs(filters);
-  };
+    const filters = getAPIFilters()
+    void exportLogs(filters)
+  }
 
   return (
     <div className="container mx-auto space-y-6 p-6">
@@ -222,5 +222,5 @@ export function LogsClient({
       {/* Auth Modal */}
       <AuthModalComponent />
     </div>
-  );
+  )
 }

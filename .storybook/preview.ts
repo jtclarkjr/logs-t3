@@ -6,17 +6,17 @@ const preview: Preview = {
   parameters: {
     controls: {
       matchers: {
-       color: /(background|color)$/i,
-       date: /Date$/i,
-      },
+        color: /(background|color)$/i,
+        date: /Date$/i
+      }
     },
     backgrounds: {
       default: 'light',
       values: [
         { name: 'light', value: '#ffffff' },
-        { name: 'dark', value: '#09090b' },
-      ],
-    },
+        { name: 'dark', value: '#09090b' }
+      ]
+    }
   },
   decorators: [
     (Story, context) => {
@@ -33,8 +33,8 @@ const preview: Preview = {
           React.createElement(Story)
         )
       )
-    },
-  ],
-};
+    }
+  ]
+}
 
-export default preview;
+export default preview

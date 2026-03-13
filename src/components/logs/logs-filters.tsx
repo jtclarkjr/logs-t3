@@ -1,49 +1,49 @@
-"use client";
+'use client'
 
-import { FilterIcon, SearchIcon } from "lucide-react";
-import type { DateRange } from "react-day-picker";
-import { Button } from "@/components/ui/button";
+import { FilterIcon, SearchIcon } from 'lucide-react'
+import type { DateRange } from 'react-day-picker'
+import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { DateRangePicker } from "@/components/ui/date-range-picker";
-import { Input } from "@/components/ui/input";
+  CardTitle
+} from '@/components/ui/card'
+import { DateRangePicker } from '@/components/ui/date-range-picker'
+import { Input } from '@/components/ui/input'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { SeverityLevel } from "@/lib/enums/severity";
+  SelectValue
+} from '@/components/ui/select'
+import { SeverityLevel } from '@/lib/enums/severity'
 import type {
   SeverityFilter,
   SortByField,
   SortOrder,
-  UserFilter,
-} from "@/lib/types/filters";
+  UserFilter
+} from '@/lib/types/filters'
 
 interface LogsFiltersProps {
-  searchQuery: string;
-  onSearchQueryChange: (query: string) => void;
-  dateRange: DateRange | undefined;
-  onDateRangeChange: (dateRange: DateRange | undefined) => void;
-  selectedSeverity: SeverityFilter;
-  onSeverityChange: (severity: SeverityFilter) => void;
-  sortBy: SortByField;
-  sortOrder: SortOrder;
-  onSortChange: (sortBy: SortByField, sortOrder: SortOrder) => void;
-  onResetFilters: () => void;
-  showUserFilters: boolean;
-  createdByFilter: UserFilter;
-  updatedByFilter: UserFilter;
-  onCreatedByFilterChange: (filter: UserFilter) => void;
-  onUpdatedByFilterChange: (filter: UserFilter) => void;
-  onSpotlightClick?: () => void;
+  searchQuery: string
+  onSearchQueryChange: (query: string) => void
+  dateRange: DateRange | undefined
+  onDateRangeChange: (dateRange: DateRange | undefined) => void
+  selectedSeverity: SeverityFilter
+  onSeverityChange: (severity: SeverityFilter) => void
+  sortBy: SortByField
+  sortOrder: SortOrder
+  onSortChange: (sortBy: SortByField, sortOrder: SortOrder) => void
+  onResetFilters: () => void
+  showUserFilters: boolean
+  createdByFilter: UserFilter
+  updatedByFilter: UserFilter
+  onCreatedByFilterChange: (filter: UserFilter) => void
+  onUpdatedByFilterChange: (filter: UserFilter) => void
+  onSpotlightClick?: () => void
 }
 
 export function LogsFilters({
@@ -62,12 +62,12 @@ export function LogsFilters({
   updatedByFilter,
   onCreatedByFilterChange,
   onUpdatedByFilterChange,
-  onSpotlightClick,
+  onSpotlightClick
 }: LogsFiltersProps) {
   const handleSortChange = (value: string) => {
-    const [field, order] = value.split("-");
-    onSortChange(field as SortByField, order as SortOrder);
-  };
+    const [field, order] = value.split('-')
+    onSortChange(field as SortByField, order as SortOrder)
+  }
 
   return (
     <Card>
@@ -166,11 +166,11 @@ export function LogsFilters({
             <div className="flex w-full flex-wrap items-center gap-4 lg:w-auto">
               <label className="flex items-center gap-2 whitespace-nowrap text-sm">
                 <input
-                  checked={createdByFilter === "me"}
+                  checked={createdByFilter === 'me'}
                   className="h-4 w-4 accent-primary"
                   name="createdByMe"
                   onChange={(e) =>
-                    onCreatedByFilterChange(e.target.checked ? "me" : "all")
+                    onCreatedByFilterChange(e.target.checked ? 'me' : 'all')
                   }
                   type="checkbox"
                 />
@@ -178,11 +178,11 @@ export function LogsFilters({
               </label>
               <label className="flex items-center gap-2 whitespace-nowrap text-sm">
                 <input
-                  checked={updatedByFilter === "me"}
+                  checked={updatedByFilter === 'me'}
                   className="h-4 w-4 accent-primary"
                   name="updatedByMe"
                   onChange={(e) =>
-                    onUpdatedByFilterChange(e.target.checked ? "me" : "all")
+                    onUpdatedByFilterChange(e.target.checked ? 'me' : 'all')
                   }
                   type="checkbox"
                 />
@@ -193,5 +193,5 @@ export function LogsFilters({
         </div>
       </CardContent>
     </Card>
-  );
+  )
 }

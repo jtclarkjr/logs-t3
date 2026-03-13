@@ -1,63 +1,63 @@
-import type { Meta, StoryObj } from "@storybook/nextjs";
-import { CheckIcon, XIcon } from "lucide-react";
-import { Badge } from "../badge";
+import type { Meta, StoryObj } from '@storybook/nextjs'
+import { CheckIcon, XIcon } from 'lucide-react'
+import { Badge } from '../badge'
 
 const meta: Meta<typeof Badge> = {
-  title: "UI/Badge",
+  title: 'UI/Badge',
   component: Badge,
   parameters: {
-    layout: "centered",
+    layout: 'centered'
   },
-  tags: ["autodocs"],
+  tags: ['autodocs'],
   argTypes: {
     variant: {
-      control: "select",
-      options: ["default", "secondary", "destructive", "outline"],
-    },
-  },
-};
+      control: 'select',
+      options: ['default', 'secondary', 'destructive', 'outline']
+    }
+  }
+}
 
-export default meta;
-type Story = StoryObj<typeof meta>;
+export default meta
+type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   args: {
-    children: "Badge",
-  },
-};
+    children: 'Badge'
+  }
+}
 
 export const Secondary: Story = {
   args: {
-    variant: "secondary",
-    children: "Secondary",
-  },
-};
+    variant: 'secondary',
+    children: 'Secondary'
+  }
+}
 
 export const Destructive: Story = {
   args: {
-    variant: "destructive",
-    children: "Destructive",
-  },
-};
+    variant: 'destructive',
+    children: 'Destructive'
+  }
+}
 
 export const Outline: Story = {
   args: {
-    variant: "outline",
-    children: "Outline",
-  },
-};
+    variant: 'outline',
+    children: 'Outline'
+  }
+}
 
 export const WithIcon: Story = {
   args: {
-    variant: "secondary",
+    variant: 'secondary',
     children: (
       <>
         <CheckIcon />
         Success
       </>
-    ),
-  },
-};
+    )
+  }
+}
 
 export const AllVariants: Story = {
   render: () => (
@@ -67,8 +67,8 @@ export const AllVariants: Story = {
       <Badge variant="destructive">Destructive</Badge>
       <Badge variant="outline">Outline</Badge>
     </div>
-  ),
-};
+  )
+}
 
 export const WithIcons: Story = {
   render: () => (
@@ -83,8 +83,8 @@ export const WithIcons: Story = {
       </Badge>
       <Badge variant="outline">Source: api-server</Badge>
     </div>
-  ),
-};
+  )
+}
 
 export const LogsExamples: Story = {
   render: () => (
@@ -95,5 +95,5 @@ export const LogsExamples: Story = {
       <Badge variant="secondary">Production</Badge>
       <Badge variant="default">Active</Badge>
     </div>
-  ),
-};
+  )
+}

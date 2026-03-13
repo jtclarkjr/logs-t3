@@ -1,19 +1,19 @@
-"use client";
+'use client'
 
-import { AlertTriangleIcon, RefreshCwIcon } from "lucide-react";
-import { Component, type ReactNode } from "react";
-import { Alert, AlertDescription } from "./alert";
-import { Button } from "./button";
+import { AlertTriangleIcon, RefreshCwIcon } from 'lucide-react'
+import { Component, type ReactNode } from 'react'
+import { Alert, AlertDescription } from './alert'
+import { Button } from './button'
 
 interface ErrorBoundaryState {
-  hasError: boolean;
-  error?: Error;
+  hasError: boolean
+  error?: Error
 }
 
 interface ErrorBoundaryProps {
-  children: ReactNode;
-  fallback?: ReactNode;
-  onReset?: () => void;
+  children: ReactNode
+  fallback?: ReactNode
+  onReset?: () => void
 }
 
 export class ErrorBoundary extends Component<
@@ -21,27 +21,27 @@ export class ErrorBoundary extends Component<
   ErrorBoundaryState
 > {
   constructor(props: ErrorBoundaryProps) {
-    super(props);
-    this.state = { hasError: false };
+    super(props)
+    this.state = { hasError: false }
   }
 
   static getDerivedStateFromError(error: Error): ErrorBoundaryState {
-    return { hasError: true, error };
+    return { hasError: true, error }
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.error("Error caught by boundary:", error, errorInfo);
+    console.error('Error caught by boundary:', error, errorInfo)
   }
 
   handleReset = () => {
-    this.setState({ hasError: false, error: undefined });
-    this.props.onReset?.();
-  };
+    this.setState({ hasError: false, error: undefined })
+    this.props.onReset?.()
+  }
 
   render() {
     if (this.state.hasError) {
       if (this.props.fallback) {
-        return this.props.fallback;
+        return this.props.fallback
       }
 
       return (
@@ -51,7 +51,7 @@ export class ErrorBoundary extends Component<
             <div>
               <strong>Something went wrong</strong>
               <p className="mt-1 text-sm">
-                {this.state.error?.message || "An unexpected error occurred"}
+                {this.state.error?.message || 'An unexpected error occurred'}
               </p>
             </div>
             <Button
@@ -65,31 +65,31 @@ export class ErrorBoundary extends Component<
             </Button>
           </AlertDescription>
         </Alert>
-      );
+      )
     }
 
-    return this.props.children;
+    return this.props.children
   }
 }
 
 // Simpler error display component for query errors
 interface QueryErrorProps {
-  error: unknown;
-  onRetry?: () => void;
-  title?: string;
+  error: unknown
+  onRetry?: () => void
+  title?: string
 }
 
 export function QueryError({
   error,
   onRetry,
-  title = "Failed to load data",
+  title = 'Failed to load data'
 }: QueryErrorProps) {
-  const message =
-    error instanceof Error
-      ? error.message
-      : typeof error === "string"
-        ? error
-        : "An error occurred while fetching data";
+  let message = 'An error occurred while fetching data'
+  if (error instanceof Error) {
+    message = error.message
+  } else if (typeof error === 'string') {
+    message = error
+  }
 
   return (
     <Alert variant="destructive">
@@ -112,5 +112,5 @@ export function QueryError({
         )}
       </AlertDescription>
     </Alert>
-  );
+  )
 }

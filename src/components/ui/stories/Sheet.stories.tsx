@@ -1,13 +1,13 @@
-import type { Meta, StoryObj } from "@storybook/nextjs";
+import type { Meta, StoryObj } from '@storybook/nextjs'
 import {
   FilterIcon,
   HelpCircleIcon,
   MenuIcon,
-  SettingsIcon,
-} from "lucide-react";
-import { Button } from "../button";
-import { Input } from "../input";
-import { Label } from "../label";
+  SettingsIcon
+} from 'lucide-react'
+import { Button } from '../button'
+import { Input } from '../input'
+import { Label } from '../label'
 import {
   Sheet,
   SheetClose,
@@ -16,21 +16,21 @@ import {
   SheetFooter,
   SheetHeader,
   SheetTitle,
-  SheetTrigger,
-} from "../sheet";
-import { Textarea } from "../textarea";
+  SheetTrigger
+} from '../sheet'
+import { Textarea } from '../textarea'
 
 const meta: Meta<typeof Sheet> = {
-  title: "UI/Sheet",
+  title: 'UI/Sheet',
   component: Sheet,
   parameters: {
-    layout: "centered",
+    layout: 'centered'
   },
-  tags: ["autodocs"],
-};
+  tags: ['autodocs']
+}
 
-export default meta;
-type Story = StoryObj<typeof meta>;
+export default meta
+type Story = StoryObj<typeof meta>
 
 export const FromRight: Story = {
   render: () => (
@@ -63,8 +63,8 @@ export const FromRight: Story = {
         </SheetFooter>
       </SheetContent>
     </Sheet>
-  ),
-};
+  )
+}
 
 export const FromLeft: Story = {
   render: () => (
@@ -115,8 +115,8 @@ export const FromLeft: Story = {
         </div>
       </SheetContent>
     </Sheet>
-  ),
-};
+  )
+}
 
 export const FromTop: Story = {
   render: () => (
@@ -148,8 +148,8 @@ export const FromTop: Story = {
         </div>
       </SheetContent>
     </Sheet>
-  ),
-};
+  )
+}
 
 export const FromBottom: Story = {
   render: () => (
@@ -181,8 +181,8 @@ export const FromBottom: Story = {
         </div>
       </SheetContent>
     </Sheet>
-  ),
-};
+  )
+}
 
 export const LogFiltersSheet: Story = {
   render: () => (
@@ -246,8 +246,8 @@ export const LogFiltersSheet: Story = {
         </SheetFooter>
       </SheetContent>
     </Sheet>
-  ),
-};
+  )
+}
 
 export const MobileMenu: Story = {
   render: () => (
@@ -318,8 +318,8 @@ export const MobileMenu: Story = {
         </div>
       </SheetContent>
     </Sheet>
-  ),
-};
+  )
+}
 
 export const CreateLogSheet: Story = {
   render: () => (
@@ -399,5 +399,5 @@ export const CreateLogSheet: Story = {
         </SheetFooter>
       </SheetContent>
     </Sheet>
-  ),
-};
+  )
+}

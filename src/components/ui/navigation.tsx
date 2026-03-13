@@ -1,37 +1,37 @@
-"use client";
+'use client'
 
-import { BarChart3Icon, FileTextIcon, MenuIcon } from "lucide-react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useState } from "react";
-import { ThemeToggle } from "@/components/theme-toggle";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { cn } from "@/lib/utils";
+import { BarChart3Icon, FileTextIcon, MenuIcon } from 'lucide-react'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { useState } from 'react'
+import { ThemeToggle } from '@/components/theme-toggle'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
+import { cn } from '@/lib/utils'
 
 const navigation = [
-  { name: "Dashboard", href: "/dashboard", icon: BarChart3Icon },
-  { name: "Logs", href: "/logs", icon: FileTextIcon },
-];
+  { name: 'Dashboard', href: '/dashboard', icon: BarChart3Icon },
+  { name: 'Logs', href: '/logs', icon: FileTextIcon }
+]
 function NavigationItems({ mobile = false }: { mobile?: boolean }) {
-  const pathname = usePathname();
+  const pathname = usePathname()
 
   return (
-    <nav className={cn("flex gap-1", mobile ? "flex-col" : "flex-row")}>
+    <nav className={cn('flex gap-1', mobile ? 'flex-col' : 'flex-row')}>
       {navigation.map((item) => {
-        const Icon = item.icon;
+        const Icon = item.icon
         const isActive =
           pathname === item.href ||
-          (item.href !== "/" && pathname.startsWith(item.href));
+          (item.href !== '/' && pathname.startsWith(item.href))
 
         return (
           <Link
             className={cn(
-              "flex items-center gap-2 rounded-md px-3 py-2 font-medium text-sm transition-colors",
+              'flex items-center gap-2 rounded-md px-3 py-2 font-medium text-sm transition-colors',
               isActive
-                ? "bg-primary text-primary-foreground"
-                : "text-muted-foreground hover:bg-muted hover:text-foreground",
+                ? 'bg-primary text-primary-foreground'
+                : 'text-muted-foreground hover:bg-muted hover:text-foreground'
             )}
             href={item.href}
             key={item.href}
@@ -39,14 +39,14 @@ function NavigationItems({ mobile = false }: { mobile?: boolean }) {
             <Icon className="h-4 w-4" />
             {item.name}
           </Link>
-        );
+        )
       })}
     </nav>
-  );
+  )
 }
 
 export function MainNavigation() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -95,5 +95,5 @@ export function MainNavigation() {
         </div>
       </div>
     </header>
-  );
+  )
 }
