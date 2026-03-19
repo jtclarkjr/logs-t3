@@ -1,6 +1,7 @@
 # Logs Dashboard - T3 Stack
 
-A full-stack logs dashboard application built with the T3 Stack (Next.js, TypeScript, Drizzle ORM, tRPC, Tailwind CSS).
+A full-stack logs dashboard application built with the T3 Stack (Next.js,
+TypeScript, Drizzle ORM, tRPC, Tailwind CSS).
 
 ## Tech Stack
 
@@ -15,6 +16,7 @@ A full-stack logs dashboard application built with the T3 Stack (Next.js, TypeSc
 ## Features
 
 ### Backend (tRPC API)
+
 - Create, read, update, delete log entries
 - Filter logs by severity, source, date range, and text search
 - Pagination and sorting
@@ -23,6 +25,7 @@ A full-stack logs dashboard application built with the T3 Stack (Next.js, TypeSc
 - Metadata endpoints (sources, severity levels, date ranges)
 
 ### Frontend (Next.js + React)
+
 - **Dashboard Page** - Interactive analytics with charts
   - Timeline chart showing log volume over time
   - Severity distribution pie chart
@@ -46,44 +49,54 @@ A full-stack logs dashboard application built with the T3 Stack (Next.js, TypeSc
   - Light/dark mode theme support
 
 ### Database Schema
-Defined with Drizzle in `src/server/db/schema.ts`:
-```ts
-const severityEnum = pgEnum("severity_level", [
-  "DEBUG",
-  "INFO",
-  "WARNING",
-  "ERROR",
-  "CRITICAL",
-]);
 
-export const logs = pgTable("logs", {
-  id: uuid("id").defaultRandom().primaryKey(),
-  timestamp: timestamp("timestamp", { withTimezone: true }).defaultNow().notNull(),
-  message: text("message").notNull(),
-  severity: severityEnum("severity").notNull(),
-  source: text("source").notNull(),
-  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
-  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
-  createdBy: uuid("created_by"), // Supabase user id when available
-  updatedBy: uuid("updated_by"), // Supabase user id when available
-});
+Defined with Drizzle in `src/server/db/schema.ts`:
+
+```ts
+const severityEnum = pgEnum('severity_level', [
+  'DEBUG',
+  'INFO',
+  'WARNING',
+  'ERROR',
+  'CRITICAL'
+])
+
+export const logs = pgTable('logs', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  timestamp: timestamp('timestamp', { withTimezone: true })
+    .defaultNow()
+    .notNull(),
+  message: text('message').notNull(),
+  severity: severityEnum('severity').notNull(),
+  source: text('source').notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true })
+    .defaultNow()
+    .notNull(),
+  updatedAt: timestamp('updated_at', { withTimezone: true })
+    .defaultNow()
+    .notNull(),
+  createdBy: uuid('created_by'), // Supabase user id when available
+  updatedBy: uuid('updated_by') // Supabase user id when available
+})
 ```
 
 ## Getting Started
 
 ### Prerequisites
+
 - Bun installed
 - Docker (optional, for running PostgreSQL)
 
 ### Installation
 
 1. **Install dependencies**
+
    ```bash
    bun install
    ```
 
-2. **Set up environment variables**
-   Copy `.env.example` to `.env` and configure:
+2. **Set up environment variables** Copy `.env.example` to `.env` and configure:
+
    ```env
    # Database (required)
    DATABASE_URL="postgresql://postgres:password@localhost:5432/logs-t3"
@@ -97,11 +110,13 @@ export const logs = pgTable("logs", {
    ```
 
 3. **Start the database**
+
    ```bash
    make db          # Start PostgreSQL in Docker
    ```
 
 4. **Push database schema**
+
    ```bash
    make db-push     # Create tables in database
    ```
@@ -116,6 +131,7 @@ The app will be running at http://localhost:3000
 ## Available Commands
 
 ### Development
+
 ```bash
 make dev          # Start Next.js dev server
 make build        # Build for production
@@ -123,6 +139,7 @@ make start        # Start production server
 ```
 
 ### Database
+
 ```bash
 make db           # Start PostgreSQL only
 make db-stop      # Stop database
@@ -133,6 +150,7 @@ make db-seed      # Seed 1000 sample log entries (pass ARGS=--reset to clear fir
 ```
 
 ### Docker
+
 ```bash
 make up           # Start all services (database + app)
 make down         # Stop all services
@@ -147,13 +165,18 @@ make logs-app     # View app logs
 All endpoints are available under `api.logs.*`:
 
 ### Queries (Read Operations)
-- `logs.getAll({ page, pageSize, severity?, source?, startDate?, endDate?, search?, sortBy?, sortOrder? })` - Get paginated logs with filters
+
+- `logs.getAll({ page, pageSize, severity?, source?, startDate?, endDate?, search?, sortBy?, sortOrder? })` -
+  Get paginated logs with filters
 - `logs.getById({ id })` - Get single log by ID
-- `logs.getAggregation({ startDate?, endDate?, severity?, source? })` - Get aggregation data for analytics
-- `logs.getChartData({ startDate?, endDate?, severity?, source?, groupBy })` - Get time series data
+- `logs.getAggregation({ startDate?, endDate?, severity?, source? })` - Get
+  aggregation data for analytics
+- `logs.getChartData({ startDate?, endDate?, severity?, source?, groupBy })` -
+  Get time series data
 - `logs.getMetadata()` - Get metadata (sources, severity levels, stats)
 
 ### Mutations (Write Operations)
+
 - `logs.create({ message, severity, source, timestamp? })` - Create new log
 - `logs.update({ id, data })` - Update existing log
 - `logs.delete({ id })` - Delete log
@@ -191,6 +214,7 @@ A complete Postman collection is available for testing the API:
 ### Example Usage
 
 **Create a log:**
+
 ```http
 POST /api/trpc/logs.create
 Content-Type: application/json
@@ -203,6 +227,7 @@ Content-Type: application/json
 ```
 
 **Get logs with filters:**
+
 ```http
 GET /api/trpc/logs.getAll?input={"json":{"page":1,"pageSize":20,"severity":"ERROR"}}
 ```
@@ -214,14 +239,16 @@ GET /api/trpc/logs.getAll?input={"json":{"page":1,"pageSize":20,"severity":"ERRO
 This application is deployed to Vercel with infrastructure-level protections:
 
 - **Platform:** Vercel
-- **Security:** IP blocking, rate limiting, and DDoS protection configured at the infrastructure level
+- **Security:** IP blocking, rate limiting, and DDoS protection configured at
+  the infrastructure level
 - **Database:** PostgreSQL (configured via `DATABASE_URL` environment variable)
 
 To deploy your own instance to Vercel:
 
 1. Push your code to GitHub
 2. Import the project in Vercel
-3. Configure environment variables (see [Environment Variables](#environment-variables))
+3. Configure environment variables (see
+   [Environment Variables](#environment-variables))
 4. Deploy
 
 ### Docker Deployment
@@ -236,17 +263,21 @@ make up
 docker compose up -d --build
 ```
 
-The app will be available at http://localhost:3000 with PostgreSQL running on port 5432.
+The app will be available at http://localhost:3000 with PostgreSQL running on
+port 5432.
 
 ## Environment Variables
 
 ### Required
+
 ```env
 DATABASE_URL="postgresql://postgres:password@localhost:5432/logs-t3"
 ```
 
 ### Optional - Authentication
+
 Authentication is **disabled by default**. Enable it by setting:
+
 ```env
 NEXT_PUBLIC_SUPABASE_URL="https://your-project.supabase.co"
 NEXT_PUBLIC_SUPABASE_ANON_KEY="your-anon-key"
@@ -256,6 +287,7 @@ NEXT_PUBLIC_AUTH_SIGNUP_ENABLED="true"  # Allow new user registration
 ```
 
 **Authentication Methods:**
+
 - Email/Password
 - GitHub OAuth
 
@@ -270,6 +302,7 @@ When auth is enabled, create/update/delete operations require authentication.
 5. Make changes to tRPC routers → hot reload automatic
 
 ### Benefits
+
 - End-to-end type safety
 - No API route definitions needed
 - Automatic API client generation
@@ -280,7 +313,8 @@ When auth is enabled, create/update/delete operations require authentication.
 ### Pages Available
 
 - **Dashboard** (`/dashboard`) - Analytics with charts and aggregation data
-- **Logs** (`/logs`) - Full CRUD interface with filtering, search, and pagination
+- **Logs** (`/logs`) - Full CRUD interface with filtering, search, and
+  pagination
 
 ## Learn More
 
